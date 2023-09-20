@@ -4,25 +4,41 @@ using UnityEngine;
 
 public class System_PlayerAttack : MonoBehaviour
 {
+    System_EventHandler EventHandler;
+
+    [Header("Player Attack Settings")]
     [SerializeField]
     float rangeDistance;
 
+    [SerializeField]
+    float moveToEnemyDistance;
+    SpriteRenderer _spriteRenderer;
+
+    bool _isFacingRight = true;
+
+    void Awake()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
     void Start()
     {
-        System_EventHandler.Instance.Event_AttackLeft += HitCheckLeft;
-        System_EventHandler.Instance.Event_AttackRight += HitCheckRight;
+        EventHandler = System_EventHandler.Instance;
+
+        EventHandler.Event_AttackLeft += HitCheckLeft;
+        EventHandler.Event_AttackRight += HitCheckRight;
     }
 
     private void OnDisable()
     {
-        System_EventHandler.Instance.Event_AttackLeft += HitCheckLeft;
-        System_EventHandler.Instance.Event_AttackRight += HitCheckRight;
+        EventHandler.Event_AttackLeft += HitCheckLeft;
+        EventHandler.Event_AttackRight += HitCheckRight;
     }
 
     void FixedUpdate()
     {
-        Debug.DrawRay(transform.position, -transform.right * rangeDistance, Color.green);
-        Debug.DrawRay(transform.position, transform.right * rangeDistance, Color.green);
+        Debug.DrawRay(transform.position, -transform.right * rangeDistance, Color.red);
+        Debug.DrawRay(transform.position, transform.right * rangeDistance, Color.red);
     }
 
     void HitCheckLeft()
@@ -35,10 +51,10 @@ public class System_PlayerAttack : MonoBehaviour
 
         if (leftHit.collider != null)
         {
-            if (leftHit.collider.gameObject.CompareTag("Enemy"))
+            var objectHit = leftHit.collider.gameObject;
+            if (objectHit.CompareTag("Enemy"))
             {
-                print($"Hit enemy: {leftHit.collider.gameObject}");
-                System_EventHandler.Instance.Event_EnemyHit?.Invoke(leftHit.collider.gameObject);
+                ConfirmHit(objectHit, "left");
             }
         }
     }
@@ -53,11 +69,79 @@ public class System_PlayerAttack : MonoBehaviour
 
         if (rightHit.collider != null)
         {
-            if (rightHit.collider.gameObject.CompareTag("Enemy"))
+            var objectHit = rightHit.collider.gameObject;
+            if (objectHit.CompareTag("Enemy"))
             {
-                print($"Hit enemy: {rightHit.collider.gameObject}");
-                System_EventHandler.Instance.Event_EnemyHit?.Invoke(rightHit.collider.gameObject);
+                ConfirmHit(objectHit, "right");
             }
         }
+    }
+
+    private void ConfirmHit(GameObject objectHit, string side)
+    {
+        EventHandler.Event_EnemyHit?.Invoke(objectHit);
+        EventHandler.Event_HitEffect?.Invoke(objectHit.transform.position);
+        MoveToHitEnemy(objectHit.transform, side);
+        CheckDirection(objectHit.transform.position);
+    }
+
+    IEnumerator CheckForEnemiesClose(Vector3 targetPosition)
+    {
+        yield return new WaitForEndOfFrame();
+
+        RaycastHit2D leftHit = Physics2D.Raycast(targetPosition, -transform.right, rangeDistance);
+        RaycastHit2D rightHit = Physics2D.Raycast(targetPosition, transform.right, rangeDistance);
+
+        if (leftHit.collider != null || rightHit.collider != null)
+        {
+            if (leftHit.collider != null && leftHit.collider.gameObject.CompareTag("Enemy"))
+            {
+                EventHandler.Event_SlowTime?.Invoke();
+            }
+            else if (rightHit.collider != null && rightHit.collider.gameObject.CompareTag("Enemy"))
+            {
+                EventHandler.Event_SlowTime?.Invoke();
+            }
+            else
+            {
+                EventHandler.Event_StopSlowTime?.Invoke();
+            }
+        }
+        else
+        {
+            EventHandler.Event_StopSlowTime?.Invoke();
+        }
+    }
+
+    void MoveToHitEnemy(Transform enemyPosition, string side)
+    {
+        var targetPosition = enemyPosition.position;
+
+        if (side.Equals("left"))
+        {
+            targetPosition += new Vector3(moveToEnemyDistance, 0f);
+            EventHandler.Event_MoveToEnemy?.Invoke(targetPosition);
+        }
+        else if (side.Equals("right"))
+        {
+            targetPosition += new Vector3(-moveToEnemyDistance, 0f);
+            EventHandler.Event_MoveToEnemy?.Invoke(targetPosition);
+        }
+
+        StartCoroutine(CheckForEnemiesClose(targetPosition));
+    }
+
+    void CheckDirection(Vector3 target)
+    {
+        if (transform.position.x > target.x && _isFacingRight)
+            Flip();
+        else if (transform.position.x < target.x && !_isFacingRight)
+            Flip();
+    }
+
+    void Flip()
+    {
+        _isFacingRight = !_isFacingRight;
+        _spriteRenderer.flipX = !_isFacingRight;
     }
 }

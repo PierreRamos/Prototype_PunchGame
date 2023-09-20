@@ -15,10 +15,16 @@ public class System_EventHandler : MonoBehaviour
     public Action Event_AttackRight;
 
     //Attack events
+    public Action Event_SlowTime;
+    public Action Event_StopSlowTime;
     public Action<GameObject> Event_EnemyHit;
+    public Action<Vector3> Event_MoveToEnemy;
 
     //Value change events
     public Action<GameObject, int> Event_EnemyHealthValueChange;
+
+    //Effect events
+    public Action<Vector3> Event_HitEffect;
 
     void Awake()
     {
