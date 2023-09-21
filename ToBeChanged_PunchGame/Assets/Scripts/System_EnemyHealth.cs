@@ -17,7 +17,9 @@ public class System_EnemyHealth : MonoBehaviour
 
     System_EventHandler EventHandler;
 
-    void Start()
+    void Start() { }
+
+    private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
 
@@ -54,8 +56,8 @@ public class System_EnemyHealth : MonoBehaviour
             _enemyHealth--;
             if (_enemyHealth <= 0)
             {
-                //temporary
-                Destroy(gameObject);
+                gameObject.SetActive(false);
+                EventHandler.Event_DefeatedEnemy?.Invoke();
                 return;
             }
             EventHandler.Event_EnemyHealthValueChange?.Invoke(gameObject, _enemyHealth);

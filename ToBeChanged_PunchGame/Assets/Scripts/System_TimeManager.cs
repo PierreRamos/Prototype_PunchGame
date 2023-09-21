@@ -9,8 +9,6 @@ public class System_TimeManager : MonoBehaviour
     [SerializeField]
     float _slowTimeValue;
 
-    [SerializeField]
-    float _slowTimeDuration;
     System_EventHandler EventHandler;
 
     Coroutine _slowTimeTimer;
@@ -48,7 +46,9 @@ public class System_TimeManager : MonoBehaviour
 
         IEnumerator SlowTimeTimer()
         {
-            yield return new WaitForSecondsRealtime(_slowTimeDuration);
+            yield return new WaitForSecondsRealtime(
+                System_GlobalValues.Instance.GetPlayerKnockBackTime()
+            );
             NormalTime();
         }
     }

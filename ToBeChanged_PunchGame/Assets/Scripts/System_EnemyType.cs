@@ -11,11 +11,12 @@ public enum EnemyType
 
 public class System_EnemyType : MonoBehaviour
 {
+    [SerializeField]
     EnemyType enemyType;
 
     void Awake()
     {
-        SelectEnemyType();
+        // SelectEnemyType();
     }
 
     void SelectEnemyType()

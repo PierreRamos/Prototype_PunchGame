@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class System_EnemySpawner : MonoBehaviour
 {
+    System_EventHandler EventHandler;
+
     [Header("Initialization")]
     [SerializeField]
     GameObject _enemyObject;
@@ -25,14 +27,9 @@ public class System_EnemySpawner : MonoBehaviour
 
     void Start()
     {
-        System_EventHandler.Instance.Event_SpawnEnemy += SpawnEnemy;
+        EventHandler = System_EventHandler.Instance;
 
         StartCoroutine(SpawnEnemyTimer());
-    }
-
-    void OnDisable()
-    {
-        System_EventHandler.Instance.Event_SpawnEnemy -= SpawnEnemy;
     }
 
     IEnumerator SpawnEnemyTimer()
@@ -55,16 +52,11 @@ public class System_EnemySpawner : MonoBehaviour
 
         if (random == 0)
         {
-            Instantiate(_enemyObject, _leftEnemySpawn.position, Quaternion.identity);
+            EventHandler.Event_SpawnEnemy?.Invoke(_leftEnemySpawn.position);
         }
         else
         {
-            Instantiate(_enemyObject, _rightEnemySpawn.position, Quaternion.identity);
+            EventHandler.Event_SpawnEnemy?.Invoke(_rightEnemySpawn.position);
         }
-    }
-
-    void CancelSpawnEnemy()
-    {
-        CancelInvoke("SpawnEnemy");
     }
 }

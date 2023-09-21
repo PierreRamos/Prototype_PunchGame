@@ -13,7 +13,9 @@ public class System_EnemyHealthDisplay : MonoBehaviour
 
     System_EventHandler EventHandler;
 
-    private void Start()
+    private void Start() { }
+
+    private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
 

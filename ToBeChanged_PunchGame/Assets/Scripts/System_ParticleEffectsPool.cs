@@ -9,42 +9,74 @@ public class System_ParticleEffectsPool : MonoBehaviour
     [Header("Initialization")]
     [Space]
     [SerializeField]
+    Transform _effectPoolParent;
+
+    [SerializeField]
     GameObject _hitEffectPrefab;
 
     [SerializeField]
-    Transform _effectPoolParent;
+    GameObject _exclamationEffectPrefab;
 
     [Header("Particle Pool Settings")]
     [Space]
     [SerializeField]
-    int _poolSize;
+    int _hitEffectPoolSize;
+
+    [SerializeField]
+    int _exclamationEffectPoolSize;
 
     List<GameObject> _hitParticlePool = new List<GameObject>();
+    List<GameObject> _exclamationParticlePool = new List<GameObject>();
 
     private void Start()
     {
         EventHandler = System_EventHandler.Instance;
 
         EventHandler.Event_HitEffect += ActivateHitParticle;
+        EventHandler.Event_ExclamationEffect += ActivateExclamationParticle;
 
         // Create the pool of particle system instances
-        for (int i = 0; i < _poolSize; i++)
+        for (int i = 0; i < _hitEffectPoolSize; i++)
         {
-            GameObject particleInstance = Instantiate(_hitEffectPrefab, _effectPoolParent);
-            particleInstance.SetActive(false);
-            _hitParticlePool.Add(particleInstance);
+            PrefabInstantiation(_hitEffectPrefab, _hitParticlePool);
+        }
+        for (int i = 0; i < _exclamationEffectPoolSize; i++)
+        {
+            PrefabInstantiation(_exclamationEffectPrefab, _exclamationParticlePool);
         }
     }
 
     private void OnDisable()
     {
         EventHandler.Event_HitEffect -= ActivateHitParticle;
+        EventHandler.Event_ExclamationEffect += ActivateExclamationParticle;
+    }
+
+    private void PrefabInstantiation(GameObject gameObject, List<GameObject> poolList)
+    {
+        GameObject particleInstance = Instantiate(gameObject, _effectPoolParent);
+        particleInstance.SetActive(false);
+        poolList.Add(particleInstance);
     }
 
     public void ActivateHitParticle(Vector3 position)
     {
         // Find an inactive particle system in the pool and activate it
         foreach (GameObject particleInstance in _hitParticlePool)
+        {
+            if (!particleInstance.activeInHierarchy)
+            {
+                particleInstance.transform.position = position;
+                particleInstance.SetActive(true);
+                return;
+            }
+        }
+    }
+
+    public void ActivateExclamationParticle(Vector3 position)
+    {
+        // Find an inactive particle system in the pool and activate it
+        foreach (GameObject particleInstance in _exclamationParticlePool)
         {
             if (!particleInstance.activeInHierarchy)
             {
