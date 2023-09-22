@@ -21,6 +21,9 @@ public class System_EnemyPool : MonoBehaviour
     [SerializeField]
     GameObject _hardEnemyPrefab;
 
+    [SerializeField]
+    GameObject _eliteEnemyPrefab;
+
     [Header("Enemy Pool Settings")]
     [Space]
     [SerializeField]
@@ -29,6 +32,7 @@ public class System_EnemyPool : MonoBehaviour
     List<GameObject> _easyEnemyPool = new List<GameObject>();
     List<GameObject> _mediumEnemyPool = new List<GameObject>();
     List<GameObject> _hardEnemyPool = new List<GameObject>();
+    List<GameObject> _eliteEnemyPool = new List<GameObject>();
 
     private void Start()
     {
@@ -49,6 +53,10 @@ public class System_EnemyPool : MonoBehaviour
         {
             PrefabInstantiation(_hardEnemyPrefab, _hardEnemyPool);
         }
+        for (int i = 0; i < _enemyPoolSize; i++)
+        {
+            PrefabInstantiation(_eliteEnemyPrefab, _eliteEnemyPool);
+        }
     }
 
     private void OnDisable()
@@ -68,19 +76,19 @@ public class System_EnemyPool : MonoBehaviour
     {
         float random = UnityEngine.Random.Range(0f, 10f);
 
-        if (random < 6.5f)
+        if (random < 5f)
         {
-            foreach (GameObject particleInstance in _easyEnemyPool)
+            foreach (GameObject enemyInstance in _easyEnemyPool)
             {
-                if (!particleInstance.activeInHierarchy)
+                if (!enemyInstance.activeInHierarchy)
                 {
-                    particleInstance.transform.position = position;
-                    particleInstance.SetActive(true);
+                    enemyInstance.transform.position = position;
+                    enemyInstance.SetActive(true);
                     return;
                 }
             }
         }
-        else if (random < 9f)
+        else if (random < 7f)
         {
             foreach (GameObject particleInstance in _mediumEnemyPool)
             {
@@ -92,9 +100,21 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
-        else if (random < 10f)
+        else if (random < 9f)
         {
             foreach (GameObject particleInstance in _hardEnemyPool)
+            {
+                if (!particleInstance.activeInHierarchy)
+                {
+                    particleInstance.transform.position = position;
+                    particleInstance.SetActive(true);
+                    return;
+                }
+            }
+        }
+        else if (random < 10f)
+        {
+            foreach (GameObject particleInstance in _eliteEnemyPool)
             {
                 if (!particleInstance.activeInHierarchy)
                 {

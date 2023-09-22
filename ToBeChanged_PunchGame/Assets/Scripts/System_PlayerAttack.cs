@@ -3,9 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+public enum DebugState
+{
+    On,
+    Off
+}
+
 public class System_PlayerAttack : MonoBehaviour
 {
     System_EventHandler EventHandler;
+
+    System_GlobalValues GlobalValues;
 
     System_PlayerStatus PlayerStatus;
 
@@ -17,7 +25,10 @@ public class System_PlayerAttack : MonoBehaviour
     float _moveToEnemyDistance;
 
     [SerializeField]
-    bool _debugOn;
+    float _playerKnockBackTime;
+
+    [SerializeField]
+    DebugState _debug;
     SpriteRenderer _spriteRenderer;
 
     bool _isFacingRight = true;
@@ -27,19 +38,30 @@ public class System_PlayerAttack : MonoBehaviour
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    void Start()
+    private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
         PlayerStatus = System_PlayerStatus.Instance;
 
         EventHandler.Event_AttackLeft += HitCheckLeft;
         EventHandler.Event_AttackRight += HitCheckRight;
+        EventHandler.Event_EnemyHit += MoveToHitEnemy;
+        EventHandler.Event_EnemyHit += CheckDirection;
     }
 
     void OnDisable()
     {
-        EventHandler.Event_AttackLeft += HitCheckLeft;
-        EventHandler.Event_AttackRight += HitCheckRight;
+        EventHandler.Event_AttackLeft -= HitCheckLeft;
+        EventHandler.Event_AttackRight -= HitCheckRight;
+        EventHandler.Event_EnemyHit -= MoveToHitEnemy;
+        EventHandler.Event_EnemyHit -= CheckDirection;
+    }
+
+    void Start()
+    {
+        GlobalValues.SetPlayerKnockBackTime(_playerKnockBackTime);
+        GlobalValues.SetPlayerAttackRange(_rangeDistance);
     }
 
     void Update()
@@ -51,7 +73,7 @@ public class System_PlayerAttack : MonoBehaviour
     //Debug method: Draws attack range when debug is on
     void DebugDrawRayCast()
     {
-        if (_debugOn)
+        if (_debug == DebugState.On)
         {
             Debug.DrawRay(transform.position, -transform.right * _rangeDistance, Color.red);
             Debug.DrawRay(transform.position, transform.right * _rangeDistance, Color.red);
@@ -78,12 +100,18 @@ public class System_PlayerAttack : MonoBehaviour
             var leftObjectHit = leftHit.collider?.gameObject;
             var rightObjectHit = rightHit.collider?.gameObject;
 
-            if (leftObjectHit != null && leftObjectHit.CompareTag("Enemy"))
+            if (
+                leftObjectHit != null && leftObjectHit.CompareTag("Enemy")
+                || leftObjectHit != null && leftObjectHit.CompareTag("Enemy_Elite")
+            )
                 EventHandler.Event_HasEnemyLeft?.Invoke(true);
             else if (leftObjectHit == null)
                 EventHandler.Event_HasEnemyLeft?.Invoke(false);
 
-            if (rightObjectHit != null && rightObjectHit.CompareTag("Enemy"))
+            if (
+                rightObjectHit != null && rightObjectHit.CompareTag("Enemy")
+                || rightObjectHit != null && rightObjectHit.CompareTag("Enemy_Elite")
+            )
                 EventHandler.Event_HasEnemyRight?.Invoke(true);
             else if (rightObjectHit == null)
                 EventHandler.Event_HasEnemyRight?.Invoke(false);
@@ -97,17 +125,23 @@ public class System_PlayerAttack : MonoBehaviour
 
     void HitCheckLeft()
     {
-        if (PlayerStatus.PlayerIsStunned() == false)
+        if (
+            PlayerStatus.PlayerIsStunned() == false
+            && GlobalValues.GetGameState() == GameState.Normal
+        )
             HitCheckDirection(-transform.right, "left");
     }
 
     void HitCheckRight()
     {
-        if (PlayerStatus.PlayerIsStunned() == false)
+        if (
+            PlayerStatus.PlayerIsStunned() == false
+            && GlobalValues.GetGameState() == GameState.Normal
+        )
             HitCheckDirection(transform.right, "right");
     }
 
-    //Checks if there is game object tagged "Enemy" on either left or right of player
+    //If player attacks: check if there is game object tagged "Enemy" or "Enemy_Elite" on either left or right of player
     void HitCheckDirection(Vector2 direction, string side)
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _rangeDistance);
@@ -115,10 +149,8 @@ public class System_PlayerAttack : MonoBehaviour
         if (hit.collider != null)
         {
             var objectHit = hit.collider.gameObject;
-            if (objectHit.CompareTag("Enemy"))
-            {
+            if (objectHit.CompareTag("Enemy") || objectHit.CompareTag("Enemy_Elite"))
                 ConfirmHit(objectHit, side);
-            }
             else
             {
                 EventHandler.Event_TriggerStun?.Invoke();
@@ -139,29 +171,28 @@ public class System_PlayerAttack : MonoBehaviour
         void ConfirmHit(GameObject objectHit, string side)
         {
             EventHandler.Event_EnemyHit?.Invoke(objectHit);
-            EventHandler.Event_HitEffect?.Invoke(objectHit.transform.position);
-            MoveToHitEnemy(objectHit.transform, side);
-            CheckDirection(objectHit.transform.position);
         }
     }
 
     //Called when enemy is hit: Moves to enemy within specific distance and checks if there is enemies still close and slows time
-    void MoveToHitEnemy(Transform enemyPosition, string side)
+    void MoveToHitEnemy(GameObject enemyPosition)
     {
-        var targetPosition = enemyPosition.position;
+        var targetPosition = enemyPosition.transform.position;
 
-        if (side.Equals("left"))
+        //If enemy is to the left of the player
+        if (enemyPosition.transform.position.x < transform.position.x)
         {
             targetPosition += new Vector3(_moveToEnemyDistance, 0f);
         }
-        else if (side.Equals("right"))
+        else
         {
             targetPosition += new Vector3(-_moveToEnemyDistance, 0f);
         }
 
         EventHandler.Event_MoveToEnemy?.Invoke(targetPosition);
 
-        StartCoroutine(CheckForEnemyCloseAfterMove(targetPosition));
+        if (GlobalValues.GetGameState() == GameState.Normal)
+            StartCoroutine(CheckForEnemyCloseAfterMove(targetPosition));
 
         //Internal
         IEnumerator CheckForEnemyCloseAfterMove(Vector3 targetPosition)
@@ -197,21 +228,26 @@ public class System_PlayerAttack : MonoBehaviour
                 }
             }
 
-            if (detectedEnemies.Count > 0)
+            if (GlobalValues.GetGameState() == GameState.Normal)
             {
-                // Invoke the slow time event or handle detectedEnemies as needed
-                EventHandler.Event_SlowTime?.Invoke();
-            }
-            else
-            {
-                EventHandler.Event_StopSlowTime?.Invoke();
+                if (detectedEnemies.Count > 0)
+                {
+                    // Invoke the slow time event or handle detectedEnemies as needed
+                    EventHandler.Event_SlowTime?.Invoke();
+                }
+                else
+                {
+                    EventHandler.Event_StopSlowTime?.Invoke();
+                }
             }
         }
     }
 
     //Called when attacking: Checks orientation relative to the enemy being hit
-    void CheckDirection(Vector3 target)
+    void CheckDirection(GameObject enemy)
     {
+        var target = enemy.transform.position;
+
         if (transform.position.x > target.x && _isFacingRight)
             Flip();
         else if (transform.position.x < target.x && !_isFacingRight)

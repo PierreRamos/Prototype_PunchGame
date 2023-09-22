@@ -6,7 +6,8 @@ public enum EnemyType
 {
     easy,
     medium,
-    hard
+    hard,
+    elite
 }
 
 public class System_EnemyType : MonoBehaviour

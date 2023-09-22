@@ -56,8 +56,8 @@ public class System_EnemyHealth : MonoBehaviour
             _enemyHealth--;
             if (_enemyHealth <= 0)
             {
+                EventHandler.Event_DefeatedEnemy?.Invoke(gameObject);
                 gameObject.SetActive(false);
-                EventHandler.Event_DefeatedEnemy?.Invoke();
                 return;
             }
             EventHandler.Event_EnemyHealthValueChange?.Invoke(gameObject, _enemyHealth);

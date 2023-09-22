@@ -6,10 +6,9 @@ public class System_EnemySpawner : MonoBehaviour
 {
     System_EventHandler EventHandler;
 
-    [Header("Initialization")]
-    [SerializeField]
-    GameObject _enemyObject;
+    System_GlobalValues GlobalValues;
 
+    [Header("Initialization")]
     [SerializeField]
     Transform _leftEnemySpawn;
 
@@ -18,17 +17,21 @@ public class System_EnemySpawner : MonoBehaviour
 
     [Header("Spawner Settings")]
     [SerializeField]
-    float _spawnInterval;
+    float _baseSpawnInterval;
 
     [SerializeField]
     float _spawnIntervalRange;
 
     bool _spawnerOn = true;
 
-    void Start()
+    void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
+    }
 
+    void Start()
+    {
         StartCoroutine(SpawnEnemyTimer());
     }
 
@@ -37,10 +40,13 @@ public class System_EnemySpawner : MonoBehaviour
         while (_spawnerOn)
         {
             SpawnEnemy();
+
+            var spawnInterval = _baseSpawnInterval - GlobalValues.GetEnemySpawnModifier();
+
             yield return new WaitForSeconds(
                 Random.Range(
-                    _spawnInterval - _spawnIntervalRange,
-                    _spawnInterval + _spawnIntervalRange
+                    spawnInterval - _spawnIntervalRange,
+                    spawnInterval + _spawnIntervalRange
                 )
             );
         }

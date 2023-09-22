@@ -32,7 +32,7 @@ public class System_ParticleEffectsPool : MonoBehaviour
     {
         EventHandler = System_EventHandler.Instance;
 
-        EventHandler.Event_HitEffect += ActivateHitParticle;
+        EventHandler.Event_EnemyHit += ActivateHitParticle;
         EventHandler.Event_ExclamationEffect += ActivateExclamationParticle;
 
         // Create the pool of particle system instances
@@ -48,7 +48,7 @@ public class System_ParticleEffectsPool : MonoBehaviour
 
     private void OnDisable()
     {
-        EventHandler.Event_HitEffect -= ActivateHitParticle;
+        EventHandler.Event_EnemyHit -= ActivateHitParticle;
         EventHandler.Event_ExclamationEffect += ActivateExclamationParticle;
     }
 
@@ -59,14 +59,14 @@ public class System_ParticleEffectsPool : MonoBehaviour
         poolList.Add(particleInstance);
     }
 
-    public void ActivateHitParticle(Vector3 position)
+    public void ActivateHitParticle(GameObject enemy)
     {
         // Find an inactive particle system in the pool and activate it
         foreach (GameObject particleInstance in _hitParticlePool)
         {
             if (!particleInstance.activeInHierarchy)
             {
-                particleInstance.transform.position = position;
+                particleInstance.transform.position = enemy.transform.position;
                 particleInstance.SetActive(true);
                 return;
             }

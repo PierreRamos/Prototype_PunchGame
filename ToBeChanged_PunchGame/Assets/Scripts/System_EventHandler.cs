@@ -9,8 +9,8 @@ public class System_EventHandler : MonoBehaviour
 
     //Game events
     public Action<Vector3> Event_SpawnEnemy;
-
-    public Action Event_DefeatedEnemy;
+    public Action<GameObject> Event_DefeatedEnemy;
+    public Action Event_DeactivatedSoloBattle;
 
     //Player controller events
     public Action Event_AttackLeft;
@@ -24,17 +24,19 @@ public class System_EventHandler : MonoBehaviour
     public Action Event_StopSlowTime;
     public Action<GameObject> Event_EnemyHit;
     public Action<Vector3> Event_MoveToEnemy;
+    public Action<GameObject, List<MoveSet>> Event_TriggeredSoloBattle;
+
+    //Solo Battle events
+    public Action<MoveSet> Event_Hit;
 
     //Value change events
 
     public Action<int> Event_PlayerHealthValueChange;
     public Action<int> Event_EnemyDefeatedValueChange;
-
     public Action<int> Event_DifficultyValueChange;
     public Action<GameObject, int> Event_EnemyHealthValueChange;
 
-    //Effect events
-    public Action<Vector3> Event_HitEffect;
+    // //Effect events
     public Action<Vector3> Event_ExclamationEffect;
 
     //Hit indicator events

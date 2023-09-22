@@ -6,6 +6,8 @@ public class System_HitIndicator : MonoBehaviour
 {
     System_EventHandler EventHandler;
 
+    System_GlobalValues GlobalValues;
+
     [Header("Initialization")]
     [Space]
     [SerializeField]
@@ -19,7 +21,10 @@ public class System_HitIndicator : MonoBehaviour
 
     [Space]
     [SerializeField]
-    Sprite _deactivatedSprite;
+    Sprite _leftDeactivatedSprite;
+
+    [SerializeField]
+    Sprite _rightDeactivatedSprite;
 
     [SerializeField]
     Sprite _leftActivatedSprite;
@@ -27,9 +32,10 @@ public class System_HitIndicator : MonoBehaviour
     [SerializeField]
     Sprite _rightActivatedSprite;
 
-    void Start()
+    void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_HasEnemyLeft += ActivateLeft;
         EventHandler.Event_HasEnemyRight += ActivateRight;
@@ -41,12 +47,25 @@ public class System_HitIndicator : MonoBehaviour
         EventHandler.Event_HasEnemyRight += ActivateRight;
     }
 
+    void Start()
+    {
+        UpdateHitIndicatorRange();
+    }
+
+    void UpdateHitIndicatorRange()
+    {
+        var playerAttackRange = GlobalValues.GetPlayerAttackRange();
+
+        _left.size = new Vector2(playerAttackRange - 0.1f, _left.size.y);
+        _right.size = new Vector2(playerAttackRange - 0.1f, _right.size.y);
+    }
+
     void ActivateLeft(bool value)
     {
         if (value == true)
             _left.sprite = _leftActivatedSprite;
         else
-            _left.sprite = _deactivatedSprite;
+            _left.sprite = _leftDeactivatedSprite;
     }
 
     void ActivateRight(bool value)
@@ -54,6 +73,6 @@ public class System_HitIndicator : MonoBehaviour
         if (value == true)
             _right.sprite = _rightActivatedSprite;
         else
-            _right.sprite = _deactivatedSprite;
+            _right.sprite = _rightDeactivatedSprite;
     }
 }

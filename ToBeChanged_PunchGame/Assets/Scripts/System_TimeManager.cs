@@ -19,17 +19,27 @@ public class System_TimeManager : MonoBehaviour
 
         EventHandler.Event_SlowTime += SlowTime;
         EventHandler.Event_StopSlowTime += NormalTime;
+        EventHandler.Event_TriggeredSoloBattle += SlowTimeIndefinitely;
     }
 
     void OnDisable()
     {
         EventHandler.Event_SlowTime -= SlowTime;
         EventHandler.Event_StopSlowTime -= NormalTime;
+        EventHandler.Event_TriggeredSoloBattle += SlowTimeIndefinitely;
     }
 
     void NormalTime()
     {
         Time.timeScale = 1;
+
+        if (_slowTimeTimer != null)
+            StopCoroutine(_slowTimeTimer);
+    }
+
+    void SlowTimeIndefinitely(GameObject gameObject, List<MoveSet> listOfMoves)
+    {
+        Time.timeScale = _slowTimeValue;
 
         if (_slowTimeTimer != null)
             StopCoroutine(_slowTimeTimer);

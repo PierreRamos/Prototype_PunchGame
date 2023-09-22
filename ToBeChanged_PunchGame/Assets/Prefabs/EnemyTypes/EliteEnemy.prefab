@@ -143,9 +143,10 @@ GameObject:
   - component: {fileID: -3296882342529021811}
   - component: {fileID: -6541493425883857811}
   - component: {fileID: -1480613759023284349}
+  - component: {fileID: -5229970508944625852}
   m_Layer: 0
-  m_Name: MediumEnemy
-  m_TagString: Enemy
+  m_Name: EliteEnemy
+  m_TagString: Enemy_Elite
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -208,7 +209,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -949660147, guid: 2317150cee5ddda49a7ab80c80d2a7fd, type: 3}
-  m_Color: {r: 1, g: 0.76042914, b: 0.3066038, a: 1}
+  m_Color: {r: 1, g: 0.33490568, b: 0.9887611, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -277,7 +278,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1345813ba36d394a9267259ffe49b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 1
+  enemyType: 3
 --- !u!114 &-3296882342529021811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,7 +301,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5829559742014051392}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 50ec840fabbdf5844825b31b69c4cee9, type: 3}
   m_Name: 
@@ -322,3 +323,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _hitPanel: {fileID: 6993499411178480913}
   _hitOrb: {fileID: 8434758756425880244, guid: 3d383d871464ed64aad5182b408b04aa, type: 3}
+--- !u!114 &-5229970508944625852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5829559742014051392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21214153ec4ecf84799d9ea86c3b7496, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _numberOfMoves: 5

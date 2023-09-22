@@ -2,23 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum MoveSet
+{
+    Left,
+    Right,
+    Up,
+    Down
+}
+
+public enum GameState
+{
+    Normal,
+    SoloBattle
+}
+
 public class System_GlobalValues : MonoBehaviour
 {
     public static System_GlobalValues Instance;
 
     System_EventHandler EventHandler;
 
-    [Header("Global Value Settings")]
-    [Space]
-    [SerializeField]
-    float _playerKnockBackTime;
-
-    [SerializeField]
-    float _enemyMovementSpeed;
-
-    [SerializeField]
+    GameState _currentGameState;
     int _difficulty;
     int _currentDefeatCount;
+    float _playerKnockBackTime;
+    float _playerAttackRange;
+    float _enemyMovementSpeed;
+    float _enemySpawnModifier;
 
     void Awake()
     {
@@ -44,8 +54,13 @@ public class System_GlobalValues : MonoBehaviour
         EventHandler.Event_DefeatedEnemy += AddDefeatCount;
     }
 
+    private void Start()
+    {
+        _currentGameState = GameState.Normal;
+    }
+
     //Incrementers
-    void AddDefeatCount()
+    void AddDefeatCount(GameObject enemy)
     {
         _currentDefeatCount++;
         EventHandler.Event_EnemyDefeatedValueChange?.Invoke(GetDefeatCount());
@@ -58,12 +73,38 @@ public class System_GlobalValues : MonoBehaviour
     }
 
     //Setters
+
+    public void SetGameState(GameState gameState)
+    {
+        _currentGameState = gameState;
+    }
+
+    public void SetPlayerKnockBackTime(float value)
+    {
+        _playerKnockBackTime = value;
+    }
+
     public void SetEnemyMovementSpeed(float value)
     {
         _enemyMovementSpeed = value;
     }
 
+    public void SetPlayerAttackRange(float value)
+    {
+        _playerAttackRange = value;
+    }
+
+    public void SetEnemySpawnModifier(float value)
+    {
+        _enemySpawnModifier = value;
+    }
+
     //Getters
+
+    public GameState GetGameState()
+    {
+        return _currentGameState;
+    }
 
     public float GetPlayerKnockBackTime()
     {
@@ -73,6 +114,16 @@ public class System_GlobalValues : MonoBehaviour
     public float GetEnemyMovementSpeed()
     {
         return _enemyMovementSpeed;
+    }
+
+    public float GetPlayerAttackRange()
+    {
+        return _playerAttackRange;
+    }
+
+    public float GetEnemySpawnModifier()
+    {
+        return _enemySpawnModifier;
     }
 
     public int GetDefeatCount()

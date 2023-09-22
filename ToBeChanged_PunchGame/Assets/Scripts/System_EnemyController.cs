@@ -16,6 +16,9 @@ public class System_EnemyController : MonoBehaviour
     [SerializeField]
     float _knockBackForce;
 
+    [SerializeField]
+    float _enemyMovementSpeed;
+
     Rigidbody2D _rigidBody;
 
     Transform _playerTransform;
@@ -31,7 +34,7 @@ public class System_EnemyController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
     }
 
-    private void OnEnable()
+    void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
@@ -62,6 +65,11 @@ public class System_EnemyController : MonoBehaviour
             Flip();
     }
 
+    void Start()
+    {
+        GlobalValues.SetEnemyMovementSpeed(_enemyMovementSpeed);
+    }
+
     void Update()
     {
         MoveTowardsPlayer();
@@ -74,7 +82,7 @@ public class System_EnemyController : MonoBehaviour
 
     void MoveTowardsPlayer()
     {
-        if (_isMoving)
+        if (_isMoving && GlobalValues.GetGameState() == GameState.Normal)
         {
             // Calculate the step size based on the movement speed and time
             float step = GlobalValues.GetEnemyMovementSpeed() * Time.deltaTime;
@@ -90,7 +98,11 @@ public class System_EnemyController : MonoBehaviour
 
     void CheckIfHit(GameObject gameObject)
     {
-        if (this.gameObject == gameObject)
+        if (
+            this.gameObject == gameObject
+            && GlobalValues.GetGameState() == GameState.Normal
+            && gameObject.activeSelf == true
+        )
         {
             GiveKnockback();
         }
