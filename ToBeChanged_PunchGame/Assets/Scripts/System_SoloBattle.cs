@@ -12,10 +12,16 @@ public class System_SoloBattle : MonoBehaviour
     [Header("Initialization")]
     [Space]
     [SerializeField]
+    GameObject _playerObject;
+
+    [SerializeField]
     GameObject _hitIndicator;
 
     [SerializeField]
     GameObject _soloBattlePanel;
+
+    [SerializeField]
+    GameObject _arrows;
 
     [SerializeField]
     Sprite _upSprite;
@@ -29,9 +35,7 @@ public class System_SoloBattle : MonoBehaviour
     [SerializeField]
     Sprite _leftSprite;
 
-    Camera _mainCamera;
-
-    Image _soloBattleImage;
+    Image _arrowImage;
 
     bool _isWaitingForAction;
 
@@ -39,26 +43,26 @@ public class System_SoloBattle : MonoBehaviour
 
     MoveSet _currentMoveToHit;
 
-    Coroutine _performMoves;
-
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_TriggeredSoloBattle += ActivateSoloBattle;
+        EventHandler.Event_SoloBattleTimerFinished += DeactivateSoloBattle;
         EventHandler.Event_Hit += CheckMove;
     }
 
     private void OnDisable()
     {
-        EventHandler.Event_TriggeredSoloBattle += ActivateSoloBattle;
-        EventHandler.Event_Hit += CheckMove;
+        EventHandler.Event_TriggeredSoloBattle -= ActivateSoloBattle;
+        EventHandler.Event_SoloBattleTimerFinished -= DeactivateSoloBattle;
+        EventHandler.Event_Hit -= CheckMove;
     }
 
     void Start()
     {
-        _soloBattleImage = _soloBattlePanel.GetComponent<Image>();
+        _arrowImage = _arrows.GetComponent<Image>();
     }
 
     void ActivateSoloBattle(GameObject gameObject, List<MoveSet> listOfMoves)
@@ -68,8 +72,7 @@ public class System_SoloBattle : MonoBehaviour
 
         _currentEnemy = gameObject;
 
-        // if (_performMoves == null)
-        _performMoves = StartCoroutine(PerformMoves(listOfMoves));
+        StartCoroutine(PerformMoves(listOfMoves));
     }
 
     IEnumerator PerformMoves(List<MoveSet> movesQueue)
@@ -97,16 +100,16 @@ public class System_SoloBattle : MonoBehaviour
         switch (move)
         {
             case MoveSet.Left:
-                _soloBattleImage.sprite = _leftSprite;
+                _arrowImage.sprite = _leftSprite;
                 break;
             case MoveSet.Right:
-                _soloBattleImage.sprite = _rightSprite;
+                _arrowImage.sprite = _rightSprite;
                 break;
             case MoveSet.Up:
-                _soloBattleImage.sprite = _upSprite;
+                _arrowImage.sprite = _upSprite;
                 break;
             case MoveSet.Down:
-                _soloBattleImage.sprite = _downSprite;
+                _arrowImage.sprite = _downSprite;
                 break;
         }
     }
@@ -119,7 +122,7 @@ public class System_SoloBattle : MonoBehaviour
         GlobalValues.SetGameState(GameState.Normal);
 
         EventHandler.Event_StopSlowTime?.Invoke();
-        EventHandler.Event_DeactivatedSoloBattle?.Invoke();
+        EventHandler.Event_DeactivatedSoloBattle?.Invoke(_playerObject.transform.position);
 
         if (defeatedEnemy)
         {

@@ -48,6 +48,7 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackRight += HitCheckRight;
         EventHandler.Event_EnemyHit += MoveToHitEnemy;
         EventHandler.Event_EnemyHit += CheckDirection;
+        EventHandler.Event_DeactivatedSoloBattle += StartCheckForEnemyCloseForSlowMotion;
     }
 
     void OnDisable()
@@ -56,6 +57,7 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackRight -= HitCheckRight;
         EventHandler.Event_EnemyHit -= MoveToHitEnemy;
         EventHandler.Event_EnemyHit -= CheckDirection;
+        EventHandler.Event_DeactivatedSoloBattle -= StartCheckForEnemyCloseForSlowMotion;
     }
 
     void Start()
@@ -192,10 +194,14 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_MoveToEnemy?.Invoke(targetPosition);
 
         if (GlobalValues.GetGameState() == GameState.Normal)
-            StartCoroutine(CheckForEnemyCloseAfterMove(targetPosition));
+            StartCheckForEnemyCloseForSlowMotion(targetPosition);
+    }
 
-        //Internal
-        IEnumerator CheckForEnemyCloseAfterMove(Vector3 targetPosition)
+    void StartCheckForEnemyCloseForSlowMotion(Vector3 targetPosition)
+    {
+        StartCoroutine(CheckForEnemyCloseForSlowMotion(targetPosition));
+
+        IEnumerator CheckForEnemyCloseForSlowMotion(Vector3 targetPosition)
         {
             yield return new WaitForEndOfFrame();
 

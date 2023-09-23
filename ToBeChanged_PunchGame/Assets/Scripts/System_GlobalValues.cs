@@ -51,7 +51,7 @@ public class System_GlobalValues : MonoBehaviour
 
     void OnDisable()
     {
-        EventHandler.Event_DefeatedEnemy += AddDefeatCount;
+        EventHandler.Event_DefeatedEnemy -= AddDefeatCount;
     }
 
     private void Start()
