@@ -10,6 +10,9 @@ public class System_UIManager : MonoBehaviour
     [Header("Initialization")]
     [Space]
     [SerializeField]
+    GameObject _gameOverPanel;
+
+    [SerializeField]
     TextMeshProUGUI _healthText;
 
     [SerializeField]
@@ -21,12 +24,20 @@ public class System_UIManager : MonoBehaviour
 
         EventHandler.Event_PlayerHealthValueChange += UpdateHealthDisplay;
         EventHandler.Event_EnemyDefeatedValueChange += UpdateDefeatedDisplay;
+        EventHandler.Event_PlayerDied += ActivateGameOver;
     }
 
     private void OnDisable()
     {
         EventHandler.Event_PlayerHealthValueChange -= UpdateHealthDisplay;
         EventHandler.Event_EnemyDefeatedValueChange -= UpdateDefeatedDisplay;
+        EventHandler.Event_PlayerDied -= ActivateGameOver;
+    }
+
+    void ActivateGameOver()
+    {
+        if (!_gameOverPanel.activeSelf)
+            _gameOverPanel.SetActive(true);
     }
 
     void UpdateHealthDisplay(int value)

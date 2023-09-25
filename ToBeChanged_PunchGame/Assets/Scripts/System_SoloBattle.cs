@@ -21,23 +21,57 @@ public class System_SoloBattle : MonoBehaviour
     GameObject _soloBattlePanel;
 
     [SerializeField]
-    GameObject _arrows;
+    GameObject _soloBattlePrompt;
+
+    [Space]
+    [SerializeField]
+    Sprite _baseUpSprite;
 
     [SerializeField]
-    Sprite _upSprite;
+    Sprite _baseDownSprite;
 
     [SerializeField]
-    Sprite _downSprite;
+    Sprite _baseRightSprite;
 
     [SerializeField]
-    Sprite _rightSprite;
+    Sprite _baseLeftSprite;
+
+    [Space]
+    [SerializeField]
+    Sprite _correctUpSprite;
 
     [SerializeField]
-    Sprite _leftSprite;
+    Sprite _correctDownSprite;
 
-    Image _arrowImage;
+    [SerializeField]
+    Sprite _correctRightSprite;
 
-    bool _isWaitingForAction;
+    [SerializeField]
+    Sprite _correctLeftSprite;
+
+    [Space]
+    [SerializeField]
+    Sprite _wrongUpSprite;
+
+    [SerializeField]
+    Sprite _wrongDownSprite;
+
+    [SerializeField]
+    Sprite _wrongRightSprite;
+
+    [SerializeField]
+    Sprite _wrongLeftSprite;
+
+    [Header("Solo Battle Settings")]
+    [Space]
+    [SerializeField]
+    float _promptDelayDuration;
+
+    Image _promptImage;
+
+    bool _isWaitingForAction,
+        _correctInputRunning,
+        _wrongInputRunning;
 
     GameObject _currentEnemy;
 
@@ -62,7 +96,7 @@ public class System_SoloBattle : MonoBehaviour
 
     void Start()
     {
-        _arrowImage = _arrows.GetComponent<Image>();
+        _promptImage = _soloBattlePrompt.GetComponent<Image>();
     }
 
     void ActivateSoloBattle(GameObject gameObject, List<MoveSet> listOfMoves)
@@ -85,7 +119,7 @@ public class System_SoloBattle : MonoBehaviour
             _currentMoveToHit = movesQueue[0];
             movesQueue.RemoveAt(0);
 
-            UpdateSprite(_currentMoveToHit);
+            UpdateBaseSprite(_currentMoveToHit);
 
             _isWaitingForAction = true;
 
@@ -93,25 +127,6 @@ public class System_SoloBattle : MonoBehaviour
         }
 
         DeactivateSoloBattle(true);
-    }
-
-    void UpdateSprite(MoveSet move)
-    {
-        switch (move)
-        {
-            case MoveSet.Left:
-                _arrowImage.sprite = _leftSprite;
-                break;
-            case MoveSet.Right:
-                _arrowImage.sprite = _rightSprite;
-                break;
-            case MoveSet.Up:
-                _arrowImage.sprite = _upSprite;
-                break;
-            case MoveSet.Down:
-                _arrowImage.sprite = _downSprite;
-                break;
-        }
     }
 
     void DeactivateSoloBattle(bool defeatedEnemy)
@@ -124,21 +139,106 @@ public class System_SoloBattle : MonoBehaviour
         EventHandler.Event_StopSlowTime?.Invoke();
         EventHandler.Event_DeactivatedSoloBattle?.Invoke(_playerObject.transform.position);
 
+        _currentEnemy.SetActive(false);
+
         if (defeatedEnemy)
         {
-            _currentEnemy.SetActive(false);
             EventHandler.Event_DefeatedEnemy?.Invoke(_currentEnemy);
         }
+        else
+            EventHandler.Event_PlayerHit?.Invoke(1);
     }
 
     void CheckMove(MoveSet move)
     {
-        if (move == _currentMoveToHit)
+        if (move == _currentMoveToHit && !_correctInputRunning)
         {
-            EventHandler.Event_EnemyHit?.Invoke(_currentEnemy);
-            _isWaitingForAction = false;
+            StartCoroutine(CorrectInput(move));
         }
-        else
-            EventHandler.Event_PlayerHit?.Invoke(1);
+        else if (!_wrongInputRunning)
+            StartCoroutine(WrongInput(_currentMoveToHit));
+    }
+
+    IEnumerator CorrectInput(MoveSet move)
+    {
+        _correctInputRunning = true;
+
+        UpdateCorrectSprite(move);
+        EventHandler.Event_EnemyHit?.Invoke(_currentEnemy);
+
+        yield return new WaitForSecondsRealtime(_promptDelayDuration);
+        _isWaitingForAction = false;
+
+        _correctInputRunning = false;
+    }
+
+    IEnumerator WrongInput(MoveSet move)
+    {
+        _wrongInputRunning = true;
+
+        UpdateWrongSprite(move);
+        EventHandler.Event_SoloBattleWrongInput?.Invoke();
+
+        yield return new WaitForSecondsRealtime(_promptDelayDuration);
+        UpdateBaseSprite(move);
+
+        _wrongInputRunning = false;
+    }
+
+    void UpdateBaseSprite(MoveSet move)
+    {
+        switch (move)
+        {
+            case MoveSet.Left:
+                _promptImage.sprite = _baseLeftSprite;
+                break;
+            case MoveSet.Right:
+                _promptImage.sprite = _baseRightSprite;
+                break;
+            case MoveSet.Up:
+                _promptImage.sprite = _baseUpSprite;
+                break;
+            case MoveSet.Down:
+                _promptImage.sprite = _baseDownSprite;
+                break;
+        }
+    }
+
+    void UpdateCorrectSprite(MoveSet move)
+    {
+        switch (move)
+        {
+            case MoveSet.Left:
+                _promptImage.sprite = _correctLeftSprite;
+                break;
+            case MoveSet.Right:
+                _promptImage.sprite = _correctRightSprite;
+                break;
+            case MoveSet.Up:
+                _promptImage.sprite = _correctUpSprite;
+                break;
+            case MoveSet.Down:
+                _promptImage.sprite = _correctDownSprite;
+                break;
+        }
+    }
+
+    void UpdateWrongSprite(MoveSet move)
+    {
+        switch (move)
+        {
+            case MoveSet.Left:
+                _promptImage.sprite = _wrongLeftSprite;
+                break;
+            case MoveSet.Right:
+                _promptImage.sprite = _wrongRightSprite;
+                break;
+            case MoveSet.Up:
+                _promptImage.sprite = _wrongUpSprite;
+                break;
+            case MoveSet.Down:
+                _promptImage.sprite = _wrongDownSprite;
+                break;
+        }
     }
 }

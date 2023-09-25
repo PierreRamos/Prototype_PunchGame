@@ -17,16 +17,18 @@ public class System_TimeManager : MonoBehaviour
     {
         EventHandler = System_EventHandler.Instance;
 
-        EventHandler.Event_SlowTime += SlowTime;
         EventHandler.Event_StopSlowTime += NormalTime;
+        EventHandler.Event_SlowTime += SlowTime;
         EventHandler.Event_TriggeredSoloBattle += SlowTimeIndefinitely;
+        EventHandler.Event_PlayerDied += StopTime;
     }
 
     void OnDisable()
     {
-        EventHandler.Event_SlowTime -= SlowTime;
         EventHandler.Event_StopSlowTime -= NormalTime;
-        EventHandler.Event_TriggeredSoloBattle += SlowTimeIndefinitely;
+        EventHandler.Event_SlowTime -= SlowTime;
+        EventHandler.Event_TriggeredSoloBattle -= SlowTimeIndefinitely;
+        EventHandler.Event_PlayerDied -= StopTime;
     }
 
     void NormalTime()
@@ -61,5 +63,10 @@ public class System_TimeManager : MonoBehaviour
             );
             NormalTime();
         }
+    }
+
+    void StopTime()
+    {
+        Time.timeScale = 0;
     }
 }

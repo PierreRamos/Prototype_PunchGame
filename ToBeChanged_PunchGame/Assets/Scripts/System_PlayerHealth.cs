@@ -23,14 +23,21 @@ public class System_PlayerHealth : MonoBehaviour
         EventHandler.Event_PlayerHealthValueChange?.Invoke(GetPlayerHealth());
     }
 
-    void UpdatePlayerHealth(int damage)
-    {
-        _currentPlayerHealth -= damage;
-        EventHandler.Event_PlayerHealthValueChange?.Invoke(GetPlayerHealth());
-    }
-
     int GetPlayerHealth()
     {
         return _currentPlayerHealth;
+    }
+
+    void UpdatePlayerHealth(int damage)
+    {
+        _currentPlayerHealth -= damage;
+
+        EventHandler.Event_PlayerHealthValueChange?.Invoke(GetPlayerHealth());
+
+        if (_currentPlayerHealth <= 0)
+        {
+            EventHandler.Event_PlayerDied?.Invoke();
+            return;
+        }
     }
 }

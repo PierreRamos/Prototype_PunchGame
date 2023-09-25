@@ -29,16 +29,18 @@ public class System_PlayerStatus : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
 
         EventHandler.Event_TriggerStun += TriggerStun;
+        EventHandler.Event_PlayerHit += StopStun;
     }
 
     private void OnDisable()
     {
         EventHandler.Event_TriggerStun -= TriggerStun;
+        EventHandler.Event_PlayerHit -= StopStun;
     }
 
     void TriggerStun()
@@ -55,6 +57,17 @@ public class System_PlayerStatus : MonoBehaviour
             yield return new WaitForSeconds(_stunTimerDuration);
             _isStunned = false;
         }
+    }
+
+    void StopStun(int dummy)
+    {
+        if (_isStunned)
+            _isStunned = false;
+        else
+            return;
+
+        if (_stunTimer != null)
+            StopCoroutine(_stunTimer);
     }
 
     public bool PlayerIsStunned()

@@ -201,6 +201,7 @@ public class System_PlayerAttack : MonoBehaviour
     {
         StartCoroutine(CheckForEnemyCloseForSlowMotion(targetPosition));
 
+        //
         IEnumerator CheckForEnemyCloseForSlowMotion(Vector3 targetPosition)
         {
             yield return new WaitForEndOfFrame();
@@ -220,7 +221,10 @@ public class System_PlayerAttack : MonoBehaviour
 
             foreach (var hit in leftHits)
             {
-                if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+                if (
+                    hit.collider != null
+                    && (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Enemy_Elite"))
+                )
                 {
                     detectedEnemies.Add(hit.collider.gameObject);
                 }
@@ -228,7 +232,10 @@ public class System_PlayerAttack : MonoBehaviour
 
             foreach (var hit in rightHits)
             {
-                if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+                if (
+                    hit.collider != null
+                    && (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Enemy_Elite"))
+                )
                 {
                     detectedEnemies.Add(hit.collider.gameObject);
                 }
@@ -238,7 +245,6 @@ public class System_PlayerAttack : MonoBehaviour
             {
                 if (detectedEnemies.Count > 0)
                 {
-                    // Invoke the slow time event or handle detectedEnemies as needed
                     EventHandler.Event_SlowTime?.Invoke();
                 }
                 else

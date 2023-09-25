@@ -124,5 +124,16 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
+
+        //Debug only
+        // foreach (GameObject particleInstance in _eliteEnemyPool)
+        // {
+        //     if (!particleInstance.activeInHierarchy)
+        //     {
+        //         particleInstance.transform.position = position;
+        //         particleInstance.SetActive(true);
+        //         return;
+        //     }
+        // }
     }
 }

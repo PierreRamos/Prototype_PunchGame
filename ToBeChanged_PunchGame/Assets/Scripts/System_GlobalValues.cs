@@ -56,6 +56,7 @@ public class System_GlobalValues : MonoBehaviour
 
     private void Start()
     {
+        Time.timeScale = 1;
         _currentGameState = GameState.Normal;
     }
 

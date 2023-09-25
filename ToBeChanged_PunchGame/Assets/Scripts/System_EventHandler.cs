@@ -18,6 +18,7 @@ public class System_EventHandler : MonoBehaviour
 
     //Player Status events
     public Action Event_TriggerStun;
+    public Action Event_PlayerDied;
 
     //Attack events
     public Action Event_SlowTime;
@@ -28,8 +29,8 @@ public class System_EventHandler : MonoBehaviour
 
     //Solo Battle events
     public Action<MoveSet> Event_Hit;
-
     public Action<bool> Event_SoloBattleTimerFinished;
+    public Action Event_SoloBattleWrongInput;
 
     //Value change events
 

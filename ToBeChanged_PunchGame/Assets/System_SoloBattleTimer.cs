@@ -17,14 +17,24 @@ public class System_SoloBattleTimer : MonoBehaviour
     [SerializeField]
     float _soloBattleDuration;
 
+    [SerializeField]
+    float _incorrectInputPenalty;
+
     float _currentTime;
 
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
 
+        EventHandler.Event_SoloBattleWrongInput += DecreaseTime;
+
         _currentTime = _soloBattleDuration;
         _timerSlider.value = _soloBattleDuration;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.Event_SoloBattleWrongInput -= DecreaseTime;
     }
 
     private void Start()
@@ -45,5 +55,10 @@ public class System_SoloBattleTimer : MonoBehaviour
             EventHandler.Event_SoloBattleTimerFinished?.Invoke(false);
 
         _timerSlider.value = _currentTime;
+    }
+
+    void DecreaseTime()
+    {
+        _currentTime -= _incorrectInputPenalty;
     }
 }
