@@ -15,7 +15,7 @@ public class System_SoloBattleTimer : MonoBehaviour
     [Header("Solo Battle Timer Settings")]
     [Space]
     [SerializeField]
-    float _soloBattleDuration;
+    float _secondsPerMove;
 
     [SerializeField]
     float _incorrectInputPenalty;
@@ -27,24 +27,25 @@ public class System_SoloBattleTimer : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
 
         EventHandler.Event_SoloBattleWrongInput += DecreaseTime;
-
-        _currentTime = _soloBattleDuration;
-        _timerSlider.value = _soloBattleDuration;
+        EventHandler.Event_UpdateSoloBattleTimer += ActivateSoloBattleTimer;
     }
 
     private void OnDisable()
     {
         EventHandler.Event_SoloBattleWrongInput -= DecreaseTime;
-    }
-
-    private void Start()
-    {
-        _timerSlider.maxValue = _soloBattleDuration;
+        EventHandler.Event_UpdateSoloBattleTimer -= ActivateSoloBattleTimer;
     }
 
     private void Update()
     {
         SoloBattleTimer();
+    }
+
+    void ActivateSoloBattleTimer(int moveCount)
+    {
+        _currentTime = moveCount * _secondsPerMove;
+        _timerSlider.value = _currentTime;
+        _timerSlider.maxValue = _currentTime;
     }
 
     void SoloBattleTimer()

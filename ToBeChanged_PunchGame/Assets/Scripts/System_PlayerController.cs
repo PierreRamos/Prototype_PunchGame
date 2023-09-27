@@ -7,11 +7,25 @@ public class System_PlayerController : MonoBehaviour
 {
     System_EventHandler EventHandler;
     System_GlobalValues GlobalValues;
+    bool _isPaused;
 
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
+    }
+
+    public void Pause(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            if (!_isPaused)
+                _isPaused = true;
+            else
+                _isPaused = false;
+
+            EventHandler.Event_Pause?.Invoke(_isPaused);
+        }
     }
 
     public void AttackLeft(InputAction.CallbackContext context)

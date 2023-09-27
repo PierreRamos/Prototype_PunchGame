@@ -15,10 +15,12 @@ public class System_EventHandler : MonoBehaviour
     //Player controller events
     public Action Event_AttackLeft;
     public Action Event_AttackRight;
+    public Action<bool> Event_Pause;
 
     //Player Status events
     public Action Event_TriggerStun;
     public Action Event_PlayerDied;
+    public Action Event_PlayerStunFinished;
 
     //Attack events
     public Action Event_SlowTime;
@@ -34,10 +36,14 @@ public class System_EventHandler : MonoBehaviour
 
     //Value change events
 
+    public Action<float> Event_PlayerStunTimeChange;
     public Action<int> Event_PlayerHealthValueChange;
     public Action<int> Event_EnemyDefeatedValueChange;
     public Action<int> Event_DifficultyValueChange;
     public Action<GameObject, int> Event_EnemyHealthValueChange;
+
+    //Update on enabled object event
+    public Action<int> Event_UpdateSoloBattleTimer;
 
     // //Effect events
     public Action<Vector3> Event_ExclamationEffect;

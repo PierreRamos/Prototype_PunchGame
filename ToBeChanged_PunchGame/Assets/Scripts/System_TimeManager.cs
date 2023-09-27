@@ -9,6 +9,9 @@ public class System_TimeManager : MonoBehaviour
     [SerializeField]
     float _slowTimeValue;
 
+    [SerializeField]
+    float _indefiniteSlowTimeValue;
+
     System_EventHandler EventHandler;
 
     Coroutine _slowTimeTimer;
@@ -21,6 +24,7 @@ public class System_TimeManager : MonoBehaviour
         EventHandler.Event_SlowTime += SlowTime;
         EventHandler.Event_TriggeredSoloBattle += SlowTimeIndefinitely;
         EventHandler.Event_PlayerDied += StopTime;
+        EventHandler.Event_Pause += PauseTime;
     }
 
     void OnDisable()
@@ -29,6 +33,7 @@ public class System_TimeManager : MonoBehaviour
         EventHandler.Event_SlowTime -= SlowTime;
         EventHandler.Event_TriggeredSoloBattle -= SlowTimeIndefinitely;
         EventHandler.Event_PlayerDied -= StopTime;
+        EventHandler.Event_Pause -= PauseTime;
     }
 
     void NormalTime()
@@ -41,7 +46,7 @@ public class System_TimeManager : MonoBehaviour
 
     void SlowTimeIndefinitely(GameObject gameObject, List<MoveSet> listOfMoves)
     {
-        Time.timeScale = _slowTimeValue;
+        Time.timeScale = _indefiniteSlowTimeValue;
 
         if (_slowTimeTimer != null)
             StopCoroutine(_slowTimeTimer);
@@ -68,5 +73,13 @@ public class System_TimeManager : MonoBehaviour
     void StopTime()
     {
         Time.timeScale = 0;
+    }
+
+    void PauseTime(bool value)
+    {
+        if (value)
+            Time.timeScale = 0;
+        else
+            Time.timeScale = 1;
     }
 }

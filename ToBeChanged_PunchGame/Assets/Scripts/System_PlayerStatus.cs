@@ -11,7 +11,8 @@ public class System_PlayerStatus : MonoBehaviour
     [Header("Player Status Settings")]
     [Space]
     [SerializeField]
-    float _stunTimerDuration;
+    float _stunTimerDuration,
+        _currentStunTime;
 
     bool _isStunned;
 
@@ -43,26 +44,39 @@ public class System_PlayerStatus : MonoBehaviour
         EventHandler.Event_PlayerHit -= StopStun;
     }
 
+    private void Update()
+    {
+        StunTimer();
+    }
+
+    void StunTimer()
+    {
+        if (_currentStunTime > 0)
+        {
+            _currentStunTime -= 1 * Time.unscaledDeltaTime;
+            EventHandler.Event_PlayerStunTimeChange?.Invoke(_currentStunTime);
+        }
+        else
+        {
+            EventHandler.Event_PlayerStunFinished?.Invoke();
+            _isStunned = false;
+        }
+    }
+
     void TriggerStun()
     {
         _isStunned = true;
 
-        if (_stunTimer != null)
-            StopCoroutine(_stunTimer);
-
-        _stunTimer = StartCoroutine(StunTimer());
-
-        IEnumerator StunTimer()
-        {
-            yield return new WaitForSeconds(_stunTimerDuration);
-            _isStunned = false;
-        }
+        _currentStunTime = _stunTimerDuration;
     }
 
     void StopStun(int dummy)
     {
         if (_isStunned)
+        {
             _isStunned = false;
+            EventHandler.Event_PlayerStunFinished?.Invoke();
+        }
         else
             return;
 

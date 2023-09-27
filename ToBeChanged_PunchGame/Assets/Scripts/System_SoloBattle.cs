@@ -25,6 +25,10 @@ public class System_SoloBattle : MonoBehaviour
 
     [Space]
     [SerializeField]
+    List<GameObject> _listOfGhostPrompts = new List<GameObject>();
+
+    [Space]
+    [SerializeField]
     Sprite _baseUpSprite;
 
     [SerializeField]
@@ -35,6 +39,19 @@ public class System_SoloBattle : MonoBehaviour
 
     [SerializeField]
     Sprite _baseLeftSprite;
+
+    [Space]
+    [SerializeField]
+    Sprite _ghostUpSprite;
+
+    [SerializeField]
+    Sprite _ghostDownSprite;
+
+    [SerializeField]
+    Sprite _ghostRightSprite;
+
+    [SerializeField]
+    Sprite _ghostLeftSprite;
 
     [Space]
     [SerializeField]
@@ -67,17 +84,45 @@ public class System_SoloBattle : MonoBehaviour
     [SerializeField]
     float _promptDelayDuration;
 
+    MoveSet _currentMoveToHit;
+    GameObject _currentEnemy;
+    Transform _ghost1,
+        _ghost2,
+        _ghost3;
     Image _promptImage;
-
     bool _isWaitingForAction,
         _correctInputRunning,
         _wrongInputRunning;
 
-    GameObject _currentEnemy;
+    Dictionary<MoveSet, Sprite> baseSprites = new Dictionary<MoveSet, Sprite>();
+    Dictionary<MoveSet, Sprite> correctSprites = new Dictionary<MoveSet, Sprite>();
+    Dictionary<MoveSet, Sprite> wrongSprites = new Dictionary<MoveSet, Sprite>();
+    Dictionary<MoveSet, Sprite> ghostSprites = new Dictionary<MoveSet, Sprite>();
 
-    MoveSet _currentMoveToHit;
+    void Awake()
+    {
+        baseSprites[MoveSet.Left] = _baseLeftSprite;
+        baseSprites[MoveSet.Right] = _baseRightSprite;
+        baseSprites[MoveSet.Up] = _baseUpSprite;
+        baseSprites[MoveSet.Down] = _baseDownSprite;
 
-    private void OnEnable()
+        ghostSprites[MoveSet.Left] = _ghostLeftSprite;
+        ghostSprites[MoveSet.Right] = _ghostRightSprite;
+        ghostSprites[MoveSet.Up] = _ghostUpSprite;
+        ghostSprites[MoveSet.Down] = _ghostDownSprite;
+
+        correctSprites[MoveSet.Left] = _correctLeftSprite;
+        correctSprites[MoveSet.Right] = _correctRightSprite;
+        correctSprites[MoveSet.Up] = _correctUpSprite;
+        correctSprites[MoveSet.Down] = _correctDownSprite;
+
+        wrongSprites[MoveSet.Left] = _wrongLeftSprite;
+        wrongSprites[MoveSet.Right] = _wrongRightSprite;
+        wrongSprites[MoveSet.Up] = _wrongUpSprite;
+        wrongSprites[MoveSet.Down] = _wrongDownSprite;
+    }
+
+    void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
@@ -87,7 +132,7 @@ public class System_SoloBattle : MonoBehaviour
         EventHandler.Event_Hit += CheckMove;
     }
 
-    private void OnDisable()
+    void OnDisable()
     {
         EventHandler.Event_TriggeredSoloBattle -= ActivateSoloBattle;
         EventHandler.Event_SoloBattleTimerFinished -= DeactivateSoloBattle;
@@ -99,12 +144,16 @@ public class System_SoloBattle : MonoBehaviour
         _promptImage = _soloBattlePrompt.GetComponent<Image>();
     }
 
-    void ActivateSoloBattle(GameObject gameObject, List<MoveSet> listOfMoves)
+    void ActivateSoloBattle(GameObject enemy, List<MoveSet> listOfMoves)
     {
+        _currentEnemy = enemy;
+
         _hitIndicator.SetActive(false);
         _soloBattlePanel.SetActive(true);
 
-        _currentEnemy = gameObject;
+        //Passes enemy move count to solo battle timer
+        var moveCount = enemy.GetComponent<System_EliteMechanics>().GetMoveCount();
+        EventHandler.Event_UpdateSoloBattleTimer?.Invoke(moveCount);
 
         StartCoroutine(PerformMoves(listOfMoves));
     }
@@ -119,6 +168,9 @@ public class System_SoloBattle : MonoBehaviour
             _currentMoveToHit = movesQueue[0];
             movesQueue.RemoveAt(0);
 
+            UpdateGhostPrompts(movesQueue);
+
+            //Wait here until last sprite animation played?
             UpdateBaseSprite(_currentMoveToHit);
 
             _isWaitingForAction = true;
@@ -167,8 +219,8 @@ public class System_SoloBattle : MonoBehaviour
         EventHandler.Event_EnemyHit?.Invoke(_currentEnemy);
 
         yield return new WaitForSecondsRealtime(_promptDelayDuration);
-        _isWaitingForAction = false;
 
+        _isWaitingForAction = false;
         _correctInputRunning = false;
     }
 
@@ -185,60 +237,65 @@ public class System_SoloBattle : MonoBehaviour
         _wrongInputRunning = false;
     }
 
+    void UpdateGhostPrompts(List<MoveSet> moves)
+    {
+        //Initially disables every prompt
+        foreach (var prompt in _listOfGhostPrompts)
+        {
+            if (prompt.activeSelf)
+                prompt.SetActive(false);
+        }
+
+        if (moves.Count > 0)
+        {
+            for (int i = 0; i < _listOfGhostPrompts.Count; i++)
+            {
+                //Breaks the for loop early if moves.Count is lesser than _listOfGhostPrompts.Count
+                if (i + 1 > moves.Count)
+                    break;
+
+                var ghostImage = _listOfGhostPrompts[i].GetComponent<Image>();
+
+                if (moves[i] == MoveSet.Left)
+                    ghostImage.sprite = _ghostLeftSprite;
+                else if (moves[i] == MoveSet.Right)
+                    ghostImage.sprite = _ghostRightSprite;
+                else if (moves[i] == MoveSet.Up)
+                    ghostImage.sprite = _ghostUpSprite;
+                else if (moves[i] == MoveSet.Down)
+                    ghostImage.sprite = _ghostDownSprite;
+
+                if (!_listOfGhostPrompts[i].activeSelf)
+                    _listOfGhostPrompts[i].SetActive(true);
+            }
+        }
+    }
+
     void UpdateBaseSprite(MoveSet move)
     {
-        switch (move)
-        {
-            case MoveSet.Left:
-                _promptImage.sprite = _baseLeftSprite;
-                break;
-            case MoveSet.Right:
-                _promptImage.sprite = _baseRightSprite;
-                break;
-            case MoveSet.Up:
-                _promptImage.sprite = _baseUpSprite;
-                break;
-            case MoveSet.Down:
-                _promptImage.sprite = _baseDownSprite;
-                break;
-        }
+        SetSprite(move, baseSprites);
     }
 
     void UpdateCorrectSprite(MoveSet move)
     {
-        switch (move)
-        {
-            case MoveSet.Left:
-                _promptImage.sprite = _correctLeftSprite;
-                break;
-            case MoveSet.Right:
-                _promptImage.sprite = _correctRightSprite;
-                break;
-            case MoveSet.Up:
-                _promptImage.sprite = _correctUpSprite;
-                break;
-            case MoveSet.Down:
-                _promptImage.sprite = _correctDownSprite;
-                break;
-        }
+        SetSprite(move, correctSprites);
     }
 
     void UpdateWrongSprite(MoveSet move)
     {
-        switch (move)
+        SetSprite(move, wrongSprites);
+    }
+
+    void SetSprite(MoveSet move, Dictionary<MoveSet, Sprite> spriteDictionary)
+    {
+        if (spriteDictionary.ContainsKey(move))
         {
-            case MoveSet.Left:
-                _promptImage.sprite = _wrongLeftSprite;
-                break;
-            case MoveSet.Right:
-                _promptImage.sprite = _wrongRightSprite;
-                break;
-            case MoveSet.Up:
-                _promptImage.sprite = _wrongUpSprite;
-                break;
-            case MoveSet.Down:
-                _promptImage.sprite = _wrongDownSprite;
-                break;
+            _promptImage.sprite = spriteDictionary[move];
+        }
+        else
+        {
+            // Handle the case where the move is not found in the dictionary
+            Debug.LogWarning("Sprite not found for move: " + move);
         }
     }
 }

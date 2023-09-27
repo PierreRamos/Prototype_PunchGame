@@ -9,7 +9,10 @@ public class System_EliteMechanics : MonoBehaviour
     System_GlobalValues GlobalValues;
 
     [SerializeField]
-    int _numberOfMoves;
+    int _minNumberOfMoves;
+
+    [SerializeField]
+    int _maxNumberOfMoves;
 
     [SerializeField]
     List<MoveSet> _listOfMoves = new List<MoveSet>();
@@ -27,6 +30,13 @@ public class System_EliteMechanics : MonoBehaviour
     void OnDisable()
     {
         EventHandler.Event_EnemyHit -= CheckIfHit;
+
+        RemoveMoveSet();
+    }
+
+    public int GetMoveCount()
+    {
+        return _listOfMoves.Count;
     }
 
     void CheckIfHit(GameObject gameObject)
@@ -47,14 +57,19 @@ public class System_EliteMechanics : MonoBehaviour
 
     void GenerateMoveSet()
     {
-        _listOfMoves.Clear();
+        var numberOfMoves = Random.Range(_minNumberOfMoves, _maxNumberOfMoves + 1);
 
-        for (int i = 0; i < _numberOfMoves; i++)
+        for (int i = 0; i < numberOfMoves; i++)
         {
             var random = Random.Range(0, 4);
 
             MoveSet move = (MoveSet)random;
             _listOfMoves.Add(move);
         }
+    }
+
+    void RemoveMoveSet()
+    {
+        _listOfMoves.Clear();
     }
 }
