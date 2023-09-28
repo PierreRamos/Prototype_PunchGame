@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1963197795372945975}
   - component: {fileID: 5281457148612104120}
   m_Layer: 0
-  m_Name: Effect_Exclamation
+  m_Name: Effect_HealIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

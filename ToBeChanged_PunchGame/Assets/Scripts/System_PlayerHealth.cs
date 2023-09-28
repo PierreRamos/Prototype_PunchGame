@@ -5,6 +5,7 @@ using UnityEngine;
 public class System_PlayerHealth : MonoBehaviour
 {
     System_EventHandler EventHandler;
+    System_GlobalValues GlobalValues;
 
     [Header("Player Health Settings")]
     [Space]
@@ -13,12 +14,23 @@ public class System_PlayerHealth : MonoBehaviour
 
     int _currentPlayerHealth;
 
-    private void Start()
+    void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
 
-        EventHandler.Event_PlayerHit += UpdatePlayerHealth;
+        EventHandler.Event_PlayerHit += DamagePlayerHealth;
+        EventHandler.Event_HealPlayer += HealPlayerHealth;
+    }
 
+    void OnDisable()
+    {
+        EventHandler.Event_PlayerHit -= DamagePlayerHealth;
+        EventHandler.Event_HealPlayer -= HealPlayerHealth;
+    }
+
+    void Start()
+    {
         _currentPlayerHealth = _maxPlayerHealth;
         EventHandler.Event_PlayerHealthValueChange?.Invoke(GetPlayerHealth());
     }
@@ -28,16 +40,29 @@ public class System_PlayerHealth : MonoBehaviour
         return _currentPlayerHealth;
     }
 
-    void UpdatePlayerHealth(int damage)
+    void HealPlayerHealth(int heal)
     {
-        _currentPlayerHealth -= damage;
+        if (_currentPlayerHealth < _maxPlayerHealth)
+            _currentPlayerHealth += heal;
+
+        //Prevents health overflow
+        if (_currentPlayerHealth > _maxPlayerHealth)
+            _currentPlayerHealth = _maxPlayerHealth;
 
         EventHandler.Event_PlayerHealthValueChange?.Invoke(GetPlayerHealth());
+    }
+
+    void DamagePlayerHealth(int damage)
+    {
+        if (_currentPlayerHealth > 0)
+            _currentPlayerHealth -= damage;
 
         if (_currentPlayerHealth <= 0)
         {
             EventHandler.Event_PlayerDied?.Invoke();
-            return;
+            GlobalValues.SetGameState(GameState.GameOver);
         }
+
+        EventHandler.Event_PlayerHealthValueChange?.Invoke(GetPlayerHealth());
     }
 }

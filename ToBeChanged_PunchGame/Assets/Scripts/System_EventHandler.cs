@@ -27,7 +27,11 @@ public class System_EventHandler : MonoBehaviour
     public Action Event_StopSlowTime;
     public Action<GameObject> Event_EnemyHit;
     public Action<Vector3> Event_MoveToEnemy;
+    public Action<GameObject> Event_TriggerSoloBattle;
     public Action<GameObject, List<MoveSet>> Event_TriggeredSoloBattle;
+
+    //Potion events
+    public Action<int> Event_HealPlayer;
 
     //Solo Battle events
     public Action<MoveSet> Event_Hit;
@@ -40,18 +44,28 @@ public class System_EventHandler : MonoBehaviour
     public Action<int> Event_PlayerHealthValueChange;
     public Action<int> Event_EnemyDefeatedValueChange;
     public Action<int> Event_DifficultyValueChange;
-    public Action<GameObject, int> Event_EnemyHealthValueChange;
+    public Action<GameObject, List<HitType>> Event_EnemyHitListChange;
 
     //Update on enabled object event
     public Action<int> Event_UpdateSoloBattleTimer;
 
-    // //Effect events
+    //Effect events
     public Action<Vector3> Event_ExclamationEffect;
 
     //Hit indicator events
     public Action<int> Event_PlayerHit;
     public Action<bool> Event_HasEnemyLeft;
     public Action<bool> Event_HasEnemyRight;
+
+    //New events
+    public Action Event_ChangeHealthUI;
+
+    //Enemy hit manager events
+    public Action<GameObject> Event_GenerateElite;
+
+    public Action<GameObject> Event_TriggerDash;
+
+    public Action<GameObject> Event_EnemyFlip;
 
     void Awake()
     {
@@ -63,5 +77,27 @@ public class System_EventHandler : MonoBehaviour
         {
             Destroy(gameObject);
         }
+    }
+
+    private void OnEnable()
+    {
+        Event_TriggeredSoloBattle += TriggerChangeHealthUI;
+        Event_DeactivatedSoloBattle += TriggerChangeHealthUI;
+    }
+
+    private void OnDisable()
+    {
+        Event_TriggeredSoloBattle -= TriggerChangeHealthUI;
+        Event_DeactivatedSoloBattle -= TriggerChangeHealthUI;
+    }
+
+    private void TriggerChangeHealthUI(Vector3 dummy)
+    {
+        Event_ChangeHealthUI?.Invoke();
+    }
+
+    void TriggerChangeHealthUI(GameObject dummy, List<MoveSet> dummy2)
+    {
+        Event_ChangeHealthUI?.Invoke();
     }
 }

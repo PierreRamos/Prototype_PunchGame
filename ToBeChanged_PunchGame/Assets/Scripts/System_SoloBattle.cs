@@ -137,6 +137,9 @@ public class System_SoloBattle : MonoBehaviour
         EventHandler.Event_TriggeredSoloBattle -= ActivateSoloBattle;
         EventHandler.Event_SoloBattleTimerFinished -= DeactivateSoloBattle;
         EventHandler.Event_Hit -= CheckMove;
+
+        StopAllCoroutines();
+        ResetBool();
     }
 
     void Start()
@@ -191,14 +194,14 @@ public class System_SoloBattle : MonoBehaviour
         EventHandler.Event_StopSlowTime?.Invoke();
         EventHandler.Event_DeactivatedSoloBattle?.Invoke(_playerObject.transform.position);
 
-        _currentEnemy.SetActive(false);
-
         if (defeatedEnemy)
         {
             EventHandler.Event_DefeatedEnemy?.Invoke(_currentEnemy);
         }
         else
             EventHandler.Event_PlayerHit?.Invoke(1);
+
+        _currentEnemy.SetActive(false);
     }
 
     void CheckMove(MoveSet move)
@@ -297,5 +300,12 @@ public class System_SoloBattle : MonoBehaviour
             // Handle the case where the move is not found in the dictionary
             Debug.LogWarning("Sprite not found for move: " + move);
         }
+    }
+
+    void ResetBool()
+    {
+        _isWaitingForAction = false;
+        _correctInputRunning = false;
+        _wrongInputRunning = false;
     }
 }

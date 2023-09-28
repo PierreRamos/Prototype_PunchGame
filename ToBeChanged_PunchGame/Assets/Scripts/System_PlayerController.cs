@@ -17,6 +17,9 @@ public class System_PlayerController : MonoBehaviour
 
     public void Pause(InputAction.CallbackContext context)
     {
+        if (GlobalValues.GetGameState() == GameState.GameOver)
+            return;
+
         if (context.performed)
         {
             if (!_isPaused)
@@ -30,6 +33,9 @@ public class System_PlayerController : MonoBehaviour
 
     public void AttackLeft(InputAction.CallbackContext context)
     {
+        if (GlobalValues.GetGameState() == GameState.GameOver)
+            return;
+
         if (context.performed)
             if (GlobalValues.GetGameState() == GameState.Normal)
                 EventHandler.Event_AttackLeft?.Invoke();
@@ -39,6 +45,9 @@ public class System_PlayerController : MonoBehaviour
 
     public void AttackRight(InputAction.CallbackContext context)
     {
+        if (GlobalValues.GetGameState() == GameState.GameOver)
+            return;
+
         if (context.performed)
             if (GlobalValues.GetGameState() == GameState.Normal)
                 EventHandler.Event_AttackRight?.Invoke();
@@ -48,6 +57,9 @@ public class System_PlayerController : MonoBehaviour
 
     public void AttackUp(InputAction.CallbackContext context)
     {
+        if (GlobalValues.GetGameState() == GameState.GameOver)
+            return;
+
         if (context.performed)
             if (GlobalValues.GetGameState() == GameState.SoloBattle)
                 EventHandler.Event_Hit?.Invoke(MoveSet.Up);
@@ -55,6 +67,9 @@ public class System_PlayerController : MonoBehaviour
 
     public void AttackDown(InputAction.CallbackContext context)
     {
+        if (GlobalValues.GetGameState() == GameState.GameOver)
+            return;
+
         if (context.performed)
             if (GlobalValues.GetGameState() == GameState.SoloBattle)
                 EventHandler.Event_Hit?.Invoke(MoveSet.Down);

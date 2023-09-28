@@ -24,6 +24,9 @@ public class System_EnemyPool : MonoBehaviour
     [SerializeField]
     GameObject _eliteEnemyPrefab;
 
+    [SerializeField]
+    GameObject _dashEnemyPrefab;
+
     [Header("Enemy Pool Settings")]
     [Space]
     [SerializeField]
@@ -33,6 +36,7 @@ public class System_EnemyPool : MonoBehaviour
     List<GameObject> _mediumEnemyPool = new List<GameObject>();
     List<GameObject> _hardEnemyPool = new List<GameObject>();
     List<GameObject> _eliteEnemyPool = new List<GameObject>();
+    List<GameObject> _dashEnemyPool = new List<GameObject>();
 
     private void Start()
     {
@@ -57,6 +61,10 @@ public class System_EnemyPool : MonoBehaviour
         {
             PrefabInstantiation(_eliteEnemyPrefab, _eliteEnemyPool);
         }
+        for (int i = 0; i < _enemyPoolSize; i++)
+        {
+            PrefabInstantiation(_dashEnemyPrefab, _dashEnemyPool);
+        }
     }
 
     private void OnDisable()
@@ -76,7 +84,7 @@ public class System_EnemyPool : MonoBehaviour
     {
         float random = UnityEngine.Random.Range(0f, 10f);
 
-        if (random < 5f)
+        if (random < 4f)
         {
             foreach (GameObject enemyInstance in _easyEnemyPool)
             {
@@ -88,7 +96,7 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
-        else if (random < 7f)
+        else if (random < 6f)
         {
             foreach (GameObject particleInstance in _mediumEnemyPool)
             {
@@ -100,7 +108,7 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
-        else if (random < 9f)
+        else if (random < 8f)
         {
             foreach (GameObject particleInstance in _hardEnemyPool)
             {
@@ -112,7 +120,7 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
-        else if (random < 10f)
+        else if (random < 9f)
         {
             foreach (GameObject particleInstance in _eliteEnemyPool)
             {
@@ -124,9 +132,21 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
+        else if (random < 10f)
+        {
+            foreach (GameObject particleInstance in _dashEnemyPool)
+            {
+                if (!particleInstance.activeInHierarchy)
+                {
+                    particleInstance.transform.position = position;
+                    particleInstance.SetActive(true);
+                    return;
+                }
+            }
+        }
 
         //Debug only
-        // foreach (GameObject particleInstance in _eliteEnemyPool)
+        // foreach (GameObject particleInstance in _dashEnemyPool)
         // {
         //     if (!particleInstance.activeInHierarchy)
         //     {

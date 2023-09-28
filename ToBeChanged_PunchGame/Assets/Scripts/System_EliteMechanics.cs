@@ -22,14 +22,14 @@ public class System_EliteMechanics : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
-        EventHandler.Event_EnemyHit += CheckIfHit;
-
-        GenerateMoveSet();
+        EventHandler.Event_TriggerSoloBattle += TriggerSoloBattle;
+        EventHandler.Event_GenerateElite += GenerateMoveSet;
     }
 
     void OnDisable()
     {
-        EventHandler.Event_EnemyHit -= CheckIfHit;
+        EventHandler.Event_TriggerSoloBattle -= TriggerSoloBattle;
+        EventHandler.Event_GenerateElite -= GenerateMoveSet;
 
         RemoveMoveSet();
     }
@@ -39,15 +39,15 @@ public class System_EliteMechanics : MonoBehaviour
         return _listOfMoves.Count;
     }
 
-    void CheckIfHit(GameObject gameObject)
+    void TriggerSoloBattle(GameObject gameObject)
     {
-        if (this.gameObject == gameObject && GlobalValues.GetGameState() == GameState.Normal)
-        {
-            StartCoroutine(TriggerSoloBattle());
-        }
+        if (this.gameObject != gameObject)
+            return;
+
+        StartCoroutine(SoloBattle());
     }
 
-    IEnumerator TriggerSoloBattle()
+    IEnumerator SoloBattle()
     {
         yield return new WaitForEndOfFrame();
 
@@ -55,8 +55,11 @@ public class System_EliteMechanics : MonoBehaviour
         EventHandler.Event_TriggeredSoloBattle?.Invoke(gameObject, _listOfMoves);
     }
 
-    void GenerateMoveSet()
+    void GenerateMoveSet(GameObject gameObject)
     {
+        if (this.gameObject != gameObject)
+            return;
+
         var numberOfMoves = Random.Range(_minNumberOfMoves, _maxNumberOfMoves + 1);
 
         for (int i = 0; i < numberOfMoves; i++)

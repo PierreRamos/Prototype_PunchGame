@@ -2,6 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum HitType
+{
+    normal,
+    solo,
+    dash
+}
+
 public enum MoveSet
 {
     Left,
@@ -10,10 +17,20 @@ public enum MoveSet
     Down
 }
 
+public enum EnemyType
+{
+    easy,
+    medium,
+    hard,
+    elite,
+    dash
+}
+
 public enum GameState
 {
     Normal,
-    SoloBattle
+    SoloBattle,
+    GameOver
 }
 
 public class System_GlobalValues : MonoBehaviour

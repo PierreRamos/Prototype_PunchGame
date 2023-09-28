@@ -102,18 +102,12 @@ public class System_PlayerAttack : MonoBehaviour
             var leftObjectHit = leftHit.collider?.gameObject;
             var rightObjectHit = rightHit.collider?.gameObject;
 
-            if (
-                leftObjectHit != null && leftObjectHit.CompareTag("Enemy")
-                || leftObjectHit != null && leftObjectHit.CompareTag("Enemy_Elite")
-            )
+            if (leftObjectHit != null && leftObjectHit.CompareTag("Enemy"))
                 EventHandler.Event_HasEnemyLeft?.Invoke(true);
             else if (leftObjectHit == null)
                 EventHandler.Event_HasEnemyLeft?.Invoke(false);
 
-            if (
-                rightObjectHit != null && rightObjectHit.CompareTag("Enemy")
-                || rightObjectHit != null && rightObjectHit.CompareTag("Enemy_Elite")
-            )
+            if (rightObjectHit != null && rightObjectHit.CompareTag("Enemy"))
                 EventHandler.Event_HasEnemyRight?.Invoke(true);
             else if (rightObjectHit == null)
                 EventHandler.Event_HasEnemyRight?.Invoke(false);
@@ -143,7 +137,7 @@ public class System_PlayerAttack : MonoBehaviour
             HitCheckDirection(transform.right, "right");
     }
 
-    //If player attacks: check if there is game object tagged "Enemy" or "Enemy_Elite" on either left or right of player
+    //If player attacks: check if there is game object tagged "Enemy" on either left or right of player
     void HitCheckDirection(Vector2 direction, string side)
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _rangeDistance);
@@ -151,7 +145,7 @@ public class System_PlayerAttack : MonoBehaviour
         if (hit.collider != null)
         {
             var objectHit = hit.collider.gameObject;
-            if (objectHit.CompareTag("Enemy") || objectHit.CompareTag("Enemy_Elite"))
+            if (objectHit.CompareTag("Enemy"))
                 ConfirmHit(objectHit, side);
             else
             {
@@ -221,10 +215,7 @@ public class System_PlayerAttack : MonoBehaviour
 
             foreach (var hit in leftHits)
             {
-                if (
-                    hit.collider != null
-                    && (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Enemy_Elite"))
-                )
+                if (hit.collider != null && hit.collider.CompareTag("Enemy"))
                 {
                     detectedEnemies.Add(hit.collider.gameObject);
                 }
@@ -232,10 +223,7 @@ public class System_PlayerAttack : MonoBehaviour
 
             foreach (var hit in rightHits)
             {
-                if (
-                    hit.collider != null
-                    && (hit.collider.CompareTag("Enemy") || hit.collider.CompareTag("Enemy_Elite"))
-                )
+                if (hit.collider != null && hit.collider.CompareTag("Enemy"))
                 {
                     detectedEnemies.Add(hit.collider.gameObject);
                 }

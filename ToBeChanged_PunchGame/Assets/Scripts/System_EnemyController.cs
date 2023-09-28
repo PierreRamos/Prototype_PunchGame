@@ -40,6 +40,7 @@ public class System_EnemyController : MonoBehaviour
         GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_EnemyHit += CheckIfHit;
+        EventHandler.Event_EnemyFlip += Flip;
 
         _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
@@ -48,10 +49,7 @@ public class System_EnemyController : MonoBehaviour
             if (_playerTransform.position.x > transform.position.x)
                 _isFacingRight = true;
             else
-                _isFacingRight = false;
-
-            if (!_isFacingRight)
-                Flip();
+                Flip(gameObject);
         }
 
         _isMoving = true;
@@ -60,9 +58,10 @@ public class System_EnemyController : MonoBehaviour
     void OnDisable()
     {
         EventHandler.Event_EnemyHit -= CheckIfHit;
+        EventHandler.Event_EnemyFlip -= Flip;
 
         if (!_isFacingRight)
-            Flip();
+            Flip(gameObject);
     }
 
     void Start()
@@ -75,8 +74,22 @@ public class System_EnemyController : MonoBehaviour
         MoveTowardsPlayer();
     }
 
-    void Flip()
+    public Transform GetPlayerPosition()
     {
+        return _playerTransform;
+    }
+
+    public bool GetIsFacingRight()
+    {
+        return _isFacingRight;
+    }
+
+    void Flip(GameObject gameObject)
+    {
+        if (this.gameObject != gameObject)
+            return;
+
+        _isFacingRight = !_isFacingRight;
         transform.Rotate(Vector3.up, 180f);
     }
 

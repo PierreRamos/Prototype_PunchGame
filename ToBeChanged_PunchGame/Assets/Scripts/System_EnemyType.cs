@@ -2,14 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyType
-{
-    easy,
-    medium,
-    hard,
-    elite
-}
-
 public class System_EnemyType : MonoBehaviour
 {
     [SerializeField]
