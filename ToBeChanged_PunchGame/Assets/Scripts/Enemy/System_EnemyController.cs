@@ -21,6 +21,10 @@ public class System_EnemyController : MonoBehaviour
 
     Rigidbody2D _rigidBody;
 
+    Collider2D _collider;
+
+    SpriteRenderer _spriteRenderer;
+
     Transform _playerTransform;
 
     Coroutine _addForceTimer;
@@ -32,6 +36,7 @@ public class System_EnemyController : MonoBehaviour
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
+        _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void OnEnable()
@@ -41,6 +46,8 @@ public class System_EnemyController : MonoBehaviour
 
         EventHandler.Event_EnemyHit += CheckIfHit;
         EventHandler.Event_EnemyFlip += Flip;
+        EventHandler.Event_DefeatedEnemy += TriggerDisableSelf;
+        EventHandler.Event_EnemyHitPlayer += TriggerDisableSelfHitPlayer;
 
         _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
@@ -59,14 +66,21 @@ public class System_EnemyController : MonoBehaviour
     {
         EventHandler.Event_EnemyHit -= CheckIfHit;
         EventHandler.Event_EnemyFlip -= Flip;
+        EventHandler.Event_DefeatedEnemy -= TriggerDisableSelf;
+        EventHandler.Event_EnemyHitPlayer -= TriggerDisableSelfHitPlayer;
 
         if (!_isFacingRight)
             Flip(gameObject);
+
+        if (!_collider.enabled)
+            _collider.enabled = true;
     }
 
     void Start()
     {
         GlobalValues.SetEnemyMovementSpeed(_enemyMovementSpeed);
+
+        _collider = GetComponent<Collider2D>();
     }
 
     void Update()
@@ -90,7 +104,47 @@ public class System_EnemyController : MonoBehaviour
             return;
 
         _isFacingRight = !_isFacingRight;
-        transform.Rotate(Vector3.up, 180f);
+
+        // transform.Rotate(Vector3.up, 180f);
+
+        //test
+        _spriteRenderer.flipX = !_spriteRenderer.flipX;
+    }
+
+    //This is for when enemy is defeated by player (no animation yet)
+    void TriggerDisableSelf(GameObject enemy)
+    {
+        if (gameObject != enemy)
+            return;
+
+        _collider.enabled = false;
+        StartCoroutine(DisableSelf());
+
+        //
+        IEnumerator DisableSelf()
+        {
+            yield return new WaitForEndOfFrame(); //Waits for other methods relying on defeated enemy event to happen first before disabling this game object
+
+            gameObject.SetActive(false);
+        }
+    }
+
+    //This is for when player is hit by enemy (no animation yet)
+    void TriggerDisableSelfHitPlayer(GameObject enemy)
+    {
+        if (gameObject != enemy)
+            return;
+
+        _collider.enabled = false;
+        StartCoroutine(DisableSelf());
+
+        //
+        IEnumerator DisableSelf()
+        {
+            yield return new WaitForEndOfFrame(); //Waits for other methods relying on defeated enemy event to happen first before disabling this game object
+
+            gameObject.SetActive(false);
+        }
     }
 
     void MoveTowardsPlayer()
@@ -158,7 +212,9 @@ public class System_EnemyController : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             EventHandler.Event_PlayerHit(_enemyDamage);
-            gameObject.SetActive(false);
+            EventHandler.Event_EnemyHitPlayer?.Invoke(gameObject);
+
+            // gameObject.SetActive(false); //Keep for now until has enemy animation if hit enemy
         }
     }
 }

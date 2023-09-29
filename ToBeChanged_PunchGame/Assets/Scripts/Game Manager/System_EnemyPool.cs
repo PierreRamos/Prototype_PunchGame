@@ -27,6 +27,9 @@ public class System_EnemyPool : MonoBehaviour
     [SerializeField]
     GameObject _dashEnemyPrefab;
 
+    [SerializeField]
+    GameObject _holdEnemyPrefab;
+
     [Header("Enemy Pool Settings")]
     [Space]
     [SerializeField]
@@ -37,6 +40,7 @@ public class System_EnemyPool : MonoBehaviour
     List<GameObject> _hardEnemyPool = new List<GameObject>();
     List<GameObject> _eliteEnemyPool = new List<GameObject>();
     List<GameObject> _dashEnemyPool = new List<GameObject>();
+    List<GameObject> _holdEnemyPool = new List<GameObject>();
 
     private void Start()
     {
@@ -65,6 +69,10 @@ public class System_EnemyPool : MonoBehaviour
         {
             PrefabInstantiation(_dashEnemyPrefab, _dashEnemyPool);
         }
+        for (int i = 0; i < _enemyPoolSize; i++)
+        {
+            PrefabInstantiation(_holdEnemyPrefab, _holdEnemyPool);
+        }
     }
 
     private void OnDisable()
@@ -82,9 +90,10 @@ public class System_EnemyPool : MonoBehaviour
     // Find an inactive particle system in the pool and activate it
     public void ActivateEnemy(Vector3 position)
     {
-        float random = UnityEngine.Random.Range(0f, 10f);
+        int random = UnityEngine.Random.Range(0, 101);
 
-        if (random < 4f)
+        //25%
+        if (random < 25)
         {
             foreach (GameObject enemyInstance in _easyEnemyPool)
             {
@@ -96,7 +105,8 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
-        else if (random < 6f)
+        //25%
+        else if (random < 50)
         {
             foreach (GameObject particleInstance in _mediumEnemyPool)
             {
@@ -108,7 +118,8 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
-        else if (random < 8f)
+        //25%
+        else if (random < 75)
         {
             foreach (GameObject particleInstance in _hardEnemyPool)
             {
@@ -120,7 +131,21 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
-        else if (random < 9f)
+        //10%
+        else if (random < 85)
+        {
+            foreach (GameObject particleInstance in _holdEnemyPool)
+            {
+                if (!particleInstance.activeInHierarchy)
+                {
+                    particleInstance.transform.position = position;
+                    particleInstance.SetActive(true);
+                    return;
+                }
+            }
+        }
+        //10%
+        else if (random < 95)
         {
             foreach (GameObject particleInstance in _eliteEnemyPool)
             {
@@ -132,7 +157,8 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
-        else if (random < 10f)
+        //5%
+        else if (random < 100)
         {
             foreach (GameObject particleInstance in _dashEnemyPool)
             {

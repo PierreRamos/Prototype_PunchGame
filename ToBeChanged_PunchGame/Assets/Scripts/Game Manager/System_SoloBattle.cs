@@ -192,16 +192,19 @@ public class System_SoloBattle : MonoBehaviour
         GlobalValues.SetGameState(GameState.Normal);
 
         EventHandler.Event_StopSlowTime?.Invoke();
-        EventHandler.Event_DeactivatedSoloBattle?.Invoke(_playerObject.transform.position);
+        EventHandler.Event_StoppedSoloBattle?.Invoke();
 
         if (defeatedEnemy)
         {
             EventHandler.Event_DefeatedEnemy?.Invoke(_currentEnemy);
         }
         else
+        {
             EventHandler.Event_PlayerHit?.Invoke(1);
+            EventHandler.Event_EnemyHitPlayer?.Invoke(_currentEnemy);
+        }
 
-        _currentEnemy.SetActive(false);
+        // _currentEnemy.SetActive(false);
     }
 
     void CheckMove(MoveSet move)

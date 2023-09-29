@@ -7,7 +7,6 @@ public class System_ParticleEffectsPool : MonoBehaviour
     System_EventHandler EventHandler;
 
     [Header("Initialization")]
-    [Space]
     [SerializeField]
     Transform _effectPoolParent;
 
@@ -15,41 +14,56 @@ public class System_ParticleEffectsPool : MonoBehaviour
     GameObject _hitEffectPrefab;
 
     [SerializeField]
+    GameObject _defeatEffectPrefab;
+
+    [SerializeField]
     GameObject _exclamationEffectPrefab;
 
     [Header("Particle Pool Settings")]
-    [Space]
     [SerializeField]
     int _hitEffectPoolSize;
+
+    [SerializeField]
+    int _defeatEffectPoolSize;
 
     [SerializeField]
     int _exclamationEffectPoolSize;
 
     List<GameObject> _hitParticlePool = new List<GameObject>();
+    List<GameObject> _defeatParticlePool = new List<GameObject>();
     List<GameObject> _exclamationParticlePool = new List<GameObject>();
 
-    private void Start()
+    private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
 
         EventHandler.Event_EnemyHit += ActivateHitParticle;
+        EventHandler.Event_DefeatedEnemy += ActivateDefeatParticle;
         EventHandler.Event_ExclamationEffect += ActivateExclamationParticle;
-
-        // Create the pool of particle system instances
-        for (int i = 0; i < _hitEffectPoolSize; i++)
-        {
-            PrefabInstantiation(_hitEffectPrefab, _hitParticlePool);
-        }
-        for (int i = 0; i < _exclamationEffectPoolSize; i++)
-        {
-            PrefabInstantiation(_exclamationEffectPrefab, _exclamationParticlePool);
-        }
     }
 
     private void OnDisable()
     {
         EventHandler.Event_EnemyHit -= ActivateHitParticle;
-        EventHandler.Event_ExclamationEffect += ActivateExclamationParticle;
+        EventHandler.Event_DefeatedEnemy -= ActivateDefeatParticle;
+        EventHandler.Event_ExclamationEffect -= ActivateExclamationParticle;
+    }
+
+    private void Start()
+    {
+        // Create the pool of particle system instances
+        for (int i = 0; i < _hitEffectPoolSize; i++)
+        {
+            PrefabInstantiation(_hitEffectPrefab, _hitParticlePool);
+        }
+        for (int i = 0; i < _defeatEffectPoolSize; i++)
+        {
+            PrefabInstantiation(_defeatEffectPrefab, _defeatParticlePool);
+        }
+        for (int i = 0; i < _exclamationEffectPoolSize; i++)
+        {
+            PrefabInstantiation(_exclamationEffectPrefab, _exclamationParticlePool);
+        }
     }
 
     private void PrefabInstantiation(GameObject gameObject, List<GameObject> poolList)
@@ -63,6 +77,20 @@ public class System_ParticleEffectsPool : MonoBehaviour
     {
         // Find an inactive particle system in the pool and activate it
         foreach (GameObject particleInstance in _hitParticlePool)
+        {
+            if (!particleInstance.activeInHierarchy)
+            {
+                particleInstance.transform.position = enemy.transform.position;
+                particleInstance.SetActive(true);
+                return;
+            }
+        }
+    }
+
+    public void ActivateDefeatParticle(GameObject enemy)
+    {
+        // Find an inactive particle system in the pool and activate it
+        foreach (GameObject particleInstance in _defeatParticlePool)
         {
             if (!particleInstance.activeInHierarchy)
             {

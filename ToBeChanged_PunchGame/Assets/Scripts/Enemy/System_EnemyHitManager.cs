@@ -27,7 +27,7 @@ public class System_EnemyHitManager : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
-        EventHandler.Event_EnemyHit += EnemyHitCheck;
+        EventHandler.Event_EnemyHit += HitCheck;
 
         GenerateHits();
 
@@ -36,7 +36,7 @@ public class System_EnemyHitManager : MonoBehaviour
 
     void OnDisable()
     {
-        EventHandler.Event_EnemyHit -= EnemyHitCheck;
+        EventHandler.Event_EnemyHit -= HitCheck;
     }
 
     public int GetEnemyHealth()
@@ -52,41 +52,65 @@ public class System_EnemyHitManager : MonoBehaviour
         //Sets enemy health value according to enemy type
         var enemyType = GetComponent<System_EnemyType>().GetEnemyType();
 
-        if (enemyType == EnemyType.easy)
+        if (enemyType == EnemyType.Easy)
             for (int i = 0; i < _easyEnemyHealth; i++)
             {
-                _listOfHits.Add(HitType.normal);
+                _listOfHits.Add(HitType.Normal);
             }
-        else if (enemyType == EnemyType.medium)
+        else if (enemyType == EnemyType.Medium)
             for (int i = 0; i < _mediumEnemyHealth; i++)
             {
-                _listOfHits.Add(HitType.normal);
+                _listOfHits.Add(HitType.Normal);
             }
-        else if (enemyType == EnemyType.hard)
+        else if (enemyType == EnemyType.Hard)
             for (int i = 0; i < _hardEnemyHealth; i++)
             {
-                _listOfHits.Add(HitType.normal);
+                _listOfHits.Add(HitType.Normal);
             }
-        else if (enemyType == EnemyType.elite)
+        //Change this
+        else if (enemyType == EnemyType.Elite)
         {
             for (int i = 0; i < 1; i++)
             {
-                _listOfHits.Add(HitType.solo);
+                _listOfHits.Add(HitType.Solo);
             }
             EventHandler.Event_GenerateElite?.Invoke(gameObject);
         }
-        //Change this
-        else if (enemyType == EnemyType.dash)
+        else if (enemyType == EnemyType.Dash)
         {
             for (int i = 0; i < _hardEnemyHealth; i++)
             {
-                _listOfHits.Add(HitType.dash);
+                if (i + 1 == _hardEnemyHealth)
+                {
+                    _listOfHits.Add(HitType.Normal);
+                    return;
+                }
+                RandomizeHits(enemyType);
+            }
+        }
+        else if (enemyType == EnemyType.Hold)
+        {
+            for (int i = 0; i < 1; i++)
+            {
+                _listOfHits.Add(HitType.Hold);
             }
         }
     }
 
-    //Checks if this is the enemy hit and removes health
-    void EnemyHitCheck(GameObject gameObject)
+    void RandomizeHits(EnemyType enemyType)
+    {
+        if (enemyType == EnemyType.Dash)
+        {
+            var random = Random.Range(0, 2);
+            if (random == 0)
+                _listOfHits.Add(HitType.Normal);
+            else
+                _listOfHits.Add(HitType.Dash);
+        }
+    }
+
+    //Checks if this is the enemy hit and evaluates depending on what type of orb is in the list
+    void HitCheck(GameObject gameObject)
     {
         if (this.gameObject != gameObject)
             return;
@@ -97,21 +121,24 @@ public class System_EnemyHitManager : MonoBehaviour
             _listOfHits.RemoveAt(0);
             EventHandler.Event_EnemyHitListChange?.Invoke(gameObject, _listOfHits);
 
-            if (currentHit == HitType.solo)
+            if (currentHit == HitType.Solo)
             {
                 EventHandler.Event_TriggerSoloBattle?.Invoke(gameObject);
-                EventHandler.Event_EnemyHitListChange?.Invoke(gameObject, _listOfHits);
-                return;
+                return; //To avoid deactivating enemy since _listOfHits.Count is now 0
             }
-            else if (currentHit == HitType.dash)
+            else if (currentHit == HitType.Dash)
             {
                 EventHandler.Event_TriggerDash?.Invoke(gameObject);
+            }
+            else if (currentHit == HitType.Hold)
+            {
+                EventHandler.Event_TriggerHoldBattle?.Invoke(gameObject);
+                return; //To avoid deactivating enemy since _listOfHits.Count is now 0
             }
 
             if (_listOfHits.Count <= 0)
             {
                 EventHandler.Event_DefeatedEnemy?.Invoke(gameObject);
-                gameObject.SetActive(false);
                 return;
             }
         }

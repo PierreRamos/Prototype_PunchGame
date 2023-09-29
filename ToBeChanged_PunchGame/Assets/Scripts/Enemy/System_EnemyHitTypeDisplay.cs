@@ -56,12 +56,14 @@ public class System_EnemyHitTypeDisplay : MonoBehaviour
         {
             if (!_listOfOrbs[i].activeSelf)
             {
-                if (listOfHits[i] == HitType.normal)
+                if (listOfHits[i] == HitType.Normal)
                     _listOfOrbs[i].GetComponent<SpriteRenderer>().sprite = _normalOrbSprite;
-                else if (listOfHits[i] == HitType.solo)
+                else if (listOfHits[i] == HitType.Solo)
                     _listOfOrbs[i].GetComponent<SpriteRenderer>().sprite = _soloOrbSprite;
-                else if (listOfHits[i] == HitType.dash)
+                else if (listOfHits[i] == HitType.Dash)
                     _listOfOrbs[i].GetComponent<SpriteRenderer>().sprite = _dashOrbSprite;
+                else if (listOfHits[i] == HitType.Hold)
+                    _listOfOrbs[i].GetComponent<SpriteRenderer>().sprite = _holdOrbSprite;
 
                 _listOfOrbs[i].SetActive(true);
             }
@@ -80,6 +82,6 @@ public class System_EnemyHitTypeDisplay : MonoBehaviour
     //Method Conditions
     bool IsEliteEnemy()
     {
-        return gameObject.GetComponent<System_EnemyType>().GetEnemyType() == EnemyType.elite;
+        return gameObject.GetComponent<System_EnemyType>().GetEnemyType() == EnemyType.Elite;
     }
 }

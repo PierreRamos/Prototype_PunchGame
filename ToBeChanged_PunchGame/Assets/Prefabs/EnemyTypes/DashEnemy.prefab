@@ -129,7 +129,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_ReverseArrangement: 1
 --- !u!1 &1724019616046846894
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +437,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6734795241508637025
 Transform:
   m_ObjectHideFlags: 0
@@ -630,7 +630,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthPotionSprite: {fileID: 21300000, guid: 1c9b3c627f3c85c4488055a275144eee, type: 3}
   _itemPanel: {fileID: 8158562259853216654}
-  _healthPotionDropChance: 2
+  _healthPotionDropChance: 8
   _healthPotionValue: 1
 --- !u!114 &-5229970508944625852
 MonoBehaviour:
@@ -646,7 +646,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minNumberOfMoves: 5
   _maxNumberOfMoves: 10
-  _listOfMoves: 
+  _listOfMoves: 00000000000000000000000000000000
 --- !u!114 &2905161848728652699
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -659,7 +659,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c917a3f1c224a6f46993993ff6014d17, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _dashDistance: 1.5
+  _dashDistance: 1.25
   _attackMoveTime: 0.1
   _attackMoveAnimationCurve:
     serializedVersion: 2
@@ -852,6 +852,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2751581082598909064, guid: 3d383d871464ed64aad5182b408b04aa, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -1052175859, guid: e0ebda2335450ed438315058a6d9bcd4, type: 3}
     - target: {fileID: 8434758756425880244, guid: 3d383d871464ed64aad5182b408b04aa, type: 3}
       propertyPath: m_Name
       value: Orb (1)
@@ -940,7 +944,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2263640497254114808, guid: 3d383d871464ed64aad5182b408b04aa, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0.43615
+      value: 0.73615
       objectReference: {fileID: 0}
     - target: {fileID: 2263640497254114808, guid: 3d383d871464ed64aad5182b408b04aa, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1064,6 +1068,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2751581082598909064, guid: 3d383d871464ed64aad5182b408b04aa, type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: -70690590, guid: e0ebda2335450ed438315058a6d9bcd4, type: 3}
     - target: {fileID: 8434758756425880244, guid: 3d383d871464ed64aad5182b408b04aa, type: 3}
       propertyPath: m_Name
       value: Orb (2)

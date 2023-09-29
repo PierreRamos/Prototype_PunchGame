@@ -205,7 +205,7 @@ MonoBehaviour:
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
-  m_ReverseArrangement: 0
+  m_ReverseArrangement: 1
 --- !u!1 &979885620016213042
 GameObject:
   m_ObjectHideFlags: 0
@@ -704,7 +704,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _healthPotionSprite: {fileID: 21300000, guid: 1c9b3c627f3c85c4488055a275144eee, type: 3}
   _itemPanel: {fileID: 4616481937163973859}
-  _healthPotionDropChance: 1
+  _healthPotionDropChance: 4
   _healthPotionValue: 1
 --- !u!1001 &1394864854161734535
 PrefabInstance:

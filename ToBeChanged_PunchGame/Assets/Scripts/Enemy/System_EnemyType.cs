@@ -17,12 +17,12 @@ public class System_EnemyType : MonoBehaviour
         int value = Random.Range(0, 100);
 
         if (value < 80)
-            enemyType = EnemyType.easy;
+            enemyType = EnemyType.Easy;
         else if (value < 95)
 
-            enemyType = EnemyType.medium;
+            enemyType = EnemyType.Medium;
         else if (value < 100)
-            enemyType = EnemyType.hard;
+            enemyType = EnemyType.Hard;
     }
 
     public EnemyType GetEnemyType()

@@ -41,6 +41,10 @@ public class System_PlayerController : MonoBehaviour
                 EventHandler.Event_AttackLeft?.Invoke();
             else if (GlobalValues.GetGameState() == GameState.SoloBattle)
                 EventHandler.Event_Hit?.Invoke(MoveSet.Left);
+
+        if (context.canceled)
+            if (GlobalValues.GetGameState() == GameState.HoldBattle)
+                EventHandler.Event_StoppedHoldInput?.Invoke();
     }
 
     public void AttackRight(InputAction.CallbackContext context)
@@ -53,6 +57,11 @@ public class System_PlayerController : MonoBehaviour
                 EventHandler.Event_AttackRight?.Invoke();
             else if (GlobalValues.GetGameState() == GameState.SoloBattle)
                 EventHandler.Event_Hit?.Invoke(MoveSet.Right);
+
+        //Test
+        if (context.canceled)
+            if (GlobalValues.GetGameState() == GameState.HoldBattle)
+                EventHandler.Event_StoppedHoldInput?.Invoke();
     }
 
     public void AttackUp(InputAction.CallbackContext context)

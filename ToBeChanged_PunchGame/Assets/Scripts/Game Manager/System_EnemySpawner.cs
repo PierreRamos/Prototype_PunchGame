@@ -22,6 +22,8 @@ public class System_EnemySpawner : MonoBehaviour
     [SerializeField]
     float _spawnIntervalRange;
 
+    [Header("Debug Options")]
+    [SerializeField]
     bool _spawnerOn = true;
 
     void OnEnable()
@@ -37,7 +39,7 @@ public class System_EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnEnemyTimer()
     {
-        while (_spawnerOn)
+        while (_spawnerOn && GlobalValues.GetGameState() != GameState.GameOver)
         {
             SpawnEnemy();
 

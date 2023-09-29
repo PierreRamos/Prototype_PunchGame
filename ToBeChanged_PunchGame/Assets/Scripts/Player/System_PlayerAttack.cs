@@ -47,8 +47,8 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackLeft += HitCheckLeft;
         EventHandler.Event_AttackRight += HitCheckRight;
         EventHandler.Event_EnemyHit += MoveToHitEnemy;
+        EventHandler.Event_DefeatedEnemy += MoveToHitEnemy;
         EventHandler.Event_EnemyHit += CheckDirection;
-        EventHandler.Event_DeactivatedSoloBattle += StartCheckForEnemyCloseForSlowMotion;
     }
 
     void OnDisable()
@@ -56,8 +56,8 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackLeft -= HitCheckLeft;
         EventHandler.Event_AttackRight -= HitCheckRight;
         EventHandler.Event_EnemyHit -= MoveToHitEnemy;
+        EventHandler.Event_DefeatedEnemy -= MoveToHitEnemy;
         EventHandler.Event_EnemyHit -= CheckDirection;
-        EventHandler.Event_DeactivatedSoloBattle -= StartCheckForEnemyCloseForSlowMotion;
     }
 
     void Start()

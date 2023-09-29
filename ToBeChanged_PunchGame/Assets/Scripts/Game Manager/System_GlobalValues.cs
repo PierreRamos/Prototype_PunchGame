@@ -4,9 +4,10 @@ using UnityEngine;
 
 public enum HitType
 {
-    normal,
-    solo,
-    dash
+    Normal,
+    Solo,
+    Dash,
+    Hold
 }
 
 public enum MoveSet
@@ -19,17 +20,19 @@ public enum MoveSet
 
 public enum EnemyType
 {
-    easy,
-    medium,
-    hard,
-    elite,
-    dash
+    Easy,
+    Medium,
+    Hard,
+    Elite,
+    Dash,
+    Hold
 }
 
 public enum GameState
 {
     Normal,
     SoloBattle,
+    HoldBattle,
     GameOver
 }
 
@@ -78,7 +81,7 @@ public class System_GlobalValues : MonoBehaviour
     }
 
     //Incrementers
-    void AddDefeatCount(GameObject enemy)
+    void AddDefeatCount(GameObject dummy)
     {
         _currentDefeatCount++;
         EventHandler.Event_EnemyDefeatedValueChange?.Invoke(GetDefeatCount());

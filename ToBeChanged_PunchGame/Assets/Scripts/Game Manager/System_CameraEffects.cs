@@ -20,25 +20,31 @@ public class System_CameraEffects : MonoBehaviour
 
     Camera _camera;
     GameObject _currentEnemyObject;
+
+    Coroutine _lerpCameraToPosition;
     float _originalCameraSize;
     float _originalCameraHeight;
     float _startTime;
     float _startZoomSize;
-    bool _soloBattleCamera;
+    bool _battleCamera;
     bool _cameraZoomedIn;
 
     void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
 
-        EventHandler.Event_TriggeredSoloBattle += TriggerSoloBattleCamera;
-        EventHandler.Event_DeactivatedSoloBattle += StopSoloBattleCamera;
+        EventHandler.Event_TriggeredSoloBattle += TriggerBattleCamera;
+        EventHandler.Event_TriggeredHoldBattle += TriggerBattleCamera;
+        EventHandler.Event_StoppedSoloBattle += StopBattleCamera;
+        EventHandler.Event_StoppedHoldBattle += StopBattleCamera;
     }
 
     void OnDisable()
     {
-        EventHandler.Event_TriggeredSoloBattle -= TriggerSoloBattleCamera;
-        EventHandler.Event_DeactivatedSoloBattle -= StopSoloBattleCamera;
+        EventHandler.Event_TriggeredSoloBattle -= TriggerBattleCamera;
+        EventHandler.Event_TriggeredHoldBattle -= TriggerBattleCamera;
+        EventHandler.Event_StoppedSoloBattle -= StopBattleCamera;
+        EventHandler.Event_StoppedHoldBattle -= StopBattleCamera;
     }
 
     void Start()
@@ -56,12 +62,12 @@ public class System_CameraEffects : MonoBehaviour
 
     void Update()
     {
-        if (!_soloBattleCamera && !_cameraZoomedIn)
+        if (!_battleCamera && !_cameraZoomedIn)
             return;
 
-        if (_soloBattleCamera)
+        if (_battleCamera)
         {
-            StartSoloBattleCamera(_currentEnemyObject);
+            StartBattleCamera(_currentEnemyObject);
             Zoom(_targetZoomDistance);
         }
         else if (_cameraZoomedIn)
@@ -70,13 +76,19 @@ public class System_CameraEffects : MonoBehaviour
         }
     }
 
-    void TriggerSoloBattleCamera(GameObject enemy, List<MoveSet> listOfMoves)
+    void TriggerBattleCamera(GameObject enemy)
     {
         _currentEnemyObject = enemy;
-        _soloBattleCamera = true;
+        _battleCamera = true;
     }
 
-    void StartSoloBattleCamera(GameObject enemy)
+    void TriggerBattleCamera(GameObject enemy, List<MoveSet> dummy)
+    {
+        _currentEnemyObject = enemy;
+        _battleCamera = true;
+    }
+
+    void StartBattleCamera(GameObject enemy)
     {
         if (_playerObject != null && enemy != null)
         {
@@ -85,22 +97,28 @@ public class System_CameraEffects : MonoBehaviour
                 enemy.transform.position
             );
 
-            StartCoroutine(LerpCameraToPosition(middlePosition));
+            // if (_lerpCameraToPosition != null)
+            //     StopCoroutine(_lerpCameraToPosition);
+
+            _lerpCameraToPosition = StartCoroutine(LerpCameraToPosition(middlePosition));
         }
     }
 
-    void StopSoloBattleCamera(Vector3 playerPosition)
+    void StopBattleCamera()
     {
+        _battleCamera = false;
+        _startTime = 0;
         if (_playerObject != null)
         {
             Vector3 cameraPosition = _playerObject.transform.position;
             cameraPosition.y = _originalCameraHeight;
             cameraPosition.z = _camera.transform.position.z;
 
-            StartCoroutine(LerpCameraToPosition(cameraPosition));
+            if (_lerpCameraToPosition != null)
+                StopCoroutine(_lerpCameraToPosition);
+
+            _lerpCameraToPosition = StartCoroutine(LerpCameraToPosition(cameraPosition));
         }
-        _soloBattleCamera = false;
-        _startTime = 0;
     }
 
     Vector3 CalculateMiddlePosition(Vector3 playerPosition, Vector3 enemyPosition)
@@ -114,6 +132,8 @@ public class System_CameraEffects : MonoBehaviour
 
     IEnumerator LerpCameraToPosition(Vector3 targetPosition)
     {
+        yield return new WaitForEndOfFrame(); //Buffer (If without, bugs lerping when stopping hold battle)
+
         float elapsedTime = 0f;
         Vector3 initialPosition = _camera.transform.position;
 
@@ -130,9 +150,13 @@ public class System_CameraEffects : MonoBehaviour
 
     void Zoom(float targetSize)
     {
+        //Checks if camera size is lesser than original size
+        if (_camera.orthographicSize < _originalCameraSize)
+            _cameraZoomedIn = true;
+
         if (_camera.orthographicSize == targetSize)
         {
-            _cameraZoomedIn = Mathf.Approximately(_camera.orthographicSize, _targetZoomDistance);
+            // _cameraZoomedIn = Mathf.Approximately(_camera.orthographicSize, _targetZoomDistance);
             _startTime = 0;
             return;
         }
@@ -148,7 +172,7 @@ public class System_CameraEffects : MonoBehaviour
         if (elapsedTime >= _lerpDuration)
         {
             _camera.orthographicSize = targetSize;
-            _cameraZoomedIn = Mathf.Approximately(_camera.orthographicSize, _targetZoomDistance);
+            // _cameraZoomedIn = Mathf.Approximately(_camera.orthographicSize, _targetZoomDistance);
             _startTime = 0;
         }
         else

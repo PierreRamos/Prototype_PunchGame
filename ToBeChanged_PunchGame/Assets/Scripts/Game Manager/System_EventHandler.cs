@@ -9,7 +9,10 @@ public class System_EventHandler : MonoBehaviour
 
     //Game events
     public Action<Vector3> Event_SpawnEnemy;
-    public Action<Vector3> Event_DeactivatedSoloBattle;
+    public Action Event_StoppedSoloBattle;
+
+    //Enemy events
+    public Action<GameObject> Event_EnemyHitPlayer;
     public Action<GameObject> Event_DefeatedEnemy;
 
     //Player controller events
@@ -27,16 +30,22 @@ public class System_EventHandler : MonoBehaviour
     public Action Event_StopSlowTime;
     public Action<GameObject> Event_EnemyHit;
     public Action<Vector3> Event_MoveToEnemy;
-    public Action<GameObject> Event_TriggerSoloBattle;
-    public Action<GameObject, List<MoveSet>> Event_TriggeredSoloBattle;
 
     //Potion events
     public Action<int> Event_HealPlayer;
 
     //Solo Battle events
     public Action<MoveSet> Event_Hit;
+    public Action<GameObject> Event_TriggerSoloBattle;
+    public Action<GameObject, List<MoveSet>> Event_TriggeredSoloBattle;
     public Action<bool> Event_SoloBattleTimerFinished;
     public Action Event_SoloBattleWrongInput;
+
+    //Hold Battle events
+    public Action<GameObject> Event_TriggerHoldBattle;
+    public Action<GameObject> Event_TriggeredHoldBattle;
+    public Action Event_StoppedHoldInput;
+    public Action Event_StoppedHoldBattle;
 
     //Value change events
 
@@ -82,16 +91,16 @@ public class System_EventHandler : MonoBehaviour
     private void OnEnable()
     {
         Event_TriggeredSoloBattle += TriggerChangeHealthUI;
-        Event_DeactivatedSoloBattle += TriggerChangeHealthUI;
+        Event_StoppedSoloBattle += TriggerChangeHealthUI;
     }
 
     private void OnDisable()
     {
         Event_TriggeredSoloBattle -= TriggerChangeHealthUI;
-        Event_DeactivatedSoloBattle -= TriggerChangeHealthUI;
+        Event_StoppedSoloBattle -= TriggerChangeHealthUI;
     }
 
-    private void TriggerChangeHealthUI(Vector3 dummy)
+    private void TriggerChangeHealthUI()
     {
         Event_ChangeHealthUI?.Invoke();
     }

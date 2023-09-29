@@ -22,7 +22,9 @@ public class System_TimeManager : MonoBehaviour
 
         EventHandler.Event_StopSlowTime += NormalTime;
         EventHandler.Event_SlowTime += SlowTime;
+
         EventHandler.Event_TriggeredSoloBattle += SlowTimeIndefinitely;
+        EventHandler.Event_TriggeredHoldBattle += SlowTimeIndefinitely;
         EventHandler.Event_PlayerDied += StopTime;
         EventHandler.Event_Pause += PauseTime;
     }
@@ -31,7 +33,9 @@ public class System_TimeManager : MonoBehaviour
     {
         EventHandler.Event_StopSlowTime -= NormalTime;
         EventHandler.Event_SlowTime -= SlowTime;
+
         EventHandler.Event_TriggeredSoloBattle -= SlowTimeIndefinitely;
+        EventHandler.Event_TriggeredHoldBattle -= SlowTimeIndefinitely;
         EventHandler.Event_PlayerDied -= StopTime;
         EventHandler.Event_Pause -= PauseTime;
     }
@@ -44,7 +48,15 @@ public class System_TimeManager : MonoBehaviour
             StopCoroutine(_slowTimeTimer);
     }
 
-    void SlowTimeIndefinitely(GameObject gameObject, List<MoveSet> listOfMoves)
+    void SlowTimeIndefinitely(GameObject dummy)
+    {
+        Time.timeScale = _indefiniteSlowTimeValue;
+
+        if (_slowTimeTimer != null)
+            StopCoroutine(_slowTimeTimer);
+    }
+
+    void SlowTimeIndefinitely(GameObject dummy, List<MoveSet> dummy2)
     {
         Time.timeScale = _indefiniteSlowTimeValue;
 
