@@ -185,10 +185,20 @@ public class System_EnemyController : MonoBehaviour
 
         IEnumerator AddForceTimer()
         {
-            _rigidBody.AddForce(-transform.right.normalized * _knockBackForce, ForceMode2D.Impulse);
+            if (_isFacingRight)
+                _rigidBody.AddForce(
+                    -transform.right.normalized * _knockBackForce,
+                    ForceMode2D.Impulse
+                );
+            else
+                _rigidBody.AddForce(
+                    transform.right.normalized * _knockBackForce,
+                    ForceMode2D.Impulse
+                );
 
             StopMovement();
 
+            //Review this realtime vs non realtime
             yield return new WaitForSecondsRealtime(
                 System_GlobalValues.Instance.GetPlayerKnockBackTime()
             );
