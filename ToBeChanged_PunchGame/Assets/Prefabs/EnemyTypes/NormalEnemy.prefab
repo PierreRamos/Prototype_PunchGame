@@ -354,7 +354,7 @@ GameObject:
   - component: {fileID: -1480613759023284349}
   - component: {fileID: -8617998876570212197}
   m_Layer: 0
-  m_Name: EasyEnemy
+  m_Name: NormalEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -419,7 +419,7 @@ SpriteRenderer:
   m_SortingLayer: 4
   m_SortingOrder: 0
   m_Sprite: {fileID: -949660147, guid: 2317150cee5ddda49a7ab80c80d2a7fd, type: 3}
-  m_Color: {r: 0.43921566, g: 1, b: 0.48811293, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -516,10 +516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ec840fabbdf5844825b31b69c4cee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyHitCount: 0
-  _easyEnemyHealth: 1
-  _mediumEnemyHealth: 2
-  _hardEnemyHealth: 3
+  _maxEnemyHealth: 3
   _listOfHits: 
 --- !u!114 &-1480613759023284349
 MonoBehaviour:

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class System_TimeManager : MonoBehaviour
 {
+    System_EventHandler EventHandler;
+    System_GlobalValues GlobalValues;
+
     [Header("Time Settings")]
     [Space]
     [SerializeField]
@@ -12,13 +15,12 @@ public class System_TimeManager : MonoBehaviour
     [SerializeField]
     float _indefiniteSlowTimeValue;
 
-    System_EventHandler EventHandler;
-
     Coroutine _slowTimeTimer;
 
-    void Start()
+    private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_StopSlowTime += NormalTime;
         EventHandler.Event_SlowTime += SlowTime;
@@ -78,6 +80,15 @@ public class System_TimeManager : MonoBehaviour
             yield return new WaitForSecondsRealtime(
                 System_GlobalValues.Instance.GetPlayerKnockBackTime()
             );
+
+            //Checks if games is paused
+            var gameState = GlobalValues.GetGameState();
+            while (gameState == GameState.GameOver || gameState == GameState.Paused)
+            {
+                gameState = GlobalValues.GetGameState();
+                yield return null;
+            }
+
             NormalTime();
         }
     }

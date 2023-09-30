@@ -437,7 +437,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6734795241508637025
 Transform:
   m_ObjectHideFlags: 0
@@ -566,7 +566,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c1345813ba36d394a9267259ffe49b74, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 4
+  enemyType: 2
 --- !u!114 &-3296882342529021811
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -594,10 +594,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ec840fabbdf5844825b31b69c4cee9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _enemyHitCount: 0
-  _easyEnemyHealth: 1
-  _mediumEnemyHealth: 2
-  _hardEnemyHealth: 3
+  _maxEnemyHealth: 3
   _listOfHits: 
 --- !u!114 &-1480613759023284349
 MonoBehaviour:

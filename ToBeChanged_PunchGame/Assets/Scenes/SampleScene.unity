@@ -4163,9 +4163,9 @@ GameObject:
   - component: {fileID: 1559235791}
   - component: {fileID: 1559235790}
   - component: {fileID: 1559235793}
+  - component: {fileID: 1559235794}
   - component: {fileID: 1559235785}
   - component: {fileID: 1559235789}
-  - component: {fileID: 1559235794}
   - component: {fileID: 1559235795}
   - component: {fileID: 1559235796}
   - component: {fileID: 1559235798}
@@ -4192,6 +4192,11 @@ MonoBehaviour:
   _rightEnemySpawn: {fileID: 1802421789}
   _baseSpawnInterval: 1
   _spawnIntervalRange: 0.25
+  _minSpawnInterval: 0.1
+  _normalEnemySpawnRatio: 10
+  _eliteEnemySpawnRatio: 3
+  _dashEnemySpawnRatio: 2
+  _holdEnemySpawnRatio: 3
   _spawnerOn: 1
 --- !u!4 &1559235786
 Transform:
@@ -4286,6 +4291,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 29054075e0e45cc47a2dc3722cfd79d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _targetFrameRate: 144
 --- !u!114 &1559235793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4299,9 +4305,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemyPoolParent: {fileID: 737240289}
-  _easyEnemyPrefab: {fileID: 5829559742014051392, guid: 85326bb4034632841ab0360ae04c02ca, type: 3}
-  _mediumEnemyPrefab: {fileID: 5829559742014051392, guid: 37b15257ea675064aa911edf031cd6a1, type: 3}
-  _hardEnemyPrefab: {fileID: 5829559742014051392, guid: 6072b9b1611c04d4c8be2144ce88c406, type: 3}
+  _normalEnemyPrefab: {fileID: 5829559742014051392, guid: 85326bb4034632841ab0360ae04c02ca, type: 3}
   _eliteEnemyPrefab: {fileID: 5829559742014051392, guid: cf9d7f265d881e94d8dbf84eb888bdc9, type: 3}
   _dashEnemyPrefab: {fileID: 5829559742014051392, guid: 2dbfb6b392112e34189b4ad0eccb8517, type: 3}
   _holdEnemyPrefab: {fileID: 5829559742014051392, guid: bfad3abb27338004fa07f79c5de288a4, type: 3}
@@ -4318,8 +4322,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 476234d896c9caa478233cf68a06b09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseDifficultyIncrement: 20
-  _enemySpawnModifierPercentage: 0.15
+  _baseDifficultyIncrement: 30
+  _enemySpawnModifierPercentage: 0.05
   _enemyMovementSpeedPercentage: 0.05
 --- !u!114 &1559235795
 MonoBehaviour:
@@ -4334,8 +4338,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerObject: {fileID: 1230512970}
-  _targetZoomDistance: 1.8
-  _lerpDuration: 0.25
+  _targetZoomDistance: 2.5
+  _lerpDuration: 0.15
   _cameraZoomCurve:
     serializedVersion: 2
     m_Curve:

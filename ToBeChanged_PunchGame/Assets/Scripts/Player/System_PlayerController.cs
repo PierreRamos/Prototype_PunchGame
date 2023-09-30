@@ -9,6 +9,8 @@ public class System_PlayerController : MonoBehaviour
     System_GlobalValues GlobalValues;
     bool _isPaused;
 
+    GameState _lastGameState;
+
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
@@ -23,9 +25,16 @@ public class System_PlayerController : MonoBehaviour
         if (context.performed)
         {
             if (!_isPaused)
+            {
                 _isPaused = true;
+                _lastGameState = GlobalValues.GetGameState();
+                GlobalValues.SetGameState(GameState.Paused);
+            }
             else
+            {
                 _isPaused = false;
+                GlobalValues.SetGameState(_lastGameState);
+            }
 
             EventHandler.Event_Pause?.Invoke(_isPaused);
         }
@@ -33,7 +42,10 @@ public class System_PlayerController : MonoBehaviour
 
     public void AttackLeft(InputAction.CallbackContext context)
     {
-        if (GlobalValues.GetGameState() == GameState.GameOver)
+        if (
+            GlobalValues.GetGameState() == GameState.GameOver
+            || GlobalValues.GetGameState() == GameState.Paused
+        )
             return;
 
         if (context.performed)
@@ -49,7 +61,10 @@ public class System_PlayerController : MonoBehaviour
 
     public void AttackRight(InputAction.CallbackContext context)
     {
-        if (GlobalValues.GetGameState() == GameState.GameOver)
+        if (
+            GlobalValues.GetGameState() == GameState.GameOver
+            || GlobalValues.GetGameState() == GameState.Paused
+        )
             return;
 
         if (context.performed)
@@ -66,7 +81,10 @@ public class System_PlayerController : MonoBehaviour
 
     public void AttackUp(InputAction.CallbackContext context)
     {
-        if (GlobalValues.GetGameState() == GameState.GameOver)
+        if (
+            GlobalValues.GetGameState() == GameState.GameOver
+            || GlobalValues.GetGameState() == GameState.Paused
+        )
             return;
 
         if (context.performed)
@@ -76,7 +94,10 @@ public class System_PlayerController : MonoBehaviour
 
     public void AttackDown(InputAction.CallbackContext context)
     {
-        if (GlobalValues.GetGameState() == GameState.GameOver)
+        if (
+            GlobalValues.GetGameState() == GameState.GameOver
+            || GlobalValues.GetGameState() == GameState.Paused
+        )
             return;
 
         if (context.performed)

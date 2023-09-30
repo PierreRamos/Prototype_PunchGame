@@ -20,9 +20,7 @@ public enum MoveSet
 
 public enum EnemyType
 {
-    Easy,
-    Medium,
-    Hard,
+    Normal,
     Elite,
     Dash,
     Hold
@@ -33,16 +31,20 @@ public enum GameState
     Normal,
     SoloBattle,
     HoldBattle,
+    Paused,
     GameOver
 }
 
 public class System_GlobalValues : MonoBehaviour
 {
     public static System_GlobalValues Instance;
-
     System_EventHandler EventHandler;
 
+    [SerializeField]
+    int _targetFrameRate;
+
     GameState _currentGameState;
+    Dictionary<EnemyType, int> _enemiesSpawnChance = new Dictionary<EnemyType, int>();
     int _difficulty;
     int _currentDefeatCount;
     float _playerKnockBackTime;
@@ -78,13 +80,8 @@ public class System_GlobalValues : MonoBehaviour
     {
         Time.timeScale = 1;
         _currentGameState = GameState.Normal;
-    }
 
-    //Incrementers
-    void AddDefeatCount(GameObject dummy)
-    {
-        _currentDefeatCount++;
-        EventHandler.Event_EnemyDefeatedValueChange?.Invoke(GetDefeatCount());
+        Application.targetFrameRate = _targetFrameRate;
     }
 
     public void AddDifficulty()
@@ -98,6 +95,17 @@ public class System_GlobalValues : MonoBehaviour
     public void SetGameState(GameState gameState)
     {
         _currentGameState = gameState;
+    }
+
+    public void SetEnemiesSpawnChance(Dictionary<EnemyType, int> enemiesSpawnChance)
+    {
+        _enemiesSpawnChance = enemiesSpawnChance;
+
+        //Debug
+        // print($"Normal Spawn Chance: {enemiesSpawnChance[EnemyType.Normal]}");
+        // print($"Elite Spawn Chance: {enemiesSpawnChance[EnemyType.Elite]}");
+        // print($"Dash Spawn Chance: {enemiesSpawnChance[EnemyType.Dash]}");
+        // print($"Hold Spawn Chance: {enemiesSpawnChance[EnemyType.Hold]}");
     }
 
     public void SetPlayerKnockBackTime(float value)
@@ -125,6 +133,11 @@ public class System_GlobalValues : MonoBehaviour
     public GameState GetGameState()
     {
         return _currentGameState;
+    }
+
+    public int GetEnemiesSpawnChance(EnemyType enemyType)
+    {
+        return _enemiesSpawnChance[enemyType];
     }
 
     public float GetPlayerKnockBackTime()
@@ -155,5 +168,12 @@ public class System_GlobalValues : MonoBehaviour
     public int GetDifficulty()
     {
         return _difficulty;
+    }
+
+    //Incrementers
+    void AddDefeatCount(GameObject dummy)
+    {
+        _currentDefeatCount++;
+        EventHandler.Event_EnemyDefeatedValueChange?.Invoke(GetDefeatCount());
     }
 }

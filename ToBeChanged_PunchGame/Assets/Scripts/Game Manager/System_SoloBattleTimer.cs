@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class System_SoloBattleTimer : MonoBehaviour
 {
     System_EventHandler EventHandler;
+    System_GlobalValues GlobalValues;
 
     [Header("Initialization")]
     [Space]
@@ -25,6 +26,7 @@ public class System_SoloBattleTimer : MonoBehaviour
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_SoloBattleWrongInput += DecreaseTime;
         EventHandler.Event_UpdateSoloBattleTimer += ActivateSoloBattleTimer;
@@ -38,6 +40,10 @@ public class System_SoloBattleTimer : MonoBehaviour
 
     private void Update()
     {
+        var gameState = GlobalValues.GetGameState();
+        if (gameState == GameState.GameOver || gameState == GameState.Paused)
+            return;
+
         SoloBattleTimer();
     }
 

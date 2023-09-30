@@ -5,7 +5,6 @@ using UnityEngine;
 public class System_DifficultyManager : MonoBehaviour
 {
     System_EventHandler EventHandler;
-
     System_GlobalValues GlobalValues;
 
     [Header("Difficulty Settings")]
@@ -38,9 +37,9 @@ public class System_DifficultyManager : MonoBehaviour
         EvaluateGameDifficulty(GlobalValues.GetDifficulty());
     }
 
-    void UpdateGameDifficulty(int value)
+    void UpdateGameDifficulty(int enemiesDefeated)
     {
-        if (_baseDifficultyIncrement <= value)
+        if (_baseDifficultyIncrement <= enemiesDefeated)
         {
             GlobalValues.AddDifficulty();
             _baseDifficultyIncrement =

@@ -6,7 +6,6 @@ using UnityEngine;
 public class System_EnemyController : MonoBehaviour
 {
     System_EventHandler EventHandler;
-
     System_GlobalValues GlobalValues;
 
     [Header("Enemy Controller Settings")]
@@ -37,6 +36,7 @@ public class System_EnemyController : MonoBehaviour
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _collider = GetComponent<Collider2D>();
     }
 
     void OnEnable()
@@ -59,6 +59,9 @@ public class System_EnemyController : MonoBehaviour
                 Flip(gameObject);
         }
 
+        if (GlobalValues.GetEnemyMovementSpeed() == 0f)
+            GlobalValues.SetEnemyMovementSpeed(_enemyMovementSpeed);
+
         _isMoving = true;
     }
 
@@ -74,13 +77,6 @@ public class System_EnemyController : MonoBehaviour
 
         if (!_collider.enabled)
             _collider.enabled = true;
-    }
-
-    void Start()
-    {
-        GlobalValues.SetEnemyMovementSpeed(_enemyMovementSpeed);
-
-        _collider = GetComponent<Collider2D>();
     }
 
     void Update()

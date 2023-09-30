@@ -8,16 +8,7 @@ public class System_EnemyHitManager : MonoBehaviour
     System_GlobalValues GlobalValues;
 
     [SerializeField]
-    int _enemyHitCount;
-
-    [SerializeField]
-    int _easyEnemyHealth;
-
-    [SerializeField]
-    int _mediumEnemyHealth;
-
-    [SerializeField]
-    int _hardEnemyHealth;
+    int _maxEnemyHealth;
 
     [SerializeField]
     List<HitType> _listOfHits = new List<HitType>();
@@ -39,11 +30,6 @@ public class System_EnemyHitManager : MonoBehaviour
         EventHandler.Event_EnemyHit -= HitCheck;
     }
 
-    public int GetEnemyHealth()
-    {
-        return _enemyHitCount;
-    }
-
     //Generates set of hit orb types depending on enemy type
     void GenerateHits()
     {
@@ -51,48 +37,56 @@ public class System_EnemyHitManager : MonoBehaviour
 
         //Sets enemy health value according to enemy type
         var enemyType = GetComponent<System_EnemyType>().GetEnemyType();
+        var enemyHealth = Random.Range(1, _maxEnemyHealth + 1);
 
-        if (enemyType == EnemyType.Easy)
-            for (int i = 0; i < _easyEnemyHealth; i++)
+        //Hit types logic which enemy types can get
+
+        //Normal enemy
+        if (enemyType == EnemyType.Normal)
+        {
+            for (int i = 0; i < enemyHealth; i++)
             {
                 _listOfHits.Add(HitType.Normal);
             }
-        else if (enemyType == EnemyType.Medium)
-            for (int i = 0; i < _mediumEnemyHealth; i++)
-            {
-                _listOfHits.Add(HitType.Normal);
-            }
-        else if (enemyType == EnemyType.Hard)
-            for (int i = 0; i < _hardEnemyHealth; i++)
-            {
-                _listOfHits.Add(HitType.Normal);
-            }
-        //Change this
+        }
+        //Elite enemy
         else if (enemyType == EnemyType.Elite)
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < enemyHealth; i++)
             {
-                _listOfHits.Add(HitType.Solo);
+                if (i + 1 == enemyHealth)
+                {
+                    _listOfHits.Add(HitType.Solo);
+                    break;
+                }
+                _listOfHits.Add(HitType.Normal);
             }
             EventHandler.Event_GenerateElite?.Invoke(gameObject);
         }
+        //Dash enemy
         else if (enemyType == EnemyType.Dash)
         {
-            for (int i = 0; i < _hardEnemyHealth; i++)
+            for (int i = 0; i < enemyHealth; i++)
             {
-                if (i + 1 == _hardEnemyHealth)
+                if (i + 1 == enemyHealth)
                 {
                     _listOfHits.Add(HitType.Normal);
-                    return;
+                    break;
                 }
                 RandomizeHits(enemyType);
             }
         }
+        //Hold enemy
         else if (enemyType == EnemyType.Hold)
         {
-            for (int i = 0; i < 1; i++)
+            for (int i = 0; i < enemyHealth; i++)
             {
-                _listOfHits.Add(HitType.Hold);
+                if (i + 1 == enemyHealth)
+                {
+                    _listOfHits.Add(HitType.Hold);
+                    break;
+                }
+                _listOfHits.Add(HitType.Normal);
             }
         }
     }

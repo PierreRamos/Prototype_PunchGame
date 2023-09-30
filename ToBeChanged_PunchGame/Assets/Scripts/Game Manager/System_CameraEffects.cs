@@ -10,7 +10,7 @@ public class System_CameraEffects : MonoBehaviour
     GameObject _playerObject;
 
     [SerializeField]
-    float _targetZoomDistance = 5.0f;
+    float _targetZoomDistance;
 
     [SerializeField]
     float _lerpDuration;
@@ -25,7 +25,7 @@ public class System_CameraEffects : MonoBehaviour
     float _originalCameraSize;
     float _originalCameraHeight;
     float _startTime;
-    float _startZoomSize;
+    float _startZoom;
     bool _battleCamera;
     bool _cameraZoomedIn;
 
@@ -164,7 +164,7 @@ public class System_CameraEffects : MonoBehaviour
         if (_startTime == 0)
         {
             _startTime = Time.unscaledTime;
-            _startZoomSize = _camera.orthographicSize;
+            _startZoom = _camera.orthographicSize;
         }
 
         float elapsedTime = Time.unscaledTime - _startTime;
@@ -180,7 +180,7 @@ public class System_CameraEffects : MonoBehaviour
             float t = elapsedTime / _lerpDuration;
             float step = _cameraZoomCurve.Evaluate(t);
 
-            _camera.orthographicSize = Mathf.Lerp(_startZoomSize, targetSize, step);
+            _camera.orthographicSize = Mathf.Lerp(_startZoom, targetSize, step);
         }
     }
 }
