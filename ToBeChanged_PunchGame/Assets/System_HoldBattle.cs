@@ -107,6 +107,7 @@ public class System_HoldBattle : MonoBehaviour
         DeactivateHoldBattle();
         EventHandler.Event_StopSlowTime?.Invoke();
         EventHandler.Event_StoppedHoldBattle?.Invoke();
+        EventHandler.Event_NormalHealthUI?.Invoke();
     }
 
     //Test

@@ -8,9 +8,11 @@ public class System_DifficultyManager : MonoBehaviour
     System_GlobalValues GlobalValues;
 
     [Header("Difficulty Settings")]
-    [Space]
     [SerializeField]
     int _baseDifficultyIncrement;
+
+    [SerializeField]
+    float _difficultyIncrementPercentageIncrease;
 
     [SerializeField]
     [Range(0f, 0.5f)]
@@ -43,7 +45,10 @@ public class System_DifficultyManager : MonoBehaviour
         {
             GlobalValues.AddDifficulty();
             _baseDifficultyIncrement =
-                _baseDifficultyIncrement + (int)(_baseDifficultyIncrement * 1.25f);
+                _baseDifficultyIncrement
+                + (int)(
+                    _baseDifficultyIncrement * (1f + (_difficultyIncrementPercentageIncrease / 100))
+                );
         }
     }
 

@@ -9,7 +9,6 @@ public class System_EventHandler : MonoBehaviour
 
     //Game events
     public Action<Vector3> Event_SpawnEnemy;
-    public Action Event_StoppedSoloBattle;
 
     //Enemy events
     public Action<GameObject> Event_EnemyHitPlayer;
@@ -40,6 +39,7 @@ public class System_EventHandler : MonoBehaviour
     public Action<GameObject, List<MoveSet>> Event_TriggeredSoloBattle;
     public Action<bool> Event_SoloBattleTimerFinished;
     public Action Event_SoloBattleWrongInput;
+    public Action Event_StoppedSoloBattle;
 
     //Hold Battle events
     public Action<GameObject> Event_TriggerHoldBattle;
@@ -67,7 +67,8 @@ public class System_EventHandler : MonoBehaviour
     public Action<bool> Event_HasEnemyRight;
 
     //New events
-    public Action Event_ChangeHealthUI;
+    public Action Event_NormalHealthUI;
+    public Action Event_FocusHealthUI;
 
     //Enemy hit manager events
     public Action<GameObject> Event_GenerateElite;
@@ -86,27 +87,5 @@ public class System_EventHandler : MonoBehaviour
         {
             Destroy(gameObject);
         }
-    }
-
-    private void OnEnable()
-    {
-        Event_TriggeredSoloBattle += TriggerChangeHealthUI;
-        Event_StoppedSoloBattle += TriggerChangeHealthUI;
-    }
-
-    private void OnDisable()
-    {
-        Event_TriggeredSoloBattle -= TriggerChangeHealthUI;
-        Event_StoppedSoloBattle -= TriggerChangeHealthUI;
-    }
-
-    private void TriggerChangeHealthUI()
-    {
-        Event_ChangeHealthUI?.Invoke();
-    }
-
-    void TriggerChangeHealthUI(GameObject dummy, List<MoveSet> dummy2)
-    {
-        Event_ChangeHealthUI?.Invoke();
     }
 }

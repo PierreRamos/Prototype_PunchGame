@@ -30,6 +30,7 @@ public class System_HoldMechanics : MonoBehaviour
         {
             GlobalValues.SetGameState(GameState.HoldBattle);
             EventHandler.Event_TriggeredHoldBattle?.Invoke(gameObject);
+            EventHandler.Event_FocusHealthUI?.Invoke();
         }
     }
 }

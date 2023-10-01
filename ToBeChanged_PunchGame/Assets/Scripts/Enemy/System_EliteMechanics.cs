@@ -53,6 +53,7 @@ public class System_EliteMechanics : MonoBehaviour
 
         GlobalValues.SetGameState(GameState.SoloBattle);
         EventHandler.Event_TriggeredSoloBattle?.Invoke(gameObject, _listOfMoves);
+        EventHandler.Event_FocusHealthUI?.Invoke();
     }
 
     void GenerateMoveSet(GameObject gameObject)

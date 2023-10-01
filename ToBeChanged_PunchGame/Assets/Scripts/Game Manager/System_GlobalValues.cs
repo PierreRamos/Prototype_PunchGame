@@ -2,6 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum GroundLocation
+{
+    Left,
+    Center,
+    Right
+}
+
+public enum Direction
+{
+    Left,
+    Right
+}
+
 public enum HitType
 {
     Normal,
@@ -47,6 +60,7 @@ public class System_GlobalValues : MonoBehaviour
     Dictionary<EnemyType, int> _enemiesSpawnChance = new Dictionary<EnemyType, int>();
     int _difficulty;
     int _currentDefeatCount;
+    int _currentPlayerHealth;
     float _playerKnockBackTime;
     float _playerAttackRange;
     float _enemyMovementSpeed;
@@ -69,11 +83,13 @@ public class System_GlobalValues : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
 
         EventHandler.Event_DefeatedEnemy += AddDefeatCount;
+        EventHandler.Event_PlayerHealthValueChange += SetPlayerHealth;
     }
 
     void OnDisable()
     {
         EventHandler.Event_DefeatedEnemy -= AddDefeatCount;
+        EventHandler.Event_PlayerHealthValueChange -= SetPlayerHealth;
     }
 
     private void Start()
@@ -128,6 +144,11 @@ public class System_GlobalValues : MonoBehaviour
         _enemySpawnModifier = value;
     }
 
+    public void SetPlayerHealth(int value)
+    {
+        _currentPlayerHealth = value;
+    }
+
     //Getters
 
     public GameState GetGameState()
@@ -168,6 +189,11 @@ public class System_GlobalValues : MonoBehaviour
     public int GetDifficulty()
     {
         return _difficulty;
+    }
+
+    public int GetPlayerHealth()
+    {
+        return _currentPlayerHealth;
     }
 
     //Incrementers

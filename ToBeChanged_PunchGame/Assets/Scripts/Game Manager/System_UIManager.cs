@@ -8,6 +8,7 @@ using UnityEngine.UI;
 public class System_UIManager : MonoBehaviour
 {
     System_EventHandler EventHandler;
+    System_GlobalValues GlobalValues;
 
     [Header("Initialization")]
     [Space]
@@ -41,6 +42,7 @@ public class System_UIManager : MonoBehaviour
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
 
         //Stun
         EventHandler.Event_TriggerStun += ActivateStunBar;
@@ -49,7 +51,8 @@ public class System_UIManager : MonoBehaviour
 
         //Health
         EventHandler.Event_PlayerHealthValueChange += UpdateHealthDisplay;
-        EventHandler.Event_ChangeHealthUI += ChangeHealthUI;
+        EventHandler.Event_FocusHealthUI += FocusHealthUI;
+        EventHandler.Event_NormalHealthUI += NormalHealthUI;
 
         EventHandler.Event_EnemyDefeatedValueChange += UpdateDefeatedDisplay;
         EventHandler.Event_PlayerDied += ActivateGameOver;
@@ -64,7 +67,8 @@ public class System_UIManager : MonoBehaviour
         EventHandler.Event_PlayerStunFinished -= DeactivateStunBar;
 
         EventHandler.Event_PlayerHealthValueChange -= UpdateHealthDisplay;
-        EventHandler.Event_ChangeHealthUI -= ChangeHealthUI;
+        EventHandler.Event_FocusHealthUI -= FocusHealthUI;
+        EventHandler.Event_NormalHealthUI -= NormalHealthUI;
 
         EventHandler.Event_EnemyDefeatedValueChange -= UpdateDefeatedDisplay;
         EventHandler.Event_PlayerDied -= ActivateGameOver;
@@ -77,25 +81,26 @@ public class System_UIManager : MonoBehaviour
         _healthText = _baseHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
     }
 
-    void ChangeHealthUI()
+    void NormalHealthUI()
     {
-        var healthValue = _healthText.text;
-        if (_baseHealthPanel.activeSelf)
-        {
-            _healthText = _soloHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-            _healthText.text = healthValue;
+        var healthValue = GlobalValues.GetPlayerHealth();
 
-            _soloHealthPanel.SetActive(true);
-            _baseHealthPanel.SetActive(false);
-        }
-        else
-        {
-            _healthText = _baseHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-            _healthText.text = healthValue;
+        _healthText = _baseHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        _healthText.text = healthValue.ToString();
 
-            _baseHealthPanel.SetActive(true);
-            _soloHealthPanel.SetActive(false);
-        }
+        _baseHealthPanel.SetActive(true);
+        _soloHealthPanel.SetActive(false);
+    }
+
+    void FocusHealthUI()
+    {
+        var healthValue = GlobalValues.GetPlayerHealth();
+
+        _healthText = _soloHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+        _healthText.text = healthValue.ToString();
+
+        _soloHealthPanel.SetActive(true);
+        _baseHealthPanel.SetActive(false);
     }
 
     void PausePanel(bool value)

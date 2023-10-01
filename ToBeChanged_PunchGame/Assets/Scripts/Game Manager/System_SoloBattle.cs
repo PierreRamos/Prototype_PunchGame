@@ -193,6 +193,7 @@ public class System_SoloBattle : MonoBehaviour
 
         EventHandler.Event_StopSlowTime?.Invoke();
         EventHandler.Event_StoppedSoloBattle?.Invoke();
+        EventHandler.Event_NormalHealthUI?.Invoke();
 
         if (defeatedEnemy)
         {
