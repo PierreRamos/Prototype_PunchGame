@@ -98,6 +98,15 @@ public class System_EnemySpawner : MonoBehaviour
                 spawnSeconds = _minSpawnInterval;
 
             yield return new WaitForSeconds(spawnSeconds);
+
+            //Stop spawning while in minigame
+            while (
+                GlobalValues.GetGameState() == GameState.SoloBattle
+                || GlobalValues.GetGameState() == GameState.HoldBattle
+            )
+            {
+                yield return null;
+            }
         }
     }
 

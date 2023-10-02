@@ -62,10 +62,20 @@ public class System_HoldBattle : MonoBehaviour
 
     private void Update()
     {
+        IncrementSlider();
+    }
+
+    private void IncrementSlider()
+    {
         if (_isHeld)
+        {
             _holdBattleSlider.value +=
                 (_sliderIncrementValue + (_currentDifficultyCache * _secondsPerDifficulty))
                 * Time.unscaledDeltaTime;
+
+            if (_holdBattleSlider.value == _holdBattleSlider.maxValue)
+                StopHold();
+        }
     }
 
     void TriggerHoldBattle(GameObject enemy)
