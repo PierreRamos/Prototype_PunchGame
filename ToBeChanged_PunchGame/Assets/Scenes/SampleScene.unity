@@ -2233,7 +2233,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1230512973}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &818428787
 GameObject:
@@ -2722,7 +2722,7 @@ RectTransform:
   - {fileID: 568622619}
   - {fileID: 977225804}
   m_Father: {fileID: 1230512973}
-  m_RootOrder: 1
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -3400,7 +3400,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -984834991
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -949660147, guid: 2317150cee5ddda49a7ab80c80d2a7fd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -3426,10 +3426,11 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 519420032}
-  - {fileID: 1008068332}
   - {fileID: 809813740}
   - {fileID: 1802421789}
+  - {fileID: 1008068332}
   - {fileID: 1502748699}
+  - {fileID: 1876596676}
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -4099,10 +4100,10 @@ MonoBehaviour:
   _leftEnemySpawn: {fileID: 809813740}
   _rightEnemySpawn: {fileID: 1802421789}
   _baseSpawnInterval: 1
-  _spawnIntervalRange: 0.25
-  _minSpawnInterval: 0.1
+  _spawnIntervalRange: 0.1
+  _minSpawnInterval: 0.05
   _normalEnemySpawnRatio: 10
-  _eliteEnemySpawnRatio: 3
+  _eliteEnemySpawnRatio: 1
   _dashEnemySpawnRatio: 2
   _holdEnemySpawnRatio: 3
   _spawnerOn: 1
@@ -4162,10 +4163,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _effectPoolParent: {fileID: 1609625853}
+  _playerEffectPoolParent: {fileID: 1876596676}
   _hitEffectPrefab: {fileID: 2045972022961383500, guid: 4ad407de122367349b2b59f28f0594f9, type: 3}
+  _healEffectPrefab: {fileID: 7644132397095401424, guid: 012914b149d7eda45a6397d3c6aff6d4, type: 3}
   _defeatEffectPrefab: {fileID: 2045972022961383500, guid: b2be69510c50dd744a1d54ef60f025c1, type: 3}
   _exclamationEffectPrefab: {fileID: 5332561822718980270, guid: f600b7b8ecc09924bb79e9fc9ade3357, type: 3}
   _hitEffectPoolSize: 15
+  _healEffectPoolSize: 3
   _defeatEffectPoolSize: 10
   _exclamationEffectPoolSize: 3
 --- !u!114 &1559235791
@@ -4230,10 +4234,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 476234d896c9caa478233cf68a06b09f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _baseDifficultyIncrement: 20
+  _baseDifficulty: 20
   _difficultyIncrementPercentageIncrease: 10
   _enemySpawnModifierPercentage: 0.1
-  _enemyMovementSpeedPercentage: 0.05
+  _enemyMovementSpeedPercentage: 5
 --- !u!114 &1559235795
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4340,6 +4344,7 @@ MonoBehaviour:
   _sliderIncrementValue: 0.85
   _highlightPercentage: 0.2
   _minimumOffsetPercentage: 0.4
+  _secondsPerDifficulty: 0.05
 --- !u!1 &1566933747
 GameObject:
   m_ObjectHideFlags: 0
@@ -4481,6 +4486,7 @@ MonoBehaviour:
   _timerSlider: {fileID: 969571520}
   _secondsPerMove: 0.75
   _incorrectInputPenalty: 0.5
+  _secondsPerDifficulty: 0.1
 --- !u!1 &1592049488
 GameObject:
   m_ObjectHideFlags: 0
@@ -5057,7 +5063,38 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1230512973}
-  m_RootOrder: 3
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1876596675
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1876596676}
+  m_Layer: 0
+  m_Name: PlayerParticles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1876596676
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1876596675}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1230512973}
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1943464035
 GameObject:

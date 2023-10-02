@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -9,15 +10,20 @@ public class System_DifficultyManager : MonoBehaviour
 
     [Header("Difficulty Settings")]
     [SerializeField]
-    int _baseDifficultyIncrement;
+    int _baseDifficulty;
 
     [SerializeField]
     float _difficultyIncrementPercentageIncrease;
 
     [SerializeField]
     [Range(0f, 0.5f)]
-    float _enemySpawnModifierPercentage,
-        _enemyMovementSpeedPercentage;
+    float _enemySpawnModifierPercentage;
+
+    [Range(0, 100)]
+    [SerializeField]
+    float _enemyMovementSpeedPercentage;
+
+    int _currentDifficultyMilestone;
 
     private void OnEnable()
     {
@@ -36,31 +42,36 @@ public class System_DifficultyManager : MonoBehaviour
 
     private void Start()
     {
+        _currentDifficultyMilestone = _baseDifficulty;
         EvaluateGameDifficulty(GlobalValues.GetDifficulty());
     }
 
     void UpdateGameDifficulty(int enemiesDefeated)
     {
-        if (_baseDifficultyIncrement <= enemiesDefeated)
+        if (_currentDifficultyMilestone <= enemiesDefeated)
         {
             GlobalValues.AddDifficulty();
-            _baseDifficultyIncrement =
-                _baseDifficultyIncrement
-                + (int)(
-                    _baseDifficultyIncrement * (1f + (_difficultyIncrementPercentageIncrease / 100))
-                );
+
+            var baseDifficultyAddition = _baseDifficulty * GlobalValues.GetDifficulty();
+
+            _currentDifficultyMilestone += baseDifficultyAddition;
         }
     }
 
-    void EvaluateGameDifficulty(int value)
+    void EvaluateGameDifficulty(int difficulty)
     {
-        var difficulty = value;
+        if (difficulty == 0)
+            return;
+
         var enemySpawnModifier = GlobalValues.GetEnemySpawnModifier();
         var enemyMovementSpeed = GlobalValues.GetEnemyMovementSpeed();
 
         enemySpawnModifier = difficulty * _enemySpawnModifierPercentage;
-        enemyMovementSpeed =
-            enemyMovementSpeed * (1 + (difficulty * _enemyMovementSpeedPercentage));
+
+        var enemyMovementSpeedIncrement =
+            enemyMovementSpeed * (_enemyMovementSpeedPercentage / 100);
+
+        enemyMovementSpeed = enemyMovementSpeed + enemyMovementSpeedIncrement;
 
         GlobalValues.SetEnemySpawnModifier(enemySpawnModifier);
         GlobalValues.SetEnemyMovementSpeed(enemyMovementSpeed);

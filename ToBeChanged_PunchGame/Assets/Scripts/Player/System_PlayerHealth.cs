@@ -49,6 +49,7 @@ public class System_PlayerHealth : MonoBehaviour
         if (_currentPlayerHealth > _maxPlayerHealth)
             _currentPlayerHealth = _maxPlayerHealth;
 
+        EventHandler.Event_PlayerHealEffect?.Invoke(transform.position);
         EventHandler.Event_PlayerHealthValueChange?.Invoke(GetPlayerHealth());
     }
 

@@ -49,11 +49,11 @@ TagManager:
   - name: SubBackground
     uniqueID: 426919037
     locked: 0
-  - name: Effects
-    uniqueID: 166059319
-    locked: 0
   - name: Entity
     uniqueID: 3310132305
+    locked: 0
+  - name: Effects
+    uniqueID: 166059319
     locked: 0
   - name: Interface
     uniqueID: 3004921501

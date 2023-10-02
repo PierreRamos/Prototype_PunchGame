@@ -5,8 +5,8 @@ using UnityEngine;
 public class System_PlayerStatus : MonoBehaviour
 {
     public static System_PlayerStatus Instance { get; private set; }
-
     System_EventHandler EventHandler;
+    System_GlobalValues GlobalValues;
 
     [Header("Player Status Settings")]
     [Space]
@@ -33,6 +33,7 @@ public class System_PlayerStatus : MonoBehaviour
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_TriggerStun += TriggerStun;
         EventHandler.Event_PlayerHit += StopStun;
@@ -51,6 +52,9 @@ public class System_PlayerStatus : MonoBehaviour
 
     void StunTimer()
     {
+        if (GlobalValues.GetGameState() == GameState.Paused)
+            return;
+
         if (_currentStunTime > 0)
         {
             _currentStunTime -= 1 * Time.unscaledDeltaTime;

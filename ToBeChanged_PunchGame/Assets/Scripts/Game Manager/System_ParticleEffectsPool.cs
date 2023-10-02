@@ -11,7 +11,14 @@ public class System_ParticleEffectsPool : MonoBehaviour
     Transform _effectPoolParent;
 
     [SerializeField]
+    Transform _playerEffectPoolParent;
+
+    [Space]
+    [SerializeField]
     GameObject _hitEffectPrefab;
+
+    [SerializeField]
+    GameObject _healEffectPrefab;
 
     [SerializeField]
     GameObject _defeatEffectPrefab;
@@ -24,12 +31,16 @@ public class System_ParticleEffectsPool : MonoBehaviour
     int _hitEffectPoolSize;
 
     [SerializeField]
+    int _healEffectPoolSize;
+
+    [SerializeField]
     int _defeatEffectPoolSize;
 
     [SerializeField]
     int _exclamationEffectPoolSize;
 
     List<GameObject> _hitParticlePool = new List<GameObject>();
+    List<GameObject> _healParticlePool = new List<GameObject>();
     List<GameObject> _defeatParticlePool = new List<GameObject>();
     List<GameObject> _exclamationParticlePool = new List<GameObject>();
 
@@ -40,6 +51,7 @@ public class System_ParticleEffectsPool : MonoBehaviour
         EventHandler.Event_EnemyHit += ActivateHitParticle;
         EventHandler.Event_DefeatedEnemy += ActivateDefeatParticle;
         EventHandler.Event_ExclamationEffect += ActivateExclamationParticle;
+        EventHandler.Event_PlayerHealEffect += ActivateHealParticle;
     }
 
     private void OnDisable()
@@ -47,6 +59,7 @@ public class System_ParticleEffectsPool : MonoBehaviour
         EventHandler.Event_EnemyHit -= ActivateHitParticle;
         EventHandler.Event_DefeatedEnemy -= ActivateDefeatParticle;
         EventHandler.Event_ExclamationEffect -= ActivateExclamationParticle;
+        EventHandler.Event_PlayerHealEffect -= ActivateHealParticle;
     }
 
     private void Start()
@@ -54,21 +67,33 @@ public class System_ParticleEffectsPool : MonoBehaviour
         // Create the pool of particle system instances
         for (int i = 0; i < _hitEffectPoolSize; i++)
         {
-            PrefabInstantiation(_hitEffectPrefab, _hitParticlePool);
+            PrefabInstantiation(_hitEffectPrefab, _hitParticlePool, _effectPoolParent);
+        }
+        for (int i = 0; i < _healEffectPoolSize; i++)
+        {
+            PrefabInstantiation(_healEffectPrefab, _healParticlePool, _playerEffectPoolParent);
         }
         for (int i = 0; i < _defeatEffectPoolSize; i++)
         {
-            PrefabInstantiation(_defeatEffectPrefab, _defeatParticlePool);
+            PrefabInstantiation(_defeatEffectPrefab, _defeatParticlePool, _effectPoolParent);
         }
         for (int i = 0; i < _exclamationEffectPoolSize; i++)
         {
-            PrefabInstantiation(_exclamationEffectPrefab, _exclamationParticlePool);
+            PrefabInstantiation(
+                _exclamationEffectPrefab,
+                _exclamationParticlePool,
+                _effectPoolParent
+            );
         }
     }
 
-    private void PrefabInstantiation(GameObject gameObject, List<GameObject> poolList)
+    private void PrefabInstantiation(
+        GameObject gameObject,
+        List<GameObject> poolList,
+        Transform effectParent
+    )
     {
-        GameObject particleInstance = Instantiate(gameObject, _effectPoolParent);
+        GameObject particleInstance = Instantiate(gameObject, effectParent);
         particleInstance.SetActive(false);
         poolList.Add(particleInstance);
     }
@@ -81,6 +106,20 @@ public class System_ParticleEffectsPool : MonoBehaviour
             if (!particleInstance.activeInHierarchy)
             {
                 particleInstance.transform.position = enemy.transform.position;
+                particleInstance.SetActive(true);
+                return;
+            }
+        }
+    }
+
+    public void ActivateHealParticle(Vector3 playerPosition)
+    {
+        // Find an inactive particle system in the pool and activate it
+        foreach (GameObject particleInstance in _healParticlePool)
+        {
+            if (!particleInstance.activeInHierarchy)
+            {
+                particleInstance.transform.position = playerPosition;
                 particleInstance.SetActive(true);
                 return;
             }

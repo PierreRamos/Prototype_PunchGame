@@ -53,6 +53,7 @@ public class System_EventHandler : MonoBehaviour
     public Action<int> Event_PlayerHealthValueChange;
     public Action<int> Event_EnemyDefeatedValueChange;
     public Action<int> Event_DifficultyValueChange;
+
     public Action<GameObject, List<HitType>> Event_EnemyHitListChange;
 
     //Update on enabled object event
@@ -60,6 +61,7 @@ public class System_EventHandler : MonoBehaviour
 
     //Effect events
     public Action<Vector3> Event_ExclamationEffect;
+    public Action<Vector3> Event_PlayerHealEffect;
 
     //Hit indicator events
     public Action<int> Event_PlayerHit;

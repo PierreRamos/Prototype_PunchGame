@@ -14,14 +14,19 @@ public class System_SoloBattleTimer : MonoBehaviour
     Slider _timerSlider;
 
     [Header("Solo Battle Timer Settings")]
-    [Space]
     [SerializeField]
     float _secondsPerMove;
 
     [SerializeField]
     float _incorrectInputPenalty;
 
+    [Range(0f, 0.5f)]
+    [SerializeField]
+    float _secondsPerDifficulty;
+
     float _currentTime;
+
+    int _currentDifficultyCache;
 
     private void OnEnable()
     {
@@ -52,12 +57,14 @@ public class System_SoloBattleTimer : MonoBehaviour
         _currentTime = moveCount * _secondsPerMove;
         _timerSlider.value = _currentTime;
         _timerSlider.maxValue = _currentTime;
+        _currentDifficultyCache = GlobalValues.GetDifficulty();
     }
 
     void SoloBattleTimer()
     {
         if (_currentTime > 0)
-            _currentTime -= 1 * Time.unscaledDeltaTime;
+            _currentTime -=
+                (1 + (_currentDifficultyCache * _secondsPerDifficulty)) * Time.unscaledDeltaTime;
         else
             EventHandler.Event_SoloBattleTimerFinished?.Invoke(false);
 

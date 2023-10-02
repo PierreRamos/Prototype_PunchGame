@@ -33,9 +33,15 @@ public class System_HoldBattle : MonoBehaviour
     [SerializeField]
     float _minimumOffsetPercentage;
 
+    [Range(0f, 0.5f)]
+    [SerializeField]
+    float _secondsPerDifficulty;
+
     GameObject _currentEnemy;
 
     float _offsetPercentage;
+
+    float _currentDifficultyCache;
 
     bool _isHeld;
 
@@ -57,7 +63,9 @@ public class System_HoldBattle : MonoBehaviour
     private void Update()
     {
         if (_isHeld)
-            _holdBattleSlider.value += _sliderIncrementValue * Time.unscaledDeltaTime;
+            _holdBattleSlider.value +=
+                (_sliderIncrementValue + (_currentDifficultyCache * _secondsPerDifficulty))
+                * Time.unscaledDeltaTime;
     }
 
     void TriggerHoldBattle(GameObject enemy)
@@ -69,6 +77,7 @@ public class System_HoldBattle : MonoBehaviour
 
         _isHeld = true;
         _holdBattleSlider.value = 0;
+        _currentDifficultyCache = GlobalValues.GetDifficulty();
         CalculatePercentagePosition();
     }
 
