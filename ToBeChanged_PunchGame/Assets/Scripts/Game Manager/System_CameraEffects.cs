@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class System_CameraEffects : MonoBehaviour
 {
     System_EventHandler EventHandler;
+
+    [SerializeField]
+    CinemachineVirtualCamera _cinemachineCamera;
 
     [SerializeField]
     GameObject _playerObject;
@@ -56,8 +60,8 @@ public class System_CameraEffects : MonoBehaviour
             enabled = false; // Disable the script if the camera is not found.
             return;
         }
-        _originalCameraSize = _camera.orthographicSize;
-        _originalCameraHeight = _camera.transform.position.y;
+        _originalCameraSize = _cinemachineCamera.m_Lens.OrthographicSize;
+        _originalCameraHeight = _cinemachineCamera.transform.position.y;
     }
 
     void Update()
@@ -97,9 +101,6 @@ public class System_CameraEffects : MonoBehaviour
                 enemy.transform.position
             );
 
-            // if (_lerpCameraToPosition != null)
-            //     StopCoroutine(_lerpCameraToPosition);
-
             _lerpCameraToPosition = StartCoroutine(LerpCameraToPosition(middlePosition));
         }
     }
@@ -112,7 +113,7 @@ public class System_CameraEffects : MonoBehaviour
         {
             Vector3 cameraPosition = _playerObject.transform.position;
             cameraPosition.y = _originalCameraHeight;
-            cameraPosition.z = _camera.transform.position.z;
+            cameraPosition.z = _cinemachineCamera.transform.position.z;
 
             if (_lerpCameraToPosition != null)
                 StopCoroutine(_lerpCameraToPosition);
@@ -126,7 +127,7 @@ public class System_CameraEffects : MonoBehaviour
         return new Vector3(
             (playerPosition.x + enemyPosition.x) / 2f,
             playerPosition.y,
-            _camera.transform.position.z
+            _cinemachineCamera.transform.position.z
         );
     }
 
@@ -135,28 +136,30 @@ public class System_CameraEffects : MonoBehaviour
         yield return new WaitForEndOfFrame(); //Buffer (If without, bugs lerping when stopping hold battle)
 
         float elapsedTime = 0f;
-        Vector3 initialPosition = _camera.transform.position;
+        Vector3 initialPosition = _cinemachineCamera.transform.position;
 
         while (elapsedTime < _lerpDuration)
         {
             float t = _cameraZoomCurve.Evaluate(elapsedTime / _lerpDuration);
-            _camera.transform.position = Vector3.Lerp(initialPosition, targetPosition, t);
+            _cinemachineCamera.transform.position = Vector3.Lerp(
+                initialPosition,
+                targetPosition,
+                t
+            );
             elapsedTime += Time.unscaledDeltaTime;
             yield return null;
         }
         // Ensure the camera reaches the exact target position.
-        _camera.transform.position = targetPosition;
+        _cinemachineCamera.transform.position = targetPosition;
     }
 
     void Zoom(float targetSize)
     {
-        //Checks if camera size is lesser than original size
-        if (_camera.orthographicSize < _originalCameraSize)
+        if (_cinemachineCamera.m_Lens.OrthographicSize < _originalCameraSize)
             _cameraZoomedIn = true;
 
-        if (_camera.orthographicSize == targetSize)
+        if (_cinemachineCamera.m_Lens.OrthographicSize == targetSize)
         {
-            // _cameraZoomedIn = Mathf.Approximately(_camera.orthographicSize, _targetZoomDistance);
             _startTime = 0;
             return;
         }
@@ -164,15 +167,14 @@ public class System_CameraEffects : MonoBehaviour
         if (_startTime == 0)
         {
             _startTime = Time.unscaledTime;
-            _startZoom = _camera.orthographicSize;
+            _startZoom = _cinemachineCamera.m_Lens.OrthographicSize;
         }
 
         float elapsedTime = Time.unscaledTime - _startTime;
 
         if (elapsedTime >= _lerpDuration)
         {
-            _camera.orthographicSize = targetSize;
-            // _cameraZoomedIn = Mathf.Approximately(_camera.orthographicSize, _targetZoomDistance);
+            _cinemachineCamera.m_Lens.OrthographicSize = targetSize;
             _startTime = 0;
         }
         else
@@ -180,7 +182,7 @@ public class System_CameraEffects : MonoBehaviour
             float t = elapsedTime / _lerpDuration;
             float step = _cameraZoomCurve.Evaluate(t);
 
-            _camera.orthographicSize = Mathf.Lerp(_startZoom, targetSize, step);
+            _cinemachineCamera.m_Lens.OrthographicSize = Mathf.Lerp(_startZoom, targetSize, step);
         }
     }
 }
