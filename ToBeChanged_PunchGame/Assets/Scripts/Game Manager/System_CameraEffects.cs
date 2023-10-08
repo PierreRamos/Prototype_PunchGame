@@ -22,6 +22,7 @@ public class System_CameraEffects : MonoBehaviour
     [SerializeField]
     AnimationCurve _cameraZoomCurve;
 
+    CinemachineFramingTransposer _framingTransposer;
     Camera _camera;
     GameObject _currentEnemyObject;
     Coroutine _lerpCameraToPosition;
@@ -60,6 +61,9 @@ public class System_CameraEffects : MonoBehaviour
             enabled = false; // Disable the script if the camera is not found.
             return;
         }
+        _framingTransposer =
+            _cinemachineCamera.GetCinemachineComponent<CinemachineFramingTransposer>();
+
         _originalCameraSize = _cinemachineCamera.m_Lens.OrthographicSize;
         _originalCameraHeight = _cinemachineCamera.transform.position.y;
     }
@@ -103,7 +107,7 @@ public class System_CameraEffects : MonoBehaviour
                 enemy.transform.position
             );
 
-            _lerpCameraToPosition = StartCoroutine(LerpCameraToPosition(middlePosition));
+            _lerpCameraToPosition = StartCoroutine(LerpCameraToPosition(middlePosition, false));
         }
 
         //
@@ -127,9 +131,15 @@ public class System_CameraEffects : MonoBehaviour
             cameraPosition.y = _originalCameraHeight;
             cameraPosition.z = _cinemachineCamera.transform.position.z;
 
-            _lerpCameraToPosition = StartCoroutine(LerpCameraToPosition(cameraPosition));
+            if (_lerpCameraToPositionIsRunning)
+            {
+                StopCoroutine(_lerpCameraToPosition);
+                _lerpCameraToPositionIsRunning = false;
+            }
+
+            _lerpCameraToPosition = StartCoroutine(LerpCameraToPosition(cameraPosition, true));
         }
-        _cinemachineCamera.m_Follow = _playerObject.transform;
+        // _cinemachineCamera.m_Follow = _playerObject.transform;
     }
 
     void Zoom(float targetSize)
@@ -165,7 +175,7 @@ public class System_CameraEffects : MonoBehaviour
         }
     }
 
-    IEnumerator LerpCameraToPosition(Vector3 targetPosition)
+    IEnumerator LerpCameraToPosition(Vector3 targetPosition, bool isStopping)
     {
         yield return new WaitForEndOfFrame(); //Buffer (If without, bugs lerping when stopping hold battle)
 
@@ -191,10 +201,8 @@ public class System_CameraEffects : MonoBehaviour
         // Ensure the camera reaches the exact target position.
         _cinemachineCamera.transform.position = targetPosition;
 
-        if (_battleCamera == false)
-        {
-            // _cinemachineCamera.m_Follow = _playerObject.transform;
-        }
+        if (isStopping)
+            _cinemachineCamera.m_Follow = _playerObject.transform;
 
         _lerpCameraToPositionIsRunning = false;
     }
