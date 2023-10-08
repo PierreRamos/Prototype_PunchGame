@@ -24,7 +24,6 @@ public class System_CameraEffects : MonoBehaviour
 
     Camera _camera;
     GameObject _currentEnemyObject;
-
     Coroutine _lerpCameraToPosition;
     float _originalCameraSize;
     float _originalCameraHeight;
@@ -32,6 +31,7 @@ public class System_CameraEffects : MonoBehaviour
     float _startZoom;
     bool _battleCamera;
     bool _cameraZoomedIn;
+    bool _lerpCameraToPositionIsRunning;
 
     void OnEnable()
     {
@@ -82,12 +82,14 @@ public class System_CameraEffects : MonoBehaviour
 
     void TriggerBattleCamera(GameObject enemy)
     {
+        _cinemachineCamera.m_Follow = null;
         _currentEnemyObject = enemy;
         _battleCamera = true;
     }
 
     void TriggerBattleCamera(GameObject enemy, List<MoveSet> dummy)
     {
+        _cinemachineCamera.m_Follow = null;
         _currentEnemyObject = enemy;
         _battleCamera = true;
     }
@@ -103,6 +105,16 @@ public class System_CameraEffects : MonoBehaviour
 
             _lerpCameraToPosition = StartCoroutine(LerpCameraToPosition(middlePosition));
         }
+
+        //
+        Vector3 CalculateMiddlePosition(Vector3 playerPosition, Vector3 enemyPosition)
+        {
+            return new Vector3(
+                (playerPosition.x + enemyPosition.x) / 2f,
+                playerPosition.y,
+                _cinemachineCamera.transform.position.z
+            );
+        }
     }
 
     void StopBattleCamera()
@@ -115,42 +127,9 @@ public class System_CameraEffects : MonoBehaviour
             cameraPosition.y = _originalCameraHeight;
             cameraPosition.z = _cinemachineCamera.transform.position.z;
 
-            if (_lerpCameraToPosition != null)
-                StopCoroutine(_lerpCameraToPosition);
-
             _lerpCameraToPosition = StartCoroutine(LerpCameraToPosition(cameraPosition));
         }
-    }
-
-    Vector3 CalculateMiddlePosition(Vector3 playerPosition, Vector3 enemyPosition)
-    {
-        return new Vector3(
-            (playerPosition.x + enemyPosition.x) / 2f,
-            playerPosition.y,
-            _cinemachineCamera.transform.position.z
-        );
-    }
-
-    IEnumerator LerpCameraToPosition(Vector3 targetPosition)
-    {
-        yield return new WaitForEndOfFrame(); //Buffer (If without, bugs lerping when stopping hold battle)
-
-        float elapsedTime = 0f;
-        Vector3 initialPosition = _cinemachineCamera.transform.position;
-
-        while (elapsedTime < _lerpDuration)
-        {
-            float t = _cameraZoomCurve.Evaluate(elapsedTime / _lerpDuration);
-            _cinemachineCamera.transform.position = Vector3.Lerp(
-                initialPosition,
-                targetPosition,
-                t
-            );
-            elapsedTime += Time.unscaledDeltaTime;
-            yield return null;
-        }
-        // Ensure the camera reaches the exact target position.
-        _cinemachineCamera.transform.position = targetPosition;
+        _cinemachineCamera.m_Follow = _playerObject.transform;
     }
 
     void Zoom(float targetSize)
@@ -184,5 +163,39 @@ public class System_CameraEffects : MonoBehaviour
 
             _cinemachineCamera.m_Lens.OrthographicSize = Mathf.Lerp(_startZoom, targetSize, step);
         }
+    }
+
+    IEnumerator LerpCameraToPosition(Vector3 targetPosition)
+    {
+        yield return new WaitForEndOfFrame(); //Buffer (If without, bugs lerping when stopping hold battle)
+
+        if (_lerpCameraToPositionIsRunning == true)
+            yield break;
+
+        _lerpCameraToPositionIsRunning = true;
+
+        float elapsedTime = 0f;
+        Vector3 initialPosition = _cinemachineCamera.transform.position;
+
+        while (elapsedTime < _lerpDuration)
+        {
+            float t = _cameraZoomCurve.Evaluate(elapsedTime / _lerpDuration);
+            _cinemachineCamera.transform.position = Vector3.Lerp(
+                initialPosition,
+                targetPosition,
+                t
+            );
+            elapsedTime += Time.unscaledDeltaTime;
+            yield return null;
+        }
+        // Ensure the camera reaches the exact target position.
+        _cinemachineCamera.transform.position = targetPosition;
+
+        if (_battleCamera == false)
+        {
+            // _cinemachineCamera.m_Follow = _playerObject.transform;
+        }
+
+        _lerpCameraToPositionIsRunning = false;
     }
 }
