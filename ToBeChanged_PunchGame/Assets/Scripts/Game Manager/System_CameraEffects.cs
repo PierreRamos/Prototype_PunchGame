@@ -189,6 +189,9 @@ public class System_CameraEffects : MonoBehaviour
 
         while (elapsedTime < _lerpDuration)
         {
+            if (isStopping)
+                targetPosition.x = _playerObject.transform.position.x;
+
             float t = _cameraZoomCurve.Evaluate(elapsedTime / _lerpDuration);
             _cinemachineCamera.transform.position = Vector3.Lerp(
                 initialPosition,
