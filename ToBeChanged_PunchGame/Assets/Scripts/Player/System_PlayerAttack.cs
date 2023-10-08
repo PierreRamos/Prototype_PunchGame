@@ -137,7 +137,7 @@ public class System_PlayerAttack : MonoBehaviour
             HitCheckDirection(transform.right, "right");
     }
 
-    //If player attacks: check if there is game object tagged "Enemy" on either left or right of player
+    //If player attacks: check if there is game object tagged "Enemy" on either left or right of player; Also checks for player miss
     void HitCheckDirection(Vector2 direction, string side)
     {
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _rangeDistance);

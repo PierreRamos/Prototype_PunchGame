@@ -27,6 +27,7 @@ public class System_TimeManager : MonoBehaviour
 
         EventHandler.Event_TriggeredSoloBattle += SlowTimeIndefinitely;
         EventHandler.Event_TriggeredHoldBattle += SlowTimeIndefinitely;
+        EventHandler.Event_TriggerStun += NormalTime;
         EventHandler.Event_PlayerDied += StopTime;
         EventHandler.Event_Pause += PauseTime;
     }
@@ -38,6 +39,7 @@ public class System_TimeManager : MonoBehaviour
 
         EventHandler.Event_TriggeredSoloBattle -= SlowTimeIndefinitely;
         EventHandler.Event_TriggeredHoldBattle -= SlowTimeIndefinitely;
+        EventHandler.Event_TriggerStun -= NormalTime;
         EventHandler.Event_PlayerDied -= StopTime;
         EventHandler.Event_Pause -= PauseTime;
     }
