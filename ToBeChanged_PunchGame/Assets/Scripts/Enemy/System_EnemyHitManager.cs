@@ -39,6 +39,8 @@ public class System_EnemyHitManager : MonoBehaviour
         var enemyType = GetComponent<System_EnemyType>().GetEnemyType();
         var enemyHealth = Random.Range(1, _maxEnemyHealth + 1);
 
+        bool hasDash = false;
+
         //Hit types logic which enemy types can get
 
         //Normal enemy
@@ -66,6 +68,9 @@ public class System_EnemyHitManager : MonoBehaviour
         //Dash enemy
         else if (enemyType == EnemyType.Dash)
         {
+            if (enemyHealth < 2)
+                enemyHealth++; //Adds health so dash enemies always have dash orbs
+
             for (int i = 0; i < enemyHealth; i++)
             {
                 if (i + 1 == enemyHealth)
@@ -73,7 +78,7 @@ public class System_EnemyHitManager : MonoBehaviour
                     _listOfHits.Add(HitType.Normal);
                     break;
                 }
-                RandomizeHits(enemyType);
+                RandomizeHits(i);
             }
         }
         //Hold enemy
@@ -89,17 +94,27 @@ public class System_EnemyHitManager : MonoBehaviour
                 _listOfHits.Add(HitType.Normal);
             }
         }
-    }
 
-    void RandomizeHits(EnemyType enemyType)
-    {
-        if (enemyType == EnemyType.Dash)
+        //
+        void RandomizeHits(int currentIndex)
         {
-            var random = Random.Range(0, 2);
-            if (random == 0)
-                _listOfHits.Add(HitType.Normal);
-            else
-                _listOfHits.Add(HitType.Dash);
+            if (enemyType == EnemyType.Dash)
+            {
+                if (enemyHealth - 2 == currentIndex && hasDash == false)
+                {
+                    _listOfHits.Add(HitType.Dash);
+                    return;
+                }
+
+                var random = Random.Range(0, 2);
+                if (random == 0)
+                    _listOfHits.Add(HitType.Normal);
+                else
+                {
+                    _listOfHits.Add(HitType.Dash);
+                    hasDash = true;
+                }
+            }
         }
     }
 
