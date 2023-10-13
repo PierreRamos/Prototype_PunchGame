@@ -18,17 +18,29 @@ public class System_PlayerAnimation : MonoBehaviour
     private float _hitDuration;
 
     private int _currentState;
-    private int _animationVariant;
+    private int _attackVariant;
+    private int _previousAttackVariant;
     private float _lockedTill;
     private bool _attacking;
     private bool _battling; //Hold battle | Solo battle
     private bool _hit;
+    private List<int> _listOfAttacks = new List<int>();
 
     private static readonly int Idle = Animator.StringToHash("Player_Idle");
     private static readonly int BattleIdle = Animator.StringToHash("Player_BattleIdle");
     private static readonly int Hit = Animator.StringToHash("Player_Hit");
-    private static readonly int Punch1 = Animator.StringToHash("Player_Punch1");
-    private static readonly int Punch2 = Animator.StringToHash("Player_Punch2");
+    private static readonly int Attack1 = Animator.StringToHash("Player_Punch1");
+    private static readonly int Attack2 = Animator.StringToHash("Player_Punch2");
+    private static readonly int Attack3 = Animator.StringToHash("Player_Attack3");
+    private static readonly int Attack4 = Animator.StringToHash("Player_Attack4");
+
+    private void Awake()
+    {
+        _listOfAttacks.Add(Attack1);
+        _listOfAttacks.Add(Attack2);
+        _listOfAttacks.Add(Attack3);
+        _listOfAttacks.Add(Attack4);
+    }
 
     private void OnEnable()
     {
@@ -85,16 +97,13 @@ public class System_PlayerAnimation : MonoBehaviour
 
         if (_attacking)
         {
-            if (_animationVariant == 0)
+            while (_attackVariant == _previousAttackVariant)
             {
-                _animationVariant++;
-                return LockState(Punch1, _punchDuration);
+                _attackVariant = Random.Range(0, 4);
             }
-            else
-            {
-                _animationVariant = 0;
-                return LockState(Punch2, _punchDuration);
-            }
+
+            _previousAttackVariant = _attackVariant;
+            return LockState(_listOfAttacks[_attackVariant], _punchDuration);
         }
 
         if (Time.unscaledTime < _lockedTill)
