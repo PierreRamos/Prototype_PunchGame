@@ -125,7 +125,7 @@ public class System_PlayerAttack : MonoBehaviour
             PlayerStatus.PlayerIsStunned() == false
             && GlobalValues.GetGameState() == GameState.Normal
         )
-            HitCheckDirection(-transform.right, "left");
+            HitCheckDirection(Direction.Left);
     }
 
     void HitCheckRight()
@@ -134,19 +134,23 @@ public class System_PlayerAttack : MonoBehaviour
             PlayerStatus.PlayerIsStunned() == false
             && GlobalValues.GetGameState() == GameState.Normal
         )
-            HitCheckDirection(transform.right, "right");
+            HitCheckDirection(Direction.Right);
     }
 
     //If player attacks: check if there is game object tagged "Enemy" on either left or right of player; Also checks for player miss
-    void HitCheckDirection(Vector2 direction, string side)
+    void HitCheckDirection(Direction direction)
     {
-        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, _rangeDistance);
+        RaycastHit2D hit = Physics2D.Raycast(
+            transform.position,
+            direction == Direction.Right ? transform.right : -transform.right,
+            _rangeDistance
+        );
 
         if (hit.collider != null)
         {
             var objectHit = hit.collider.gameObject;
             if (objectHit.CompareTag("Enemy"))
-                ConfirmHit(objectHit, side);
+                ConfirmHit(objectHit);
             else
             {
                 EventHandler.Event_TriggerStun?.Invoke();
@@ -164,10 +168,12 @@ public class System_PlayerAttack : MonoBehaviour
         }
 
         //Internal
-        void ConfirmHit(GameObject objectHit, string side)
+        void ConfirmHit(GameObject objectHit)
         {
             EventHandler.Event_EnemyHit?.Invoke(objectHit);
         }
+
+        CheckDirection(direction);
     }
 
     //Called when enemy is hit: Moves to enemy within specific distance and checks if there is enemies still close and slows time
@@ -251,6 +257,22 @@ public class System_PlayerAttack : MonoBehaviour
         if (transform.position.x > target.x && _isFacingRight)
             Flip();
         else if (transform.position.x < target.x && !_isFacingRight)
+            Flip();
+
+        //Internal
+        void Flip()
+        {
+            _isFacingRight = !_isFacingRight;
+            _spriteRenderer.flipX = !_isFacingRight;
+        }
+    }
+
+    //Direction override for check direction
+    void CheckDirection(Direction direction)
+    {
+        if (_isFacingRight && direction == Direction.Left)
+            Flip();
+        else if (!_isFacingRight && direction == Direction.Right)
             Flip();
 
         //Internal
