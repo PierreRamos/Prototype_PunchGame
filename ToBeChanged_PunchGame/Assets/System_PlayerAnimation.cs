@@ -17,6 +17,9 @@ public class System_PlayerAnimation : MonoBehaviour
     [SerializeField]
     private float _hitDuration;
 
+    [SerializeField]
+    private float _stunDuration;
+
     private int _currentState;
     private int _attackVariant;
     private int _previousAttackVariant;
@@ -24,11 +27,13 @@ public class System_PlayerAnimation : MonoBehaviour
     private bool _attacking;
     private bool _battling; //Hold battle | Solo battle
     private bool _hit;
+    private bool _stunned;
     private List<int> _listOfAttacks = new List<int>();
 
     private static readonly int Idle = Animator.StringToHash("Player_Idle");
     private static readonly int BattleIdle = Animator.StringToHash("Player_BattleIdle");
     private static readonly int Hit = Animator.StringToHash("Player_Hit");
+    private static readonly int Missed = Animator.StringToHash("Player_Missed");
     private static readonly int Attack1 = Animator.StringToHash("Player_Punch1");
     private static readonly int Attack2 = Animator.StringToHash("Player_Punch2");
     private static readonly int Attack3 = Animator.StringToHash("Player_Attack3");
@@ -75,6 +80,16 @@ public class System_PlayerAnimation : MonoBehaviour
         {
             _hit = true;
         };
+
+        //Missed
+        EventHandler.Event_TriggerStun += () =>
+        {
+            _stunned = true;
+        };
+        EventHandler.Event_PlayerStunFinished += () =>
+        {
+            _stunned = false;
+        };
     }
 
     private void Update()
@@ -93,7 +108,10 @@ public class System_PlayerAnimation : MonoBehaviour
     int GetState()
     {
         if (_hit)
-            return LockState(Hit, _hitDuration);
+            return LockStateUnscaled(Hit, _hitDuration);
+
+        if (_stunned)
+            return Missed;
 
         if (_attacking)
         {
@@ -103,7 +121,7 @@ public class System_PlayerAnimation : MonoBehaviour
             }
 
             _previousAttackVariant = _attackVariant;
-            return LockState(_listOfAttacks[_attackVariant], _punchDuration);
+            return LockStateUnscaled(_listOfAttacks[_attackVariant], _punchDuration);
         }
 
         if (Time.unscaledTime < _lockedTill)
@@ -114,10 +132,15 @@ public class System_PlayerAnimation : MonoBehaviour
 
         return Idle;
 
-        int LockState(int state, float time)
+        int LockStateUnscaled(int state, float time)
         {
             _lockedTill = Time.unscaledTime + time;
             return state;
         }
+        // int LockStateScaled(int state, float time)
+        // {
+        //     _lockedTill = Time.time + time;
+        //     return state;
+        // }
     }
 }

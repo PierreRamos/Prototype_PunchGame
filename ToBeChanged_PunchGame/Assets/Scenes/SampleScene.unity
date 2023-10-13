@@ -3970,7 +3970,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerAnimator: {fileID: 1230512981}
-  _punchDuration: 0.6
+  _punchDuration: 0.4
+  _hitDuration: 0.2
+  _stunDuration: 0
 --- !u!1 &1280346654
 GameObject:
   m_ObjectHideFlags: 0
