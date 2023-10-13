@@ -43,6 +43,7 @@ public class System_EnemySpawner : MonoBehaviour
     [SerializeField]
     bool _spawnerOn = true;
 
+    Coroutine _spawnEnemyTimer;
     Dictionary<EnemyType, int> _enemiesSpawnChance = new Dictionary<EnemyType, int>();
 
     void OnEnable()
@@ -54,7 +55,7 @@ public class System_EnemySpawner : MonoBehaviour
     void Start()
     {
         CalculateEnemySpawnChance();
-        StartCoroutine(SpawnEnemyTimer());
+        _spawnEnemyTimer = StartCoroutine(SpawnEnemyTimer());
     }
 
     void CalculateEnemySpawnChance()
@@ -78,14 +79,11 @@ public class System_EnemySpawner : MonoBehaviour
 
     IEnumerator SpawnEnemyTimer()
     {
-        while (
-            _spawnerOn
-            && (
-                GlobalValues.GetGameState() != GameState.GameOver
-                || GlobalValues.GetGameState() != GameState.Paused
-            )
-        )
+        while (_spawnerOn && GlobalValues.GetGameState() != GameState.Paused)
         {
+            if (GlobalValues.GetGameState() == GameState.GameOver)
+                StopCoroutine(_spawnEnemyTimer);
+
             SpawnEnemy();
 
             var spawnInterval = _baseSpawnInterval - GlobalValues.GetEnemySpawnModifier();
@@ -99,7 +97,7 @@ public class System_EnemySpawner : MonoBehaviour
 
             yield return new WaitForSeconds(spawnSeconds);
 
-            //Stop spawning while in minigame
+            //Stop spawning while in certain scenarios
             while (
                 GlobalValues.GetGameState() == GameState.SoloBattle
                 || GlobalValues.GetGameState() == GameState.HoldBattle

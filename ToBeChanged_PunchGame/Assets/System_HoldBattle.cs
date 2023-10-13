@@ -100,8 +100,8 @@ public class System_HoldBattle : MonoBehaviour
     void StopHold()
     {
         _isHeld = false;
-        EvaluateValues();
         GlobalValues.SetGameState(GameState.Normal);
+        EvaluateValues();
     }
 
     void EvaluateValues()

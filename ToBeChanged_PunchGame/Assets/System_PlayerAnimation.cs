@@ -17,9 +17,6 @@ public class System_PlayerAnimation : MonoBehaviour
     [SerializeField]
     private float _hitDuration;
 
-    [SerializeField]
-    private float _stunDuration;
-
     private int _currentState;
     private int _attackVariant;
     private int _previousAttackVariant;
