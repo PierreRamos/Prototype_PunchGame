@@ -44,7 +44,7 @@ public class System_EnemyController : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
-        EventHandler.Event_EnemyHit += CheckIfHit;
+        EventHandler.Event_EnemyHitConfirm += CheckIfHit;
         EventHandler.Event_EnemyFlip += Flip;
         EventHandler.Event_DefeatedEnemy += TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer += TriggerDisableSelfHitPlayer;
@@ -67,7 +67,7 @@ public class System_EnemyController : MonoBehaviour
 
     void OnDisable()
     {
-        EventHandler.Event_EnemyHit -= CheckIfHit;
+        EventHandler.Event_EnemyHitConfirm -= CheckIfHit;
         EventHandler.Event_EnemyFlip -= Flip;
         EventHandler.Event_DefeatedEnemy -= TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer -= TriggerDisableSelfHitPlayer;

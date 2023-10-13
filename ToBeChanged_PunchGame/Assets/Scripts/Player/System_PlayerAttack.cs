@@ -47,8 +47,8 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackLeft += HitCheckLeft;
         EventHandler.Event_AttackRight += HitCheckRight;
         EventHandler.Event_EnemyHit += MoveToHitEnemy;
-        EventHandler.Event_DefeatedEnemy += MoveToHitEnemy;
         EventHandler.Event_EnemyHit += CheckDirection;
+        EventHandler.Event_DefeatedEnemy += MoveToHitEnemy;
     }
 
     void OnDisable()
@@ -56,8 +56,8 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackLeft -= HitCheckLeft;
         EventHandler.Event_AttackRight -= HitCheckRight;
         EventHandler.Event_EnemyHit -= MoveToHitEnemy;
-        EventHandler.Event_DefeatedEnemy -= MoveToHitEnemy;
         EventHandler.Event_EnemyHit -= CheckDirection;
+        EventHandler.Event_DefeatedEnemy -= MoveToHitEnemy;
     }
 
     void Start()
@@ -189,55 +189,55 @@ public class System_PlayerAttack : MonoBehaviour
 
         if (GlobalValues.GetGameState() == GameState.Normal)
             StartCheckForEnemyCloseForSlowMotion(targetPosition);
-    }
 
-    void StartCheckForEnemyCloseForSlowMotion(Vector3 targetPosition)
-    {
-        StartCoroutine(CheckForEnemyCloseForSlowMotion(targetPosition));
-
-        //
-        IEnumerator CheckForEnemyCloseForSlowMotion(Vector3 targetPosition)
+        void StartCheckForEnemyCloseForSlowMotion(Vector3 targetPosition)
         {
-            yield return new WaitForEndOfFrame();
+            StartCoroutine(CheckForEnemyCloseForSlowMotion(targetPosition));
 
-            RaycastHit2D[] leftHits = Physics2D.RaycastAll(
-                targetPosition,
-                -transform.right,
-                _rangeDistance
-            );
-            RaycastHit2D[] rightHits = Physics2D.RaycastAll(
-                targetPosition,
-                transform.right,
-                _rangeDistance
-            );
-
-            List<GameObject> detectedEnemies = new List<GameObject>();
-
-            foreach (var hit in leftHits)
+            //
+            IEnumerator CheckForEnemyCloseForSlowMotion(Vector3 targetPosition)
             {
-                if (hit.collider != null && hit.collider.CompareTag("Enemy"))
-                {
-                    detectedEnemies.Add(hit.collider.gameObject);
-                }
-            }
+                yield return new WaitForEndOfFrame();
 
-            foreach (var hit in rightHits)
-            {
-                if (hit.collider != null && hit.collider.CompareTag("Enemy"))
-                {
-                    detectedEnemies.Add(hit.collider.gameObject);
-                }
-            }
+                RaycastHit2D[] leftHits = Physics2D.RaycastAll(
+                    targetPosition,
+                    -transform.right,
+                    _rangeDistance
+                );
+                RaycastHit2D[] rightHits = Physics2D.RaycastAll(
+                    targetPosition,
+                    transform.right,
+                    _rangeDistance
+                );
 
-            if (GlobalValues.GetGameState() == GameState.Normal)
-            {
-                if (detectedEnemies.Count > 0)
+                List<GameObject> detectedEnemies = new List<GameObject>();
+
+                foreach (var hit in leftHits)
                 {
-                    EventHandler.Event_SlowTime?.Invoke();
+                    if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+                    {
+                        detectedEnemies.Add(hit.collider.gameObject);
+                    }
                 }
-                else
+
+                foreach (var hit in rightHits)
                 {
-                    EventHandler.Event_StopSlowTime?.Invoke();
+                    if (hit.collider != null && hit.collider.CompareTag("Enemy"))
+                    {
+                        detectedEnemies.Add(hit.collider.gameObject);
+                    }
+                }
+
+                if (GlobalValues.GetGameState() == GameState.Normal)
+                {
+                    if (detectedEnemies.Count > 0)
+                    {
+                        EventHandler.Event_SlowTime?.Invoke();
+                    }
+                    else
+                    {
+                        EventHandler.Event_StopSlowTime?.Invoke();
+                    }
                 }
             }
         }

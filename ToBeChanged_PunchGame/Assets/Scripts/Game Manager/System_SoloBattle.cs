@@ -223,7 +223,7 @@ public class System_SoloBattle : MonoBehaviour
         _correctInputRunning = true;
 
         UpdateCorrectSprite(move);
-        EventHandler.Event_EnemyHit?.Invoke(_currentEnemy);
+        EventHandler.Event_EnemyHitConfirm?.Invoke(_currentEnemy);
 
         yield return new WaitForSecondsRealtime(_promptDelayDuration);
 

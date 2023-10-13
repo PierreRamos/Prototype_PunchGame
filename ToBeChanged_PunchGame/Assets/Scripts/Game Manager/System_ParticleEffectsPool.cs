@@ -48,7 +48,7 @@ public class System_ParticleEffectsPool : MonoBehaviour
     {
         EventHandler = System_EventHandler.Instance;
 
-        EventHandler.Event_EnemyHit += ActivateHitParticle;
+        EventHandler.Event_EnemyHitConfirm += ActivateHitParticle;
         EventHandler.Event_DefeatedEnemy += ActivateDefeatParticle;
         EventHandler.Event_ExclamationEffect += ActivateExclamationParticle;
         EventHandler.Event_PlayerHealEffect += ActivateHealParticle;
@@ -56,7 +56,7 @@ public class System_ParticleEffectsPool : MonoBehaviour
 
     private void OnDisable()
     {
-        EventHandler.Event_EnemyHit -= ActivateHitParticle;
+        EventHandler.Event_EnemyHitConfirm -= ActivateHitParticle;
         EventHandler.Event_DefeatedEnemy -= ActivateDefeatParticle;
         EventHandler.Event_ExclamationEffect -= ActivateExclamationParticle;
         EventHandler.Event_PlayerHealEffect -= ActivateHealParticle;

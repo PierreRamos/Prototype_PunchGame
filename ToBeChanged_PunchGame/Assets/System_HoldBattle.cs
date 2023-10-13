@@ -115,6 +115,7 @@ public class System_HoldBattle : MonoBehaviour
         {
             //Inside range
             EventHandler.Event_DefeatedEnemy(_currentEnemy);
+            EventHandler.Event_EnemyHitConfirm(_currentEnemy);
         }
         else
         {

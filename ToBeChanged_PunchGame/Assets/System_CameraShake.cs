@@ -28,13 +28,13 @@ public class System_CameraShake : MonoBehaviour
     {
         EventHandler = System_EventHandler.Instance;
 
-        EventHandler.Event_EnemyHit += TriggerEnemyHitShake;
+        EventHandler.Event_EnemyHitConfirm += TriggerEnemyHitShake;
         EventHandler.Event_DefeatedEnemy += TriggerEnemyDefeatedShake;
     }
 
     private void OnDisable()
     {
-        EventHandler.Event_EnemyHit -= TriggerEnemyHitShake;
+        EventHandler.Event_EnemyHitConfirm -= TriggerEnemyHitShake;
         EventHandler.Event_DefeatedEnemy -= TriggerEnemyDefeatedShake;
     }
 

@@ -115,7 +115,11 @@ public class System_EnemyHitManager : MonoBehaviour
             _listOfHits.RemoveAt(0);
             EventHandler.Event_EnemyHitListChange?.Invoke(gameObject, _listOfHits);
 
-            if (currentHit == HitType.Solo)
+            if (currentHit == HitType.Normal)
+            {
+                EventHandler.Event_EnemyHitConfirm?.Invoke(gameObject);
+            }
+            else if (currentHit == HitType.Solo)
             {
                 EventHandler.Event_TriggerSoloBattle?.Invoke(gameObject);
                 return; //To avoid deactivating enemy since _listOfHits.Count is now 0
@@ -123,6 +127,7 @@ public class System_EnemyHitManager : MonoBehaviour
             else if (currentHit == HitType.Dash)
             {
                 EventHandler.Event_TriggerDash?.Invoke(gameObject);
+                EventHandler.Event_EnemyHitConfirm?.Invoke(gameObject);
             }
             else if (currentHit == HitType.Hold)
             {
