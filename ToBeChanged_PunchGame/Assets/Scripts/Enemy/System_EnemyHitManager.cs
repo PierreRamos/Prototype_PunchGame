@@ -25,13 +25,18 @@ public class System_EnemyHitManager : MonoBehaviour
         EventHandler.Event_EnemyHitListChange?.Invoke(gameObject, _listOfHits);
     }
 
-    void OnDisable()
+    private void OnDisable()
     {
         EventHandler.Event_EnemyHit -= HitCheck;
     }
 
+    public bool IsLastHit()
+    {
+        return _listOfHits.Count == 0;
+    }
+
     //Generates set of hit orb types depending on enemy type
-    void GenerateHits()
+    private void GenerateHits()
     {
         _listOfHits.Clear();
 
@@ -119,7 +124,7 @@ public class System_EnemyHitManager : MonoBehaviour
     }
 
     //Checks if this is the enemy hit and evaluates depending on what type of orb is in the list
-    void HitCheck(GameObject gameObject)
+    private void HitCheck(GameObject gameObject)
     {
         if (this.gameObject != gameObject)
             return;

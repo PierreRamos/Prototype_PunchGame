@@ -124,6 +124,7 @@ public class System_PlayerAnimation : MonoBehaviour
         _currentState = state;
     }
 
+    //Called through animation
     public void ConfirmHit()
     {
         _hitStopped = true;
@@ -154,12 +155,18 @@ public class System_PlayerAnimation : MonoBehaviour
             if (_usedRight)
             {
                 _usedRight = !_usedRight;
-                return LockState(_leftAttacks[_attackVariant], _punchDuration);
+                if (_currentEnemy.GetComponent<System_EnemyHitManager>().IsLastHit())
+                    return LockState(_leftAttacks[1], _punchDuration);
+
+                return LockState(_leftAttacks[0], _punchDuration);
             }
             else
             {
                 _usedRight = !_usedRight;
-                return LockState(_rightAttacks[_attackVariant], _punchDuration);
+                if (_currentEnemy.GetComponent<System_EnemyHitManager>().IsLastHit())
+                    return LockState(_rightAttacks[1], _punchDuration);
+
+                return LockState(_rightAttacks[0], _punchDuration);
             }
         }
 
