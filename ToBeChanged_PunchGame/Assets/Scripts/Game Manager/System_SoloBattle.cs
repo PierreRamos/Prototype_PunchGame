@@ -10,10 +10,6 @@ public class System_SoloBattle : MonoBehaviour
     System_GlobalValues GlobalValues;
 
     [Header("Initialization")]
-    [Space]
-    [SerializeField]
-    GameObject _playerObject;
-
     [SerializeField]
     GameObject _hitIndicator;
 
@@ -83,7 +79,6 @@ public class System_SoloBattle : MonoBehaviour
     [Space]
     [SerializeField]
     float _promptDelayDuration;
-
     MoveSet _currentMoveToHit;
     GameObject _currentEnemy;
     Transform _ghost1,
@@ -147,8 +142,9 @@ public class System_SoloBattle : MonoBehaviour
         _promptImage = _soloBattlePrompt.GetComponent<Image>();
     }
 
-    void ActivateSoloBattle(GameObject enemy, List<MoveSet> listOfMoves)
+    private void ActivateSoloBattle(GameObject enemy, List<MoveSet> listOfMoves)
     {
+        GlobalValues.SetMovesToHitCount(listOfMoves.Count);
         _currentEnemy = enemy;
 
         _hitIndicator.SetActive(false);
@@ -170,6 +166,7 @@ public class System_SoloBattle : MonoBehaviour
 
             _currentMoveToHit = movesQueue[0];
             movesQueue.RemoveAt(0);
+            GlobalValues.SetMovesToHitCount(movesQueue.Count);
 
             UpdateGhostPrompts(movesQueue);
 

@@ -5,6 +5,7 @@ using UnityEngine;
 public class System_PlayerAnimation : MonoBehaviour
 {
     System_EventHandler EventHandler;
+    System_GlobalValues GlobalValues;
 
     [Header("Init")]
     [SerializeField]
@@ -52,6 +53,7 @@ public class System_PlayerAnimation : MonoBehaviour
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
 
         //Attacking
         EventHandler.Event_EnemyHitConfirm += (enemy) =>
@@ -150,12 +152,23 @@ public class System_PlayerAnimation : MonoBehaviour
 
         if (_attacking)
         {
-            int attackIndex = _currentEnemy.GetComponent<System_EnemyHitManager>().IsLastHit()
-              ? 1
-              : 0;
-            int attackAnimation = _usedRight
-                ? _leftAttacks[attackIndex]
-                : _rightAttacks[attackIndex];
+            var enemyHitManager = _currentEnemy.GetComponent<System_EnemyHitManager>();
+            int attackIndex = enemyHitManager.IsLastHit() ? 1 : 0;
+            int attackAnimation;
+
+            if (GlobalValues.GetGameState() == GameState.SoloBattle)
+            {
+                if (GlobalValues.GetMovesToHitCount() == 0)
+                    attackAnimation = _usedRight ? _leftAttacks[1] : _rightAttacks[1];
+                else
+                    attackAnimation = _usedRight ? _leftAttacks[0] : _rightAttacks[0];
+            }
+            else
+            {
+                attackAnimation = _usedRight
+                    ? _leftAttacks[attackIndex]
+                    : _rightAttacks[attackIndex];
+            }
 
             _usedRight = !_usedRight;
 
@@ -175,10 +188,5 @@ public class System_PlayerAnimation : MonoBehaviour
             _lockedTill = Time.time + time;
             return state;
         }
-        // int LockStateScaled(int state, float time)
-        // {
-        //     _lockedTill = Time.time + time;
-        //     return state;
-        // }
     }
 }

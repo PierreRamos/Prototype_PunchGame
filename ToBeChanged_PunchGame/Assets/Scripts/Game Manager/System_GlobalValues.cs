@@ -61,6 +61,7 @@ public class System_GlobalValues : MonoBehaviour
     int _difficulty;
     int _currentDefeatCount;
     int _currentPlayerHealth;
+    int _movesToHitCount;
     float _playerKnockBackTime;
     float _playerAttackRange;
     float _enemyMovementSpeed;
@@ -116,12 +117,6 @@ public class System_GlobalValues : MonoBehaviour
     public void SetEnemiesSpawnChance(Dictionary<EnemyType, int> enemiesSpawnChance)
     {
         _enemiesSpawnChance = enemiesSpawnChance;
-
-        //Debug
-        // print($"Normal Spawn Chance: {enemiesSpawnChance[EnemyType.Normal]}");
-        // print($"Elite Spawn Chance: {enemiesSpawnChance[EnemyType.Elite]}");
-        // print($"Dash Spawn Chance: {enemiesSpawnChance[EnemyType.Dash]}");
-        // print($"Hold Spawn Chance: {enemiesSpawnChance[EnemyType.Hold]}");
     }
 
     public void SetPlayerKnockBackTime(float value)
@@ -147,6 +142,11 @@ public class System_GlobalValues : MonoBehaviour
     public void SetPlayerHealth(int value)
     {
         _currentPlayerHealth = value;
+    }
+
+    public void SetMovesToHitCount(int value)
+    {
+        _movesToHitCount = value;
     }
 
     //Getters
@@ -194,6 +194,11 @@ public class System_GlobalValues : MonoBehaviour
     public int GetPlayerHealth()
     {
         return _currentPlayerHealth;
+    }
+
+    public int GetMovesToHitCount()
+    {
+        return _movesToHitCount;
     }
 
     //Incrementers
