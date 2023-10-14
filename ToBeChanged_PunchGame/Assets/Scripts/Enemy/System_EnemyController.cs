@@ -194,10 +194,7 @@ public class System_EnemyController : MonoBehaviour
 
             StopMovement();
 
-            //Review this realtime vs non realtime
-            yield return new WaitForSecondsRealtime(
-                System_GlobalValues.Instance.GetPlayerKnockBackTime()
-            );
+            yield return new WaitForSeconds(GlobalValues.GetPlayerKnockBackTime());
 
             StartMovement();
         }

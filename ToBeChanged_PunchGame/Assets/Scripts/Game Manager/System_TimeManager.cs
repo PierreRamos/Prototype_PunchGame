@@ -56,8 +56,11 @@ public class System_TimeManager : MonoBehaviour
 
     void HitStop(GameObject dummy)
     {
-        if (_runningHitStopTimer == true)
+        if (_runningHitStopTimer)
+        {
+            _runningHitStopTimer = false;
             StopCoroutine(_hitStopTimer);
+        }
 
         _hitStopTimer = StartCoroutine(HitStopTimer());
 
@@ -65,12 +68,12 @@ public class System_TimeManager : MonoBehaviour
         IEnumerator HitStopTimer()
         {
             _runningHitStopTimer = true;
-            var currentTimescale = Time.timeScale;
+            var previousTimescale = Time.timeScale;
             Time.timeScale = 0;
             yield return new WaitForSecondsRealtime(_hitStopDuration);
 
             if (_runningSlowTimeTimer)
-                Time.timeScale = currentTimescale;
+                Time.timeScale = previousTimescale;
             else
                 NormalTime();
 
@@ -83,48 +86,47 @@ public class System_TimeManager : MonoBehaviour
     {
         Time.timeScale = 1;
 
-        if (_slowTimeTimer != null)
-            StopCoroutine(_slowTimeTimer);
+        if (_runningSlowTimeTimer)
+            StopSlowTimeTimerCoroutine();
     }
 
     void SlowTimeIndefinitely(GameObject dummy)
     {
         Time.timeScale = _indefiniteSlowTimeValue;
 
-        if (_slowTimeTimer != null)
-            StopCoroutine(_slowTimeTimer);
+        if (_runningSlowTimeTimer)
+            StopSlowTimeTimerCoroutine();
     }
 
     void SlowTimeIndefinitely(GameObject dummy, List<MoveSet> dummy2)
     {
         Time.timeScale = _indefiniteSlowTimeValue;
 
-        if (_slowTimeTimer != null)
-            StopCoroutine(_slowTimeTimer);
+        if (_runningSlowTimeTimer)
+            StopSlowTimeTimerCoroutine();
     }
 
     void SlowTime()
     {
         Time.timeScale = _slowTimeValue;
 
-        if (_slowTimeTimer != null)
-            StopCoroutine(_slowTimeTimer);
+        if (_runningSlowTimeTimer)
+            StopSlowTimeTimerCoroutine();
 
         _slowTimeTimer = StartCoroutine(SlowTimeTimer());
 
         IEnumerator SlowTimeTimer()
         {
             _runningSlowTimeTimer = true;
-            yield return new WaitForSecondsRealtime(
-                System_GlobalValues.Instance.GetPlayerKnockBackTime()
-            );
+            yield return new WaitForSecondsRealtime(GlobalValues.GetPlayerKnockBackTime());
 
             //Checks if games is paused
             var gameState = GlobalValues.GetGameState();
+
             while (
                 gameState == GameState.GameOver
                 || gameState == GameState.Paused
-                || _runningHitStopTimer == true
+                || _runningHitStopTimer
             )
             {
                 gameState = GlobalValues.GetGameState();
@@ -134,6 +136,12 @@ public class System_TimeManager : MonoBehaviour
             NormalTime();
             _runningSlowTimeTimer = false;
         }
+    }
+
+    void StopSlowTimeTimerCoroutine()
+    {
+        _runningSlowTimeTimer = false;
+        StopCoroutine(_slowTimeTimer);
     }
 
     void StopTime()

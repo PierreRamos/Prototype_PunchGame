@@ -143,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 47c4b4987f55cbf44a6124701023fe48
-      internalID: 1726324278
+      spriteID: f7340344ff07f1c458b805d193ed7af4
+      internalID: 1856489212
       vertices: []
       indices: 
       edges: []
@@ -164,8 +164,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f5ae365b36ce96549a17e49dbd423033
-      internalID: 1504055902
+      spriteID: 57b72759fac2cbd4aba3eb53963fceec
+      internalID: 1766628261
       vertices: []
       indices: 
       edges: []
@@ -185,8 +185,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2ffa6dd156788d0449b3a64f3c967663
-      internalID: 328352584
+      spriteID: cca519cba4349e9468ae2c71f28b30d7
+      internalID: 2062524567
       vertices: []
       indices: 
       edges: []
@@ -202,9 +202,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player-Attack_3_2: 328352584
-      Player-Attack_3_0: 1726324278
-      Player-Attack_3_1: 1504055902
+      Player-Attack_3_2: 2062524567
+      Player-Attack_3_0: 1856489212
+      Player-Attack_3_1: 1766628261
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
