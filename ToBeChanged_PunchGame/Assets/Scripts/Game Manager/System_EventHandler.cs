@@ -29,6 +29,7 @@ public class System_EventHandler : MonoBehaviour
     public Action Event_StopSlowTime;
     public Action<GameObject> Event_EnemyHit;
     public Action<GameObject> Event_EnemyHitConfirm;
+    public Action<GameObject> Event_EnemyHitAnimation;
     public Action<Vector3> Event_MoveToEnemy;
 
     //Potion events

@@ -17,31 +17,35 @@ public class System_PlayerAnimation : MonoBehaviour
     [SerializeField]
     private float _hitDuration;
 
+    private GameObject _currentEnemy;
     private int _currentState;
     private int _attackVariant;
-    private int _previousAttackVariant;
     private float _lockedTill;
     private bool _attacking;
     private bool _battling; //Hold battle | Solo battle
     private bool _hit;
     private bool _stunned;
-    private List<int> _listOfAttacks = new List<int>();
+    private bool _died;
+    private bool _usedRight;
+    private List<int> _leftAttacks = new List<int>();
+    private List<int> _rightAttacks = new List<int>();
 
+    private static readonly int Died = Animator.StringToHash("Player_Death");
     private static readonly int Idle = Animator.StringToHash("Player_Idle");
     private static readonly int BattleIdle = Animator.StringToHash("Player_BattleIdle");
     private static readonly int Hit = Animator.StringToHash("Player_Hit");
     private static readonly int Missed = Animator.StringToHash("Player_Missed");
-    private static readonly int Attack1 = Animator.StringToHash("Player_Punch1");
-    private static readonly int Attack2 = Animator.StringToHash("Player_Punch2");
+    private static readonly int Attack1 = Animator.StringToHash("Player_Attack1");
+    private static readonly int Attack2 = Animator.StringToHash("Player_Attack2");
     private static readonly int Attack3 = Animator.StringToHash("Player_Attack3");
     private static readonly int Attack4 = Animator.StringToHash("Player_Attack4");
 
     private void Awake()
     {
-        _listOfAttacks.Add(Attack1);
-        _listOfAttacks.Add(Attack2);
-        _listOfAttacks.Add(Attack3);
-        _listOfAttacks.Add(Attack4);
+        _leftAttacks.Add(Attack2);
+        _leftAttacks.Add(Attack3);
+        _rightAttacks.Add(Attack1);
+        _rightAttacks.Add(Attack4);
     }
 
     private void OnEnable()
@@ -49,8 +53,9 @@ public class System_PlayerAnimation : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
 
         //Attacking
-        EventHandler.Event_EnemyHitConfirm += (dummy) =>
+        EventHandler.Event_EnemyHitConfirm += (enemy) =>
         {
+            _currentEnemy = enemy;
             _attacking = true;
         };
 
@@ -87,6 +92,12 @@ public class System_PlayerAnimation : MonoBehaviour
         {
             _stunned = false;
         };
+
+        //Defeat
+        EventHandler.Event_PlayerDied += () =>
+        {
+            _died = true;
+        };
     }
 
     private void Update()
@@ -102,8 +113,16 @@ public class System_PlayerAnimation : MonoBehaviour
         _currentState = state;
     }
 
-    int GetState()
+    public void ConfirmHit()
     {
+        EventHandler.Event_EnemyHitAnimation?.Invoke(_currentEnemy);
+    }
+
+    private int GetState()
+    {
+        if (_died)
+            return Died;
+
         if (_hit)
             return LockStateUnscaled(Hit, _hitDuration);
 
@@ -112,13 +131,18 @@ public class System_PlayerAnimation : MonoBehaviour
 
         if (_attacking)
         {
-            while (_attackVariant == _previousAttackVariant)
-            {
-                _attackVariant = Random.Range(0, 4);
-            }
+            _attackVariant = Random.Range(0, 2);
 
-            _previousAttackVariant = _attackVariant;
-            return LockStateUnscaled(_listOfAttacks[_attackVariant], _punchDuration);
+            if (_usedRight)
+            {
+                _usedRight = !_usedRight;
+                return LockStateUnscaled(_leftAttacks[_attackVariant], _punchDuration);
+            }
+            else
+            {
+                _usedRight = !_usedRight;
+                return LockStateUnscaled(_rightAttacks[_attackVariant], _punchDuration);
+            }
         }
 
         if (Time.unscaledTime < _lockedTill)
