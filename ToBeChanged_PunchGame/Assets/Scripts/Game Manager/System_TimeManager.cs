@@ -15,7 +15,13 @@ public class System_TimeManager : MonoBehaviour
     [SerializeField]
     float _indefiniteSlowTimeValue;
 
-    Coroutine _slowTimeTimer;
+    [SerializeField]
+    private float _hitStopDuration;
+
+    private Coroutine _slowTimeTimer;
+    private Coroutine _hitStopTimer;
+    private bool _runningSlowTimeTimer;
+    private bool _runningHitStopTimer;
 
     private void OnEnable()
     {
@@ -30,6 +36,8 @@ public class System_TimeManager : MonoBehaviour
         EventHandler.Event_TriggerStun += NormalTime;
         EventHandler.Event_PlayerDied += StopTime;
         EventHandler.Event_Pause += PauseTime;
+
+        EventHandler.Event_EnemyHitAnimation += HitStop;
     }
 
     void OnDisable()
@@ -42,6 +50,33 @@ public class System_TimeManager : MonoBehaviour
         EventHandler.Event_TriggerStun -= NormalTime;
         EventHandler.Event_PlayerDied -= StopTime;
         EventHandler.Event_Pause -= PauseTime;
+
+        EventHandler.Event_EnemyHitAnimation -= HitStop;
+    }
+
+    void HitStop(GameObject dummy)
+    {
+        if (_runningHitStopTimer == true)
+            StopCoroutine(_hitStopTimer);
+
+        _hitStopTimer = StartCoroutine(HitStopTimer());
+
+        //
+        IEnumerator HitStopTimer()
+        {
+            _runningHitStopTimer = true;
+            var currentTimescale = Time.timeScale;
+            Time.timeScale = 0;
+            yield return new WaitForSecondsRealtime(_hitStopDuration);
+
+            if (_runningSlowTimeTimer)
+                Time.timeScale = currentTimescale;
+            else
+                NormalTime();
+
+            EventHandler.Event_HitStopFinished?.Invoke();
+            _runningHitStopTimer = false;
+        }
     }
 
     void NormalTime()
@@ -79,19 +114,25 @@ public class System_TimeManager : MonoBehaviour
 
         IEnumerator SlowTimeTimer()
         {
+            _runningSlowTimeTimer = true;
             yield return new WaitForSecondsRealtime(
                 System_GlobalValues.Instance.GetPlayerKnockBackTime()
             );
 
             //Checks if games is paused
             var gameState = GlobalValues.GetGameState();
-            while (gameState == GameState.GameOver || gameState == GameState.Paused)
+            while (
+                gameState == GameState.GameOver
+                || gameState == GameState.Paused
+                || _runningHitStopTimer == true
+            )
             {
                 gameState = GlobalValues.GetGameState();
                 yield return null;
             }
 
             NormalTime();
+            _runningSlowTimeTimer = false;
         }
     }
 

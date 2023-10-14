@@ -26,6 +26,7 @@ public class System_PlayerAnimation : MonoBehaviour
     private bool _hit;
     private bool _stunned;
     private bool _died;
+    private bool _hitStopped;
     private bool _usedRight;
     private List<int> _leftAttacks = new List<int>();
     private List<int> _rightAttacks = new List<int>();
@@ -98,6 +99,13 @@ public class System_PlayerAnimation : MonoBehaviour
         {
             _died = true;
         };
+
+        //Hitstop
+        EventHandler.Event_HitStopFinished += () =>
+        {
+            _hitStopped = false;
+            AnimatorTimeScaling(AnimatorUpdateMode.UnscaledTime);
+        };
     }
 
     private void Update()
@@ -107,15 +115,25 @@ public class System_PlayerAnimation : MonoBehaviour
         _attacking = false;
         _hit = false;
 
-        if (state == _currentState)
+        if (state == Idle && _hitStopped == true)
             return;
+        else if (state == _currentState)
+            return;
+
         _playerAnimator.CrossFade(state, 0, 0);
         _currentState = state;
     }
 
     public void ConfirmHit()
     {
+        _hitStopped = true;
+        AnimatorTimeScaling(AnimatorUpdateMode.Normal);
         EventHandler.Event_EnemyHitAnimation?.Invoke(_currentEnemy);
+    }
+
+    public void AnimatorTimeScaling(AnimatorUpdateMode value)
+    {
+        _playerAnimator.updateMode = value;
     }
 
     private int GetState()
@@ -124,7 +142,7 @@ public class System_PlayerAnimation : MonoBehaviour
             return Died;
 
         if (_hit)
-            return LockStateUnscaled(Hit, _hitDuration);
+            return LockState(Hit, _hitDuration);
 
         if (_stunned)
             return Missed;
@@ -136,16 +154,16 @@ public class System_PlayerAnimation : MonoBehaviour
             if (_usedRight)
             {
                 _usedRight = !_usedRight;
-                return LockStateUnscaled(_leftAttacks[_attackVariant], _punchDuration);
+                return LockState(_leftAttacks[_attackVariant], _punchDuration);
             }
             else
             {
                 _usedRight = !_usedRight;
-                return LockStateUnscaled(_rightAttacks[_attackVariant], _punchDuration);
+                return LockState(_rightAttacks[_attackVariant], _punchDuration);
             }
         }
 
-        if (Time.unscaledTime < _lockedTill)
+        if (Time.time < _lockedTill)
             return _currentState;
 
         if (_battling)
@@ -153,9 +171,9 @@ public class System_PlayerAnimation : MonoBehaviour
 
         return Idle;
 
-        int LockStateUnscaled(int state, float time)
+        int LockState(int state, float time)
         {
-            _lockedTill = Time.unscaledTime + time;
+            _lockedTill = Time.time + time;
             return state;
         }
         // int LockStateScaled(int state, float time)

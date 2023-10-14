@@ -76,10 +76,9 @@ public class System_EventHandler : MonoBehaviour
 
     //Enemy hit manager events
     public Action<GameObject> Event_GenerateElite;
-
     public Action<GameObject> Event_TriggerDash;
-
     public Action<GameObject> Event_EnemyFlip;
+    public Action Event_HitStopFinished;
 
     void Awake()
     {
