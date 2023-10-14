@@ -150,24 +150,16 @@ public class System_PlayerAnimation : MonoBehaviour
 
         if (_attacking)
         {
-            _attackVariant = Random.Range(0, 2);
+            int attackIndex = _currentEnemy.GetComponent<System_EnemyHitManager>().IsLastHit()
+              ? 1
+              : 0;
+            int attackAnimation = _usedRight
+                ? _leftAttacks[attackIndex]
+                : _rightAttacks[attackIndex];
 
-            if (_usedRight)
-            {
-                _usedRight = !_usedRight;
-                if (_currentEnemy.GetComponent<System_EnemyHitManager>().IsLastHit())
-                    return LockState(_leftAttacks[1], _punchDuration);
+            _usedRight = !_usedRight;
 
-                return LockState(_leftAttacks[0], _punchDuration);
-            }
-            else
-            {
-                _usedRight = !_usedRight;
-                if (_currentEnemy.GetComponent<System_EnemyHitManager>().IsLastHit())
-                    return LockState(_rightAttacks[1], _punchDuration);
-
-                return LockState(_rightAttacks[0], _punchDuration);
-            }
+            return LockState(attackAnimation, _punchDuration);
         }
 
         if (Time.time < _lockedTill)
