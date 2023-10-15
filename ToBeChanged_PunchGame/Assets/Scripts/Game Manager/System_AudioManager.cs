@@ -41,6 +41,14 @@ public class System_AudioManager : MonoBehaviour
         {
             SetSoundNameToPlay("UI_IncorrectInput");
         };
+        EventHandler.Event_TriggeredHoldBattle += (dummy) =>
+        {
+            SetSoundNameToPlay("UI_BarCharge");
+        };
+        EventHandler.Event_StoppedHoldBattle += () =>
+        {
+            StopSound("UI_BarCharge");
+        };
 
         //Player
         EventHandler.Event_PlayerHit += (dummy) =>
@@ -95,5 +103,19 @@ public class System_AudioManager : MonoBehaviour
         }
 
         _randomizePitch = false;
+    }
+
+    public void StopSound(string name)
+    {
+        Object_Sound sound = Array.Find(audioList, test => test.soundName.Equals(name));
+
+        if (sound != null)
+        {
+            sound.source.Stop();
+        }
+        else
+        {
+            print("Cannot find sound");
+        }
     }
 }
