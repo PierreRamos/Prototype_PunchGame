@@ -4318,6 +4318,7 @@ GameObject:
   - component: {fileID: 1559235788}
   - component: {fileID: 1559235792}
   - component: {fileID: 1559235797}
+  - component: {fileID: 1559235800}
   - component: {fileID: 1559235791}
   - component: {fileID: 1559235790}
   - component: {fileID: 1559235793}
@@ -4352,7 +4353,7 @@ MonoBehaviour:
   _baseSpawnInterval: 1
   _spawnIntervalRange: 0.1
   _minSpawnInterval: 0.05
-  _normalEnemySpawnRatio: 10
+  _normalEnemySpawnRatio: 15
   _eliteEnemySpawnRatio: 1
   _dashEnemySpawnRatio: 2
   _holdEnemySpawnRatio: 3
@@ -4613,6 +4614,64 @@ MonoBehaviour:
   _defeatShakeDuration: 0.25
   _shakeAmplitude: 0.2
   _shakeFrequency: 5
+--- !u!114 &1559235800
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559235784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f833eb6bb17f8b4c93dc47edf380e3d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioList:
+  - source: {fileID: 0}
+    soundName: Player_Hit
+    sound: {fileID: 8300000, guid: 0e4f7c8d06c92294da346e332623a1d0, type: 3}
+    volume: 1
+    pitch: 1
+  - source: {fileID: 0}
+    soundName: Player_Heal
+    sound: {fileID: 8300000, guid: 390696dc6bab2f54fbae4181e84fd892, type: 3}
+    volume: 1
+    pitch: 1
+  - source: {fileID: 0}
+    soundName: Player_Miss
+    sound: {fileID: 8300000, guid: 52e7c4e5f7811b44aabd85f70772fc75, type: 3}
+    volume: 1
+    pitch: 1
+  - source: {fileID: 0}
+    soundName: Enemy_Hit
+    sound: {fileID: 8300000, guid: 9702ff283f031834eaeb128f17cd81f3, type: 3}
+    volume: 1
+    pitch: 0.8
+  - source: {fileID: 0}
+    soundName: Enemy_Defeat
+    sound: {fileID: 8300000, guid: 5d1243e2da588184c8b4260374bb250a, type: 3}
+    volume: 1
+    pitch: 0.8
+  - source: {fileID: 0}
+    soundName: UI_CorrectInput
+    sound: {fileID: 8300000, guid: 84b467ce5ab53374c9c3da8d08b8c5ae, type: 3}
+    volume: 1
+    pitch: 0.8
+  - source: {fileID: 0}
+    soundName: UI_IncorrectInput
+    sound: {fileID: 8300000, guid: 16790877c2795ed4b925955abf3cafec, type: 3}
+    volume: 1
+    pitch: 1
+  - source: {fileID: 0}
+    soundName: UI_BarCharge
+    sound: {fileID: 8300000, guid: 9c1cfee12b9d0584ebf7c45a26946e73, type: 3}
+    volume: 0.5
+    pitch: 1
+  - source: {fileID: 0}
+    soundName: UI_SoloBattle
+    sound: {fileID: 8300000, guid: c255c68e1efe706448a48fd7fc723f0e, type: 3}
+    volume: 0.5
+    pitch: 1
 --- !u!1 &1566933747
 GameObject:
   m_ObjectHideFlags: 0

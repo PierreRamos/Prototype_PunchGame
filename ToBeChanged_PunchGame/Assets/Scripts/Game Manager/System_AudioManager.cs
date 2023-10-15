@@ -16,6 +16,7 @@ public class System_AudioManager : MonoBehaviour
     private Object_Sound[] audioList;
 
     bool _randomizePitch;
+    bool _startedSoloBattle;
 
     private void Awake()
     {
@@ -48,6 +49,16 @@ public class System_AudioManager : MonoBehaviour
         EventHandler.Event_StoppedHoldBattle += () =>
         {
             StopSound("UI_BarCharge");
+        };
+        EventHandler.Event_TriggeredSoloBattle += (dummy, dummy2) =>
+        {
+            _startedSoloBattle = true;
+            SetSoundNameToPlay("UI_SoloBattle");
+        };
+        EventHandler.Event_StoppedSoloBattle += () =>
+        {
+            _startedSoloBattle = false;
+            ResetPitch("UI_CorrectInput");
         };
 
         //Player
@@ -95,6 +106,15 @@ public class System_AudioManager : MonoBehaviour
                 sound.source.pitch = setPitch + UnityEngine.Random.Range(-0.2f, 0.2f);
             }
 
+            if (_startedSoloBattle)
+                if (sound.soundName.Equals("UI_CorrectInput"))
+                {
+                    sound.source.pitch =
+                        sound.source.pitch < 1f
+                            ? sound.source.pitch + 0.05f
+                            : sound.source.pitch = 1f;
+                }
+
             sound.source.Play();
         }
         else
@@ -112,6 +132,20 @@ public class System_AudioManager : MonoBehaviour
         if (sound != null)
         {
             sound.source.Stop();
+        }
+        else
+        {
+            print("Cannot find sound");
+        }
+    }
+
+    private void ResetPitch(string name)
+    {
+        Object_Sound sound = Array.Find(audioList, test => test.soundName.Equals(name));
+
+        if (sound != null)
+        {
+            sound.source.pitch = sound.pitch;
         }
         else
         {

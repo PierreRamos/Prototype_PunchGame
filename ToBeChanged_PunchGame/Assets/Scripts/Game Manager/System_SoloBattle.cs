@@ -221,7 +221,9 @@ public class System_SoloBattle : MonoBehaviour
 
         UpdateCorrectSprite(move);
         EventHandler.Event_EnemyHitConfirm?.Invoke(_currentEnemy);
-        EventHandler.Event_CorrectInput?.Invoke();
+
+        if (GlobalValues.GetMovesToHitCount() > 0)
+            EventHandler.Event_CorrectInput?.Invoke();
 
         yield return new WaitForSecondsRealtime(_promptDelayDuration);
 
