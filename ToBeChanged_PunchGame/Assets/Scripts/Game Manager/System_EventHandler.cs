@@ -9,6 +9,7 @@ public class System_EventHandler : MonoBehaviour
 
     //Game events
     public Action<Vector3> Event_SpawnEnemy;
+    public Action<string> Event_PlaySound;
 
     //Enemy events
     public Action<GameObject> Event_EnemyHitPlayer;

@@ -4400,7 +4400,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _slowTimeValue: 0.4
   _indefiniteSlowTimeValue: 0.2
-  _hitStopDuration: 0.1
+  _hitStopDuration: 0.075
 --- !u!114 &1559235790
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4541,7 +4541,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ee4014f41fc404db39f7167248466f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _playerObject: {fileID: 1230512970}
   _hitIndicator: {fileID: 1502748698}
   _soloBattlePanel: {fileID: 1569269271}
   _soloBattlePrompt: {fileID: 724212366}
