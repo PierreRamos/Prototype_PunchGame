@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
+using UnityEngine.EventSystems;
 
 public class System_AudioManager : MonoBehaviour
 {
@@ -60,6 +61,11 @@ public class System_AudioManager : MonoBehaviour
         {
             _randomizePitch = true;
             SetSoundNameToPlay("Enemy_Hit");
+        };
+        EventHandler.Event_DefeatedEnemy += (dummy) =>
+        {
+            _randomizePitch = true;
+            SetSoundNameToPlay("Enemy_Defeat");
         };
     }
 
