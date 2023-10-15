@@ -221,6 +221,7 @@ public class System_SoloBattle : MonoBehaviour
 
         UpdateCorrectSprite(move);
         EventHandler.Event_EnemyHitConfirm?.Invoke(_currentEnemy);
+        EventHandler.Event_CorrectInput?.Invoke();
 
         yield return new WaitForSecondsRealtime(_promptDelayDuration);
 
@@ -234,6 +235,7 @@ public class System_SoloBattle : MonoBehaviour
 
         UpdateWrongSprite(move);
         EventHandler.Event_SoloBattleWrongInput?.Invoke();
+        EventHandler.Event_IncorrectInput?.Invoke();
 
         yield return new WaitForSecondsRealtime(_promptDelayDuration);
         UpdateBaseSprite(move);

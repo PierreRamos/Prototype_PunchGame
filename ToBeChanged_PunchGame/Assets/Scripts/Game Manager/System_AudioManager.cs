@@ -31,22 +31,31 @@ public class System_AudioManager : MonoBehaviour
     {
         EventHandler = System_EventHandler.Instance;
 
+        //UI
+        EventHandler.Event_CorrectInput += () =>
+        {
+            SetSoundNameToPlay("UI_CorrectInput");
+        };
+        EventHandler.Event_IncorrectInput += () =>
+        {
+            SetSoundNameToPlay("UI_IncorrectInput");
+        };
+
         //Player
         EventHandler.Event_PlayerHit += (dummy) =>
         {
             SetSoundNameToPlay("Player_Hit");
         };
-
         EventHandler.Event_HealPlayer += (dummy) =>
         {
             SetSoundNameToPlay("Player_Heal");
         };
-
         EventHandler.Event_TriggerStun += () =>
         {
             SetSoundNameToPlay("Player_Miss");
         };
 
+        //Enemy
         EventHandler.Event_EnemyHitAnimation += (dummy) =>
         {
             _randomizePitch = true;
