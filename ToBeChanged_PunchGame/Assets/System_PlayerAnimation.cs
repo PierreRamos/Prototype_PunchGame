@@ -20,7 +20,6 @@ public class System_PlayerAnimation : MonoBehaviour
 
     private GameObject _currentEnemy;
     private int _currentState;
-    private int _attackVariant;
     private float _lockedTill;
     private bool _attacking;
     private bool _battling; //Hold battle | Solo battle
