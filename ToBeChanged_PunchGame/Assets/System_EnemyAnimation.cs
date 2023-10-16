@@ -8,6 +8,7 @@ public class System_EnemyAnimation : MonoBehaviour
     System_GlobalValues GlobalValues;
 
     [Header("Enemy Animation Settings")]
+    [SerializeField]
     private float _hitDuration;
 
     private Animator _enemyAnimator;
@@ -17,6 +18,7 @@ public class System_EnemyAnimation : MonoBehaviour
 
     private static readonly int Died = Animator.StringToHash("Player_Death");
     private static readonly int Idle = Animator.StringToHash("Enemy_Idle");
+    private static readonly int Walk = Animator.StringToHash("Enemy_Walk");
     private static readonly int Hit = Animator.StringToHash("Enemy_Hit");
     private static readonly int Attack = Animator.StringToHash("Player_Attack1");
 
@@ -39,16 +41,26 @@ public class System_EnemyAnimation : MonoBehaviour
         };
     }
 
+    private void OnDisable()
+    {
+        _hit = false;
+    }
+
     private void Update()
     {
         var state = GetState();
 
-        if (state == _currentState)
+        if (state == _currentState && state != Hit)
             return;
 
-        _hit = false;
+        if (state == Hit && _hit)
+        {
+            _hit = false;
+            _enemyAnimator.CrossFadeInFixedTime(state, 0, 0);
+        }
+        else
+            _enemyAnimator.CrossFade(state, 0, 0);
 
-        _enemyAnimator.CrossFade(state, 0, 0);
         _currentState = state;
     }
 
@@ -65,7 +77,7 @@ public class System_EnemyAnimation : MonoBehaviour
         if (Time.time < _lockedTill)
             return _currentState;
 
-        return Idle;
+        return Walk;
 
         int LockState(int state, float time)
         {
