@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 43e5b08b530077348bb5f295dba6ee5d
+guid: 1f4810cc7a64c5f46a31d3fc57ef9fad
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,12 +129,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player-Attack4_0
+      name: Enemy-Idle_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
+        width: 24
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -143,19 +143,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 03977d66df0332d44af354f5bf97a126
-      internalID: -172881966
+      spriteID: 5a4748e888b648045a316742f4d7f935
+      internalID: 256741375
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player-Attack4_1
+      name: Enemy-Idle_1
       rect:
         serializedVersion: 2
-        x: 16
+        x: 24
         y: 0
-        width: 16
+        width: 24
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -164,19 +164,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c49ad9382d88234789c1a3d59543086
-      internalID: -2044307782
+      spriteID: 27ab33e5a7879c34195b3f60967aa0dd
+      internalID: 815588868
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player-Attack4_2
+      name: Enemy-Idle_2
       rect:
         serializedVersion: 2
-        x: 32
+        x: 48
         y: 0
-        width: 16
+        width: 24
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -185,8 +185,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2697ad7f13c4d1a4483d9054b1886246
-      internalID: 1567773012
+      spriteID: b2d72a3abc317f24ca5917a7e5ac6943
+      internalID: 744780038
       vertices: []
       indices: 
       edges: []
@@ -202,9 +202,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player-Attack4_1: -2044307782
-      Player-Attack4_2: 1567773012
-      Player-Attack4_0: -172881966
+      Enemy-Idle_2: 744780038
+      Enemy-Idle_0: 256741375
+      Enemy-Idle_1: 815588868
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

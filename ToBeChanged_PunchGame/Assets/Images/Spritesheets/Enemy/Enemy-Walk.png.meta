@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 35d8d5b31244c5f47b97b41412e3ada7
+guid: 7ee0027f2f4e0d2439401f2f1784c1bd
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,12 +129,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player-Punch_2_0
+      name: Enemy-Walk_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
+        width: 24
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -143,19 +143,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ce03e4d6c4b050d4991915731e75d794
-      internalID: 987742772
+      spriteID: 52cf7a90e5cccd94d8c92f27c5b604f2
+      internalID: 1815218554
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player-Punch_2_1
+      name: Enemy-Walk_1
       rect:
         serializedVersion: 2
-        x: 16
+        x: 24
         y: 0
-        width: 16
+        width: 24
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -164,19 +164,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4c5aafa6597afbe4d9e6aaff2a908b52
-      internalID: 364560018
+      spriteID: 54e41be52c125354da54cbf789a1f7e7
+      internalID: -827198758
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player-Punch_2_2
+      name: Enemy-Walk_2
       rect:
         serializedVersion: 2
-        x: 32
+        x: 48
         y: 0
-        width: 16
+        width: 24
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -185,8 +185,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d06f5b807073f6b4baa17e2cf0fb7ee4
-      internalID: 2006363478
+      spriteID: 5686497f6ab19d54baaa05bfdb2d11c8
+      internalID: 2067319309
       vertices: []
       indices: 
       edges: []
@@ -202,9 +202,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player-Punch_2_1: 364560018
-      Player-Punch_2_0: 987742772
-      Player-Punch_2_2: 2006363478
+      Enemy-Walk_2: 2067319309
+      Enemy-Walk_0: 1815218554
+      Enemy-Walk_1: -827198758
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

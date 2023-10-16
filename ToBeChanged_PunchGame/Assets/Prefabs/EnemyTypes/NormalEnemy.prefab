@@ -223,6 +223,7 @@ GameObject:
   - component: {fileID: -6541493425883857811}
   - component: {fileID: -1480613759023284349}
   - component: {fileID: -8617998876570212197}
+  - component: {fileID: 9038710881875028904}
   m_Layer: 0
   m_Name: NormalEnemy
   m_TagString: Enemy
@@ -286,7 +287,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -984834991
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_Sprite: {fileID: -949660147, guid: 2317150cee5ddda49a7ab80c80d2a7fd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -421,6 +422,26 @@ MonoBehaviour:
   _itemPanel: {fileID: 593072608147032763}
   _healthPotionDropChance: 4
   _healthPotionValue: 1
+--- !u!95 &9038710881875028904
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5829559742014051392}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 09f8cba935c77dd488e6c50e8a86551d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &6810240012215031482
 GameObject:
   m_ObjectHideFlags: 0
