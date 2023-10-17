@@ -41,6 +41,7 @@ public class System_AudioManager : MonoBehaviour
         EventHandler.Event_IncorrectInput += () =>
         {
             SetSoundNameToPlay("UI_IncorrectInput");
+            ResetPitch("UI_CorrectInput");
         };
         EventHandler.Event_TriggeredHoldBattle += (dummy) =>
         {
