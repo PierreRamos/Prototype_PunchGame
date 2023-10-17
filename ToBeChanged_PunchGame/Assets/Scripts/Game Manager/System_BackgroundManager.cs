@@ -3,8 +3,12 @@ using UnityEngine.UI;
 
 public class System_BackgroundManager : MonoBehaviour
 {
+    System_EventHandler EventHandler;
+
     [Header("Initialization")]
-    [Space]
+    [SerializeField]
+    Animator _backgroundDimAnimator;
+
     [SerializeField]
     Transform _playerObject;
 
@@ -34,6 +38,29 @@ public class System_BackgroundManager : MonoBehaviour
     Vector3 _previousPlayerPositionBase; // Separate variable for _backgroundBase
     Vector3 _previousPlayerPositionMiddle; // Separate variable for _backgroundBase
     Vector3 _previousPlayerPositionLights; // Separate variable for _backgroundLights
+
+    private void OnEnable()
+    {
+        EventHandler = System_EventHandler.Instance;
+
+        EventHandler.Event_TriggeredHoldBattle += (dummy) =>
+        {
+            _backgroundDimAnimator.SetTrigger("Dim");
+        };
+        EventHandler.Event_TriggeredSoloBattle += (dummy, dummy2) =>
+        {
+            _backgroundDimAnimator.SetTrigger("Dim");
+        };
+
+        EventHandler.Event_StoppedHoldBattle += () =>
+        {
+            _backgroundDimAnimator.SetTrigger("Normal");
+        };
+        EventHandler.Event_StoppedSoloBattle += () =>
+        {
+            _backgroundDimAnimator.SetTrigger("Normal");
+        };
+    }
 
     void Update()
     {
