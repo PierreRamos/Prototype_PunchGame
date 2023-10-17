@@ -43,20 +43,23 @@ public class System_EnemyDrops : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
+        GenerateItems();
+
         EventHandler.Event_DefeatedEnemy += (enemy) =>
         {
-            if (enemy == gameObject && _hasHealthPotion)
+            if (enemy == gameObject && _hasHealthPotion && !_isDefeated)
             {
+                print("called?");
                 EventHandler.Event_HealPlayer?.Invoke(_healthPotionValue);
                 ClearItemDisplay();
+                _isDefeated = true;
             }
         };
-
-        GenerateItems();
     }
 
     void OnDisable()
     {
+        ClearItemDisplay();
         ResetBool();
     }
 
