@@ -121,7 +121,8 @@ public class System_EnemyController : MonoBehaviour
         {
             yield return new WaitForEndOfFrame(); //Waits for other methods relying on defeated enemy event to happen first before disabling this game object
 
-            gameObject.SetActive(false);
+            EventHandler.Event_EnemyDeathAnimation?.Invoke(gameObject);
+            StopMovement();
         }
     }
 
@@ -139,6 +140,7 @@ public class System_EnemyController : MonoBehaviour
         {
             yield return new WaitForEndOfFrame(); //Waits for other methods relying on defeated enemy event to happen first before disabling this game object
 
+            // EventHandler.Event_EnemyDeathAnimation?.Invoke(gameObject);
             gameObject.SetActive(false);
         }
     }

@@ -14,6 +14,7 @@ public class System_EventHandler : MonoBehaviour
     //Enemy events
     public Action<GameObject> Event_EnemyHitPlayer;
     public Action<GameObject> Event_DefeatedEnemy;
+    public Action<GameObject> Event_EnemyDeathAnimation;
 
     //Player controller events
     public Action Event_AttackLeft;

@@ -43,28 +43,21 @@ public class System_EnemyDrops : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
-        EventHandler.Event_DefeatedEnemy += CheckIfDefeated;
+        EventHandler.Event_DefeatedEnemy += (enemy) =>
+        {
+            if (enemy == gameObject && _hasHealthPotion)
+            {
+                EventHandler.Event_HealPlayer?.Invoke(_healthPotionValue);
+                ClearItemDisplay();
+            }
+        };
 
         GenerateItems();
     }
 
     void OnDisable()
     {
-        EventHandler.Event_DefeatedEnemy -= CheckIfDefeated;
-
-        ClearItemDisplay();
-
-        if (_isDefeated && _hasHealthPotion)
-            EventHandler.Event_HealPlayer?.Invoke(_healthPotionValue);
-
         ResetBool();
-    }
-
-    //Checks if defeated by player and only then can player recieve items
-    void CheckIfDefeated(GameObject gameObject)
-    {
-        if (this.gameObject == gameObject)
-            _isDefeated = true;
     }
 
     //Generates items carried by enemies on enable

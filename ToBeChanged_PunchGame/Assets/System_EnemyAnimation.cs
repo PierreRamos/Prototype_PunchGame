@@ -16,9 +16,10 @@ public class System_EnemyAnimation : MonoBehaviour
     private float _lockedTill;
     private bool _hit;
     private bool _idle;
+    private bool _died;
     private bool _triggeredHit;
 
-    private static readonly int Died = Animator.StringToHash("Player_Death");
+    private static readonly int Died = Animator.StringToHash("Enemy_Death");
     private static readonly int Idle = Animator.StringToHash("Enemy_Idle");
     private static readonly int Walk = Animator.StringToHash("Enemy_Walk");
     private static readonly int Hit = Animator.StringToHash("Enemy_Hit");
@@ -53,12 +54,21 @@ public class System_EnemyAnimation : MonoBehaviour
             if (enemy == gameObject)
                 _idle = true;
         };
+
+        EventHandler.Event_EnemyDeathAnimation += (enemy) =>
+        {
+            if (enemy != gameObject)
+                return;
+
+            _died = true;
+        };
     }
 
     private void OnDisable()
     {
         _idle = false;
         _hit = false;
+        _died = false;
     }
 
     private void Update()
@@ -84,8 +94,16 @@ public class System_EnemyAnimation : MonoBehaviour
         _enemyAnimator.updateMode = value;
     }
 
+    public void DisableEnemy()
+    {
+        gameObject.SetActive(false);
+    }
+
     private int GetState()
     {
+        if (_died)
+            return Died;
+
         if (_hit)
             return LockState(Hit, _hitDuration);
 
