@@ -23,13 +23,13 @@ public class System_EliteMechanics : MonoBehaviour
         GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_TriggerSoloBattle += TriggerSoloBattle;
-        EventHandler.Event_GenerateElite += GenerateMoveSet;
+
+        GenerateMoveSet();
     }
 
     void OnDisable()
     {
         EventHandler.Event_TriggerSoloBattle -= TriggerSoloBattle;
-        EventHandler.Event_GenerateElite -= GenerateMoveSet;
 
         RemoveMoveSet();
     }
@@ -56,11 +56,8 @@ public class System_EliteMechanics : MonoBehaviour
         EventHandler.Event_FocusHealthUI?.Invoke();
     }
 
-    void GenerateMoveSet(GameObject gameObject)
+    void GenerateMoveSet()
     {
-        if (this.gameObject != gameObject)
-            return;
-
         var numberOfMoves = Random.Range(_minNumberOfMoves, _maxNumberOfMoves + 1);
 
         for (int i = 0; i < numberOfMoves; i++)

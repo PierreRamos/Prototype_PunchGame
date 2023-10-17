@@ -68,7 +68,6 @@ public class System_EnemyHitManager : MonoBehaviour
                 }
                 _listOfHits.Add(HitType.Normal);
             }
-            EventHandler.Event_GenerateElite?.Invoke(gameObject);
         }
         //Dash enemy
         else if (enemyType == EnemyType.Dash)
