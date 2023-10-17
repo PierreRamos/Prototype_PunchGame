@@ -16,6 +16,7 @@ public class System_EnemyAnimation : MonoBehaviour
     private float _lockedTill;
     private bool _hit;
     private bool _idle;
+    private bool _triggeredHit;
 
     private static readonly int Died = Animator.StringToHash("Player_Death");
     private static readonly int Idle = Animator.StringToHash("Enemy_Idle");
@@ -36,7 +37,10 @@ public class System_EnemyAnimation : MonoBehaviour
         EventHandler.Event_EnemyHitAnimation += (enemy) =>
         {
             if (enemy == gameObject)
+            {
                 _hit = true;
+                _triggeredHit = true;
+            }
         };
 
         EventHandler.Event_TriggerSoloBattle += (enemy) =>
@@ -63,10 +67,14 @@ public class System_EnemyAnimation : MonoBehaviour
 
         _hit = false;
 
-        if (state == _currentState)
+        if (state == _currentState && state != Hit)
+            return;
+        if (state == Hit && _triggeredHit == false)
             return;
 
-        _enemyAnimator.CrossFade(state, 0, 0);
+        _triggeredHit = false;
+
+        _enemyAnimator.CrossFadeInFixedTime(state, 0, 0);
 
         _currentState = state;
     }
