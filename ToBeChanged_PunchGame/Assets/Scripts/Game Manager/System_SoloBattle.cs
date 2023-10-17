@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,9 +20,25 @@ public class System_SoloBattle : MonoBehaviour
     [SerializeField]
     GameObject _soloBattlePrompt;
 
+    [SerializeField]
+    GameObject _transitionArrow;
+
     [Space]
     [SerializeField]
     List<GameObject> _listOfGhostPrompts = new List<GameObject>();
+
+    //Base Arrow
+    [SerializeField]
+    Sprite _upArrow;
+
+    [SerializeField]
+    Sprite _downArrow;
+
+    [SerializeField]
+    Sprite _rightArrow;
+
+    [SerializeField]
+    Sprite _leftArrow;
 
     [Space]
     [SerializeField]
@@ -84,37 +101,46 @@ public class System_SoloBattle : MonoBehaviour
     Transform _ghost1,
         _ghost2,
         _ghost3;
-    Image _promptImage;
+
+    Vector3 _initialTransitionArrowPosition;
+    Image _promptImage,
+        _transitionImage;
     bool _isWaitingForAction,
         _correctInputRunning,
         _wrongInputRunning;
 
-    Dictionary<MoveSet, Sprite> baseSprites = new Dictionary<MoveSet, Sprite>();
-    Dictionary<MoveSet, Sprite> correctSprites = new Dictionary<MoveSet, Sprite>();
-    Dictionary<MoveSet, Sprite> wrongSprites = new Dictionary<MoveSet, Sprite>();
-    Dictionary<MoveSet, Sprite> ghostSprites = new Dictionary<MoveSet, Sprite>();
+    Dictionary<MoveSet, Sprite> _arrowSprites = new Dictionary<MoveSet, Sprite>();
+    Dictionary<MoveSet, Sprite> _baseSprites = new Dictionary<MoveSet, Sprite>();
+    Dictionary<MoveSet, Sprite> _correctSprites = new Dictionary<MoveSet, Sprite>();
+    Dictionary<MoveSet, Sprite> _wrongSprites = new Dictionary<MoveSet, Sprite>();
+    Dictionary<MoveSet, Sprite> _ghostSprites = new Dictionary<MoveSet, Sprite>();
 
     void Awake()
     {
-        baseSprites[MoveSet.Left] = _baseLeftSprite;
-        baseSprites[MoveSet.Right] = _baseRightSprite;
-        baseSprites[MoveSet.Up] = _baseUpSprite;
-        baseSprites[MoveSet.Down] = _baseDownSprite;
+        _arrowSprites[MoveSet.Left] = _leftArrow;
+        _arrowSprites[MoveSet.Right] = _rightArrow;
+        _arrowSprites[MoveSet.Up] = _upArrow;
+        _arrowSprites[MoveSet.Down] = _downArrow;
 
-        ghostSprites[MoveSet.Left] = _ghostLeftSprite;
-        ghostSprites[MoveSet.Right] = _ghostRightSprite;
-        ghostSprites[MoveSet.Up] = _ghostUpSprite;
-        ghostSprites[MoveSet.Down] = _ghostDownSprite;
+        _baseSprites[MoveSet.Left] = _baseLeftSprite;
+        _baseSprites[MoveSet.Right] = _baseRightSprite;
+        _baseSprites[MoveSet.Up] = _baseUpSprite;
+        _baseSprites[MoveSet.Down] = _baseDownSprite;
 
-        correctSprites[MoveSet.Left] = _correctLeftSprite;
-        correctSprites[MoveSet.Right] = _correctRightSprite;
-        correctSprites[MoveSet.Up] = _correctUpSprite;
-        correctSprites[MoveSet.Down] = _correctDownSprite;
+        _ghostSprites[MoveSet.Left] = _ghostLeftSprite;
+        _ghostSprites[MoveSet.Right] = _ghostRightSprite;
+        _ghostSprites[MoveSet.Up] = _ghostUpSprite;
+        _ghostSprites[MoveSet.Down] = _ghostDownSprite;
 
-        wrongSprites[MoveSet.Left] = _wrongLeftSprite;
-        wrongSprites[MoveSet.Right] = _wrongRightSprite;
-        wrongSprites[MoveSet.Up] = _wrongUpSprite;
-        wrongSprites[MoveSet.Down] = _wrongDownSprite;
+        _correctSprites[MoveSet.Left] = _correctLeftSprite;
+        _correctSprites[MoveSet.Right] = _correctRightSprite;
+        _correctSprites[MoveSet.Up] = _correctUpSprite;
+        _correctSprites[MoveSet.Down] = _correctDownSprite;
+
+        _wrongSprites[MoveSet.Left] = _wrongLeftSprite;
+        _wrongSprites[MoveSet.Right] = _wrongRightSprite;
+        _wrongSprites[MoveSet.Up] = _wrongUpSprite;
+        _wrongSprites[MoveSet.Down] = _wrongDownSprite;
     }
 
     void OnEnable()
@@ -140,6 +166,9 @@ public class System_SoloBattle : MonoBehaviour
     void Start()
     {
         _promptImage = _soloBattlePrompt.GetComponent<Image>();
+        _transitionImage = _transitionArrow.GetComponent<Image>();
+
+        _initialTransitionArrowPosition = _transitionArrow.transform.localPosition;
     }
 
     private void ActivateSoloBattle(GameObject enemy, List<MoveSet> listOfMoves)
@@ -219,6 +248,8 @@ public class System_SoloBattle : MonoBehaviour
     {
         _correctInputRunning = true;
 
+        // TransitionArrowPrompt(move);
+
         UpdateCorrectSprite(move);
         EventHandler.Event_EnemyHitConfirm?.Invoke(_currentEnemy);
 
@@ -229,6 +260,22 @@ public class System_SoloBattle : MonoBehaviour
 
         _isWaitingForAction = false;
         _correctInputRunning = false;
+    }
+
+    private void TransitionArrowPrompt(MoveSet move)
+    {
+        _transitionArrow.transform.localPosition = _initialTransitionArrowPosition;
+
+        _transitionImage.sprite = _arrowSprites[move];
+
+        if (_transitionArrow.activeSelf == false)
+            _transitionArrow.SetActive(true);
+
+        _transitionArrow.transform.DOMoveX(_promptImage.transform.position.x, .1f).onComplete +=
+            () =>
+            {
+                _transitionArrow.SetActive(false);
+            };
     }
 
     IEnumerator WrongInput(MoveSet move)
@@ -281,17 +328,17 @@ public class System_SoloBattle : MonoBehaviour
 
     void UpdateBaseSprite(MoveSet move)
     {
-        SetSprite(move, baseSprites);
+        SetSprite(move, _baseSprites);
     }
 
     void UpdateCorrectSprite(MoveSet move)
     {
-        SetSprite(move, correctSprites);
+        SetSprite(move, _correctSprites);
     }
 
     void UpdateWrongSprite(MoveSet move)
     {
-        SetSprite(move, wrongSprites);
+        SetSprite(move, _wrongSprites);
     }
 
     void SetSprite(MoveSet move, Dictionary<MoveSet, Sprite> spriteDictionary)
