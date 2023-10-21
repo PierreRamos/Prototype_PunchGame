@@ -151,6 +151,9 @@ public class System_PlayerAnimation : MonoBehaviour
 
         if (_attacking)
         {
+            if (_currentEnemy == null)
+                return 0;
+
             var enemyHitManager = _currentEnemy.GetComponent<System_EnemyHitManager>();
             int attackIndex = enemyHitManager.IsLastHit() ? 1 : 0;
             int attackAnimation;
