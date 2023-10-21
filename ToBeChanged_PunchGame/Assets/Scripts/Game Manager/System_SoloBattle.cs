@@ -148,15 +148,15 @@ public class System_SoloBattle : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
-        EventHandler.Event_TriggeredSoloBattle += ActivateSoloBattle;
-        EventHandler.Event_SoloBattleTimerFinished += DeactivateSoloBattle;
+        // EventHandler.Event_TriggeredSoloBattle += ActivateSoloBattle;
+        // EventHandler.Event_SoloBattleTimerFinished += DeactivateSoloBattle;
         EventHandler.Event_Hit += CheckMove;
     }
 
     void OnDisable()
     {
-        EventHandler.Event_TriggeredSoloBattle -= ActivateSoloBattle;
-        EventHandler.Event_SoloBattleTimerFinished -= DeactivateSoloBattle;
+        // EventHandler.Event_TriggeredSoloBattle -= ActivateSoloBattle;
+        // EventHandler.Event_SoloBattleTimerFinished -= DeactivateSoloBattle;
         EventHandler.Event_Hit -= CheckMove;
 
         StopAllCoroutines();
