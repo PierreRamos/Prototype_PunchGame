@@ -36,6 +36,7 @@ public class System_SoloBattlePrompt : MonoBehaviour
     private GameObject _currentEnemy;
     private Dictionary<MoveSet, Sprite> _arrowSprites = new Dictionary<MoveSet, Sprite>();
     private List<MoveSet> _movesToHit = new List<MoveSet>();
+    private float _scrollMoveAmount;
 
     private void OnEnable()
     {
@@ -112,10 +113,19 @@ public class System_SoloBattlePrompt : MonoBehaviour
         EventHandler.Event_StoppedSoloBattle?.Invoke();
         EventHandler.Event_NormalHealthUI?.Invoke();
         GlobalValues.SetGameState(GameState.Normal);
+
+        //Disables all prompts
+        foreach (Transform prompt in _promptListObject)
+        {
+            if (prompt.gameObject.activeSelf)
+                prompt.gameObject.SetActive(false);
+        }
     }
 
     private void MovePrompt()
     {
+        _scrollMoveAmount += _promptListObject.transform.localPosition.x - _scrollMoveValue; // to fix
+
         _promptListObject
             .DOLocalMoveX(_promptListObject.transform.localPosition.x - _scrollMoveValue, 0.25f)
             .SetUpdate(true);
