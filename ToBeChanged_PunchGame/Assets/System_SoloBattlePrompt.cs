@@ -6,9 +6,13 @@ using UnityEngine.UI;
 
 public class System_SoloBattlePrompt : MonoBehaviour
 {
+    System_GlobalValues GlobalValues;
     System_EventHandler EventHandler;
 
     [Header("Init")]
+    [SerializeField]
+    private GameObject _soloBattlePromptPanel;
+
     [SerializeField]
     private Transform _promptListObject;
 
@@ -29,16 +33,18 @@ public class System_SoloBattlePrompt : MonoBehaviour
     [SerializeField]
     float _scrollMoveValue;
 
+    private GameObject _currentEnemy;
     private Dictionary<MoveSet, Sprite> _arrowSprites = new Dictionary<MoveSet, Sprite>();
     private List<MoveSet> _movesToHit = new List<MoveSet>();
 
     private void OnEnable()
     {
+        GlobalValues = System_GlobalValues.Instance;
         EventHandler = System_EventHandler.Instance;
 
         EventHandler.Event_TriggeredSoloBattle += (enemy, listOfMoves) =>
         {
-            print(_promptListObject.transform.localPosition.x);
+            _currentEnemy = enemy;
 
             foreach (var move in listOfMoves)
             {
@@ -53,11 +59,14 @@ public class System_SoloBattlePrompt : MonoBehaviour
                     }
                 }
             }
+
+            if (!_soloBattlePromptPanel.activeSelf)
+                _soloBattlePromptPanel.SetActive(true);
         };
 
         EventHandler.Event_Hit += (move) =>
         {
-            MovePrompt();
+            CheckInput(move);
         };
     }
 
@@ -69,10 +78,41 @@ public class System_SoloBattlePrompt : MonoBehaviour
         _arrowSprites[MoveSet.Down] = _downArrow;
     }
 
-    // private void CheckInput(MoveSet move)
-    // {
+    private void CheckInput(MoveSet move)
+    {
+        if (_movesToHit[0] == move)
+        {
+            MovePrompt();
+            _movesToHit.RemoveAt(0);
+            EventHandler.Event_CorrectInput();
+        }
+        else
+            EventHandler.Event_IncorrectInput();
 
-    // }
+        //End solo battle
+        if (_movesToHit.Count == 0)
+        {
+            EvaluateSoloBattle(true);
+        }
+    }
+
+    //Called at the end of solo battle event
+    private void EvaluateSoloBattle(bool defeatedEnemy)
+    {
+        if (defeatedEnemy)
+            EventHandler.Event_DefeatedEnemy?.Invoke(_currentEnemy);
+        else
+        {
+            EventHandler.Event_PlayerHit?.Invoke(1);
+            EventHandler.Event_EnemyHitPlayer?.Invoke(_currentEnemy);
+        }
+
+        _soloBattlePromptPanel.SetActive(false);
+        EventHandler.Event_StopSlowTime?.Invoke();
+        EventHandler.Event_StoppedSoloBattle?.Invoke();
+        EventHandler.Event_NormalHealthUI?.Invoke();
+        GlobalValues.SetGameState(GameState.Normal);
+    }
 
     private void MovePrompt()
     {
