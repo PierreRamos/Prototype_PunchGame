@@ -254,9 +254,9 @@ public class System_SoloBattle : MonoBehaviour
         EventHandler.Event_EnemyHitConfirm?.Invoke(_currentEnemy);
 
         if (GlobalValues.GetMovesToHitCount() > 0)
-            EventHandler.Event_CorrectInput?.Invoke();
+            // EventHandler.Event_CorrectInput?.Invoke();
 
-        yield return new WaitForSecondsRealtime(_promptDelayDuration);
+            yield return new WaitForSecondsRealtime(_promptDelayDuration);
 
         _isWaitingForAction = false;
         _correctInputRunning = false;

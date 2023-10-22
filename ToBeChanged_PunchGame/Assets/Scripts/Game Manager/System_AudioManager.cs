@@ -34,12 +34,16 @@ public class System_AudioManager : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
 
         //UI
-        EventHandler.Event_CorrectInput += () =>
+        EventHandler.Event_CorrectInput += (movesCount) =>
         {
-            SetSoundNameToPlay("UI_CorrectInput");
+            StopSound("UI_CorrectInput");
+
+            if (movesCount != 0)
+                SetSoundNameToPlay("UI_CorrectInput");
         };
         EventHandler.Event_IncorrectInput += () =>
         {
+            StopSound("UI_CorrectInput");
             SetSoundNameToPlay("UI_IncorrectInput");
             ResetPitch("UI_CorrectInput");
         };

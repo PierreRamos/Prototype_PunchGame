@@ -44,7 +44,7 @@ public class System_EventHandler : MonoBehaviour
     public Action<bool> Event_SoloBattleTimerFinished;
     public Action Event_SoloBattleWrongInput;
     public Action Event_StoppedSoloBattle;
-    public Action Event_CorrectInput;
+    public Action<int> Event_CorrectInput;
     public Action Event_IncorrectInput;
 
     //Hold Battle events

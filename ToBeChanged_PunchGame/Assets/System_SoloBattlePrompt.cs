@@ -94,7 +94,7 @@ public class System_SoloBattlePrompt : MonoBehaviour
         {
             MovePrompt();
             _movesToHit.RemoveAt(0);
-            EventHandler.Event_CorrectInput();
+            EventHandler.Event_CorrectInput(_movesToHit.Count);
         }
         else
             EventHandler.Event_IncorrectInput();
