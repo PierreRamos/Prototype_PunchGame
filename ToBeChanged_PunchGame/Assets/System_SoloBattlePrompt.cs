@@ -31,12 +31,16 @@ public class System_SoloBattlePrompt : MonoBehaviour
 
     [Header("Solo Battle Prompt Settings")]
     [SerializeField]
-    float _scrollMoveValue;
+    float _scrollOffset;
+
+    [SerializeField]
+    float _scrollDuration;
 
     private GameObject _currentEnemy;
     private Dictionary<MoveSet, Sprite> _arrowSprites = new Dictionary<MoveSet, Sprite>();
     private List<MoveSet> _movesToHit = new List<MoveSet>();
-    private float _scrollMoveAmount;
+    private bool _initialScroll;
+    private float _scrollMove;
 
     private void OnEnable()
     {
@@ -45,7 +49,12 @@ public class System_SoloBattlePrompt : MonoBehaviour
 
         EventHandler.Event_TriggeredSoloBattle += (enemy, listOfMoves) =>
         {
+            var initialLocalPosition = _promptListObject.transform.localPosition;
+            initialLocalPosition.x = -96.63f;
+            _promptListObject.transform.localPosition = initialLocalPosition;
+
             _currentEnemy = enemy;
+            _initialScroll = true;
 
             foreach (var move in listOfMoves)
             {
@@ -124,10 +133,14 @@ public class System_SoloBattlePrompt : MonoBehaviour
 
     private void MovePrompt()
     {
-        _scrollMoveAmount += _promptListObject.transform.localPosition.x - _scrollMoveValue; // to fix
+        if (_initialScroll)
+        {
+            _scrollMove = _promptListObject.transform.localPosition.x - _scrollOffset;
+            _initialScroll = false;
+        }
+        else
+            _scrollMove = _scrollMove - _scrollOffset;
 
-        _promptListObject
-            .DOLocalMoveX(_promptListObject.transform.localPosition.x - _scrollMoveValue, 0.25f)
-            .SetUpdate(true);
+        _promptListObject.DOLocalMoveX(_scrollMove, _scrollDuration).SetUpdate(true);
     }
 }
