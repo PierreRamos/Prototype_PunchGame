@@ -181,7 +181,7 @@ public class System_SoloBattle : MonoBehaviour
 
         //Passes enemy move count to solo battle timer
         var moveCount = enemy.GetComponent<System_EliteMechanics>().GetMoveCount();
-        EventHandler.Event_UpdateSoloBattleTimer?.Invoke(moveCount);
+        EventHandler.Event_SetSoloBattleTimer?.Invoke(moveCount);
 
         StartCoroutine(PerformMoves(listOfMoves));
     }

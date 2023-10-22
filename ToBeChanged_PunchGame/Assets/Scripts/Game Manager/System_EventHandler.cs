@@ -63,7 +63,7 @@ public class System_EventHandler : MonoBehaviour
     public Action<GameObject, List<HitType>> Event_EnemyHitListChange;
 
     //Update on enabled object event
-    public Action<int> Event_UpdateSoloBattleTimer;
+    public Action<int> Event_SetSoloBattleTimer;
 
     //Effect events
     public Action<Vector3> Event_ExclamationEffect;

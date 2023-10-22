@@ -33,14 +33,20 @@ public class System_SoloBattleTimer : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
-        EventHandler.Event_SoloBattleWrongInput += DecreaseTime;
-        EventHandler.Event_UpdateSoloBattleTimer += ActivateSoloBattleTimer;
+        EventHandler.Event_SetSoloBattleTimer += (moveCount) =>
+        {
+            ActivateSoloBattleTimer(moveCount);
+        };
+        EventHandler.Event_IncorrectInput += () =>
+        {
+            DecreaseTime();
+        };
     }
 
     private void OnDisable()
     {
-        EventHandler.Event_SoloBattleWrongInput -= DecreaseTime;
-        EventHandler.Event_UpdateSoloBattleTimer -= ActivateSoloBattleTimer;
+        EventHandler.Event_IncorrectInput -= DecreaseTime;
+        EventHandler.Event_SetSoloBattleTimer -= ActivateSoloBattleTimer;
     }
 
     private void Update()

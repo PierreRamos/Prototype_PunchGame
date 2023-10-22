@@ -49,7 +49,6 @@ public class System_EnemyDrops : MonoBehaviour
         {
             if (enemy == gameObject && _hasHealthPotion && !_isDefeated)
             {
-                print("called?");
                 EventHandler.Event_HealPlayer?.Invoke(_healthPotionValue);
                 ClearItemDisplay();
                 _isDefeated = true;

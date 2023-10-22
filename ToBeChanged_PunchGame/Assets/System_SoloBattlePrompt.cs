@@ -49,6 +49,9 @@ public class System_SoloBattlePrompt : MonoBehaviour
 
         EventHandler.Event_TriggeredSoloBattle += (enemy, listOfMoves) =>
         {
+            if (!_soloBattlePromptPanel.activeSelf)
+                _soloBattlePromptPanel.SetActive(true);
+
             var initialLocalPosition = _promptListObject.transform.localPosition;
             initialLocalPosition.x = -96.63f;
             _promptListObject.transform.localPosition = initialLocalPosition;
@@ -70,13 +73,15 @@ public class System_SoloBattlePrompt : MonoBehaviour
                 }
             }
 
-            if (!_soloBattlePromptPanel.activeSelf)
-                _soloBattlePromptPanel.SetActive(true);
+            EventHandler.Event_SetSoloBattleTimer?.Invoke(_movesToHit.Count);
         };
-
         EventHandler.Event_Hit += (move) =>
         {
             CheckInput(move);
+        };
+        EventHandler.Event_SoloBattleTimerFinished += (defeatedEnemy) =>
+        {
+            EvaluateSoloBattle(defeatedEnemy);
         };
     }
 
@@ -94,7 +99,8 @@ public class System_SoloBattlePrompt : MonoBehaviour
         {
             MovePrompt();
             _movesToHit.RemoveAt(0);
-            EventHandler.Event_CorrectInput(_movesToHit.Count);
+            EventHandler.Event_CorrectInput?.Invoke(_movesToHit.Count);
+            EventHandler.Event_EnemyHitConfirm?.Invoke(_currentEnemy);
         }
         else
             EventHandler.Event_IncorrectInput();
@@ -123,12 +129,14 @@ public class System_SoloBattlePrompt : MonoBehaviour
         EventHandler.Event_NormalHealthUI?.Invoke();
         GlobalValues.SetGameState(GameState.Normal);
 
-        //Disables all prompts
+        //Reset Values
         foreach (Transform prompt in _promptListObject)
         {
             if (prompt.gameObject.activeSelf)
                 prompt.gameObject.SetActive(false);
         }
+
+        _movesToHit.Clear();
     }
 
     private void MovePrompt()
