@@ -73,7 +73,6 @@ public class System_SoloBattleTimer : MonoBehaviour
 
     void DecreaseTime()
     {
-        print($"Current Time: {_currentTime} & To remove {_incorrectInputPenalty}");
         _currentTime -= _incorrectInputPenalty;
     }
 }

@@ -11,11 +11,27 @@ public class System_SoloBattlePrompt : MonoBehaviour
 
     [Header("Init")]
     [SerializeField]
+    Image _promptBackground;
+
+    [Space]
+    [SerializeField]
     private GameObject _soloBattlePromptPanel;
 
+    [Space]
     [SerializeField]
     private Transform _promptListObject;
 
+    [Space]
+    [SerializeField]
+    Sprite _normalBackground;
+
+    [SerializeField]
+    Sprite _correctBackground;
+
+    [SerializeField]
+    Sprite _incorrectBackground;
+
+    [Space]
     //Base Arrow
     [SerializeField]
     Sprite _upArrow;
@@ -31,15 +47,20 @@ public class System_SoloBattlePrompt : MonoBehaviour
 
     [Header("Solo Battle Prompt Settings")]
     [SerializeField]
+    float _backgroundChangeDuration;
+
+    [SerializeField]
     float _scrollOffset;
 
     [SerializeField]
     float _scrollDuration;
 
+    private Coroutine _changeBackgroundSprite;
     private GameObject _currentEnemy;
     private Dictionary<MoveSet, Sprite> _arrowSprites = new Dictionary<MoveSet, Sprite>();
     private List<MoveSet> _movesToHit = new List<MoveSet>();
     private bool _initialScroll;
+    private bool _runningChangeBackgroundSprite;
     private float _scrollMove;
 
     private void OnEnable()
@@ -96,20 +117,46 @@ public class System_SoloBattlePrompt : MonoBehaviour
 
     private void CheckInput(MoveSet move)
     {
+        bool isCorrect;
+
         if (_movesToHit[0] == move)
         {
             MovePrompt();
             _movesToHit.RemoveAt(0);
             EventHandler.Event_CorrectInput?.Invoke(_movesToHit.Count);
             EventHandler.Event_EnemyHitConfirm?.Invoke(_currentEnemy);
+            isCorrect = true;
         }
         else
+        {
             EventHandler.Event_IncorrectInput();
+            isCorrect = false;
+        }
+
+        if (_runningChangeBackgroundSprite)
+            StopCoroutine(_changeBackgroundSprite);
+
+        _changeBackgroundSprite = StartCoroutine(ChangeBackgroundSprite(isCorrect));
 
         //End solo battle
         if (_movesToHit.Count == 0)
         {
             EvaluateSoloBattle(true);
+        }
+
+        //
+        IEnumerator ChangeBackgroundSprite(bool isCorrect)
+        {
+            _runningChangeBackgroundSprite = true;
+            if (isCorrect)
+                _promptBackground.sprite = _correctBackground;
+            else
+                _promptBackground.sprite = _incorrectBackground;
+
+            yield return new WaitForSecondsRealtime(_backgroundChangeDuration);
+
+            _promptBackground.sprite = _normalBackground;
+            _runningChangeBackgroundSprite = false;
         }
     }
 
