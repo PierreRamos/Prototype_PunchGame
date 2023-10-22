@@ -28,7 +28,7 @@ public class System_SoloBattleTimer : MonoBehaviour
 
     int _currentDifficultyCache;
 
-    private void OnEnable()
+    private void Awake()
     {
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
@@ -41,12 +41,6 @@ public class System_SoloBattleTimer : MonoBehaviour
         {
             DecreaseTime();
         };
-    }
-
-    private void OnDisable()
-    {
-        EventHandler.Event_IncorrectInput -= DecreaseTime;
-        EventHandler.Event_SetSoloBattleTimer -= ActivateSoloBattleTimer;
     }
 
     private void Update()
@@ -79,6 +73,7 @@ public class System_SoloBattleTimer : MonoBehaviour
 
     void DecreaseTime()
     {
+        print($"Current Time: {_currentTime} & To remove {_incorrectInputPenalty}");
         _currentTime -= _incorrectInputPenalty;
     }
 }

@@ -73,6 +73,7 @@ public class System_SoloBattlePrompt : MonoBehaviour
                 }
             }
 
+            // print("initial invoke");
             EventHandler.Event_SetSoloBattleTimer?.Invoke(_movesToHit.Count);
         };
         EventHandler.Event_Hit += (move) =>
