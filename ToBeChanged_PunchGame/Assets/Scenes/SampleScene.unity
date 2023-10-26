@@ -5939,6 +5939,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 50ee4014f41fc404db39f7167248466f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  EventHandler: {fileID: 0}
+  GlobalValues: {fileID: 0}
   _hitIndicator: {fileID: 1502748698}
   _soloBattlePanel: {fileID: 1569269271}
   _soloBattlePrompt: {fileID: 724212366}
@@ -5968,6 +5970,17 @@ MonoBehaviour:
   _wrongRightSprite: {fileID: 1572114220, guid: dbac806c3be32b2448c2fcbbf654df02, type: 3}
   _wrongLeftSprite: {fileID: 933915768, guid: 3795eb0f25be0e845b8c7bb2a6c8cc76, type: 3}
   _promptDelayDuration: 0.05
+  _currentMoveToHit: 0
+  _currentEnemy: {fileID: 0}
+  _ghost1: {fileID: 0}
+  _ghost2: {fileID: 0}
+  _ghost3: {fileID: 0}
+  _initialTransitionArrowPosition: {x: 0, y: 0, z: 0}
+  _promptImage: {fileID: 0}
+  _transitionImage: {fileID: 0}
+  _isWaitingForAction: 0
+  _correctInputRunning: 0
+  _wrongInputRunning: 0
 --- !u!114 &1559235797
 MonoBehaviour:
   m_ObjectHideFlags: 0
