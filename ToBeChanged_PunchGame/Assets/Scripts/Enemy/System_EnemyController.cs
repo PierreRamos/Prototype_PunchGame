@@ -28,6 +28,7 @@ public class System_EnemyController : MonoBehaviour
     Transform _playerTransform;
 
     Coroutine _addForceTimer;
+    private bool _runningAddForceTimer;
 
     bool _isFacingRight = true;
 
@@ -47,7 +48,7 @@ public class System_EnemyController : MonoBehaviour
         {
             if (gameObject == enemy)
             {
-                StopMovement();
+                StopMovement(enemy);
                 HaltMovement();
             }
         };
@@ -56,7 +57,7 @@ public class System_EnemyController : MonoBehaviour
         {
             if (gameObject == enemy)
             {
-                StopMovement();
+                StopMovement(enemy);
                 HaltMovement();
             }
         };
@@ -67,7 +68,8 @@ public class System_EnemyController : MonoBehaviour
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
-        EventHandler.Event_EnemyHitConfirm += CheckIfHit;
+        EventHandler.Event_EnemyHitConfirm += StopMovement;
+        EventHandler.Event_EnemyHitAnimation += GiveKnockback;
         EventHandler.Event_EnemyFlip += Flip;
         EventHandler.Event_DefeatedEnemy += TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer += TriggerDisableSelfHitPlayer;
@@ -91,7 +93,8 @@ public class System_EnemyController : MonoBehaviour
 
     void OnDisable()
     {
-        EventHandler.Event_EnemyHitConfirm -= CheckIfHit;
+        EventHandler.Event_EnemyHitConfirm -= StopMovement;
+        EventHandler.Event_EnemyHitAnimation -= GiveKnockback;
         EventHandler.Event_EnemyFlip -= Flip;
         EventHandler.Event_DefeatedEnemy -= TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer -= TriggerDisableSelfHitPlayer;
@@ -149,7 +152,7 @@ public class System_EnemyController : MonoBehaviour
             yield return new WaitForEndOfFrame(); //Waits for other methods relying on defeated enemy event to happen first before disabling this game object
 
             EventHandler.Event_EnemyDeathAnimation?.Invoke(gameObject);
-            StopMovement();
+            StopMovement(enemy);
         }
     }
 
@@ -202,7 +205,7 @@ public class System_EnemyController : MonoBehaviour
         if (gameObject != enemy || GlobalValues.GetGameState() != GameState.Normal)
             return;
 
-        StopMovement();
+        StopMovement(enemy);
 
         if (_addForceTimer != null)
             StopCoroutine(_addForceTimer);
@@ -211,6 +214,8 @@ public class System_EnemyController : MonoBehaviour
 
         IEnumerator AddForceTimer()
         {
+            _runningAddForceTimer = true;
+
             if (_isFacingRight)
                 _rigidBody.AddForce(
                     -transform.right.normalized * _knockBackForce,
@@ -225,6 +230,7 @@ public class System_EnemyController : MonoBehaviour
             yield return new WaitForSeconds(GlobalValues.GetPlayerKnockBackTime());
 
             StartMovement();
+            _runningAddForceTimer = false;
         }
     }
 
@@ -235,8 +241,11 @@ public class System_EnemyController : MonoBehaviour
     }
 
     //Stops movement towards player
-    void StopMovement()
+    void StopMovement(GameObject enemy)
     {
+        if (gameObject != enemy)
+            return;
+
         _isMoving = false;
     }
 
@@ -244,7 +253,9 @@ public class System_EnemyController : MonoBehaviour
     private void HaltMovement()
     {
         _rigidBody.velocity = Vector2.zero;
-        StopCoroutine(_addForceTimer);
+
+        if (_runningAddForceTimer)
+            StopCoroutine(_addForceTimer);
     }
 
     void OnTriggerEnter2D(Collider2D other)
