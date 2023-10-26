@@ -41,15 +41,24 @@ public class System_EnemyController : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _collider = GetComponent<Collider2D>();
+        _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
         holdBattleDelegate = (enemy) =>
         {
-            HaltMovement();
+            if (gameObject == enemy)
+            {
+                StopMovement();
+                HaltMovement();
+            }
         };
 
         soloBattleDelegate = (enemy, moveSet) =>
         {
-            HaltMovement();
+            if (gameObject == enemy)
+            {
+                StopMovement();
+                HaltMovement();
+            }
         };
     }
 
@@ -66,8 +75,6 @@ public class System_EnemyController : MonoBehaviour
         EventHandler.Event_TriggeredHoldBattle += holdBattleDelegate;
         EventHandler.Event_TriggeredSoloBattle += soloBattleDelegate;
 
-        _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-
         if (_playerTransform != null)
         {
             if (_playerTransform.position.x > transform.position.x)
@@ -79,7 +86,7 @@ public class System_EnemyController : MonoBehaviour
         if (GlobalValues.GetEnemyMovementSpeed() == 0f)
             GlobalValues.SetEnemyMovementSpeed(_enemyMovementSpeed);
 
-        _isMoving = true;
+        StartMovement();
     }
 
     void OnDisable()
@@ -181,21 +188,20 @@ public class System_EnemyController : MonoBehaviour
         }
     }
 
-    void CheckIfHit(GameObject gameObject)
+    void CheckIfHit(GameObject enemy)
     {
-        if (
-            this.gameObject == gameObject
-            && GlobalValues.GetGameState() == GameState.Normal
-            && gameObject.activeSelf == true
-        )
+        if (enemy.activeSelf == true)
         {
-            GiveKnockback();
+            GiveKnockback(enemy);
         }
     }
 
     //Pushes game object back
-    private void GiveKnockback()
+    private void GiveKnockback(GameObject enemy)
     {
+        if (gameObject != enemy || GlobalValues.GetGameState() != GameState.Normal)
+            return;
+
         StopMovement();
 
         if (_addForceTimer != null)
@@ -238,6 +244,7 @@ public class System_EnemyController : MonoBehaviour
     private void HaltMovement()
     {
         _rigidBody.velocity = Vector2.zero;
+        StopCoroutine(_addForceTimer);
     }
 
     void OnTriggerEnter2D(Collider2D other)
