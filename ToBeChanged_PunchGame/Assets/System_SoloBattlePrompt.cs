@@ -164,7 +164,8 @@ public class System_SoloBattlePrompt : MonoBehaviour
     private void EvaluateSoloBattle(bool defeatedEnemy)
     {
         if (defeatedEnemy)
-            EventHandler.Event_DefeatedEnemy?.Invoke(_currentEnemy);
+            // EventHandler.Event_DefeatedEnemy?.Invoke(_currentEnemy);
+            EventHandler.Event_EnemyHitConfirm?.Invoke(_currentEnemy);
         else
         {
             EventHandler.Event_PlayerHit?.Invoke(1);

@@ -114,14 +114,14 @@ public class System_HoldBattle : MonoBehaviour
         if (sliderValue >= minRange && sliderValue <= maxRange)
         {
             //Inside range
-            EventHandler.Event_DefeatedEnemy(_currentEnemy);
-            EventHandler.Event_EnemyHitConfirm(_currentEnemy);
+            // EventHandler.Event_DefeatedEnemy?.Invoke(_currentEnemy);
+            EventHandler.Event_EnemyHitConfirm?.Invoke(_currentEnemy);
         }
         else
         {
             //Outside range
-            EventHandler.Event_PlayerHit(1);
-            EventHandler.Event_EnemyHitPlayer(_currentEnemy);
+            EventHandler.Event_PlayerHit?.Invoke(1);
+            EventHandler.Event_EnemyHitPlayer?.Invoke(_currentEnemy);
         }
 
         DeactivateHoldBattle();

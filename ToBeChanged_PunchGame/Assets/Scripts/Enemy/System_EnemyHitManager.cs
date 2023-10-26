@@ -23,11 +23,13 @@ public class System_EnemyHitManager : MonoBehaviour
         GenerateHits();
 
         EventHandler.Event_EnemyHitListChange?.Invoke(gameObject, _listOfHits);
+        EventHandler.Event_EnemyHitAnimation += ConfirmHitAfterAnimation;
     }
 
     private void OnDisable()
     {
         EventHandler.Event_EnemyHit -= HitCheck;
+        EventHandler.Event_EnemyHitAnimation -= ConfirmHitAfterAnimation;
     }
 
     public bool IsLastHit()
@@ -122,10 +124,21 @@ public class System_EnemyHitManager : MonoBehaviour
         }
     }
 
+    private void ConfirmHitAfterAnimation(GameObject enemy)
+    {
+        if (gameObject != enemy)
+            return;
+
+        if (_listOfHits.Count <= 0)
+        {
+            EventHandler.Event_DefeatedEnemy?.Invoke(gameObject);
+        }
+    }
+
     //Checks if this is the enemy hit and evaluates depending on what type of orb is in the list
     private void HitCheck(GameObject gameObject)
     {
-        if (this.gameObject != gameObject)
+        if (this.gameObject != gameObject || _listOfHits.Count <= 0)
             return;
 
         if (GlobalValues.GetGameState() == GameState.Normal)
@@ -152,12 +165,6 @@ public class System_EnemyHitManager : MonoBehaviour
             {
                 EventHandler.Event_TriggerHoldBattle?.Invoke(gameObject);
                 return; //To avoid deactivating enemy since _listOfHits.Count is now 0
-            }
-
-            if (_listOfHits.Count <= 0)
-            {
-                EventHandler.Event_DefeatedEnemy?.Invoke(gameObject);
-                return;
             }
         }
     }
