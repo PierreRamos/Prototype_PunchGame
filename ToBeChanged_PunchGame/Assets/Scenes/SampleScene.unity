@@ -5751,7 +5751,7 @@ MonoBehaviour:
   _spawnIntervalRange: 0.1
   _minSpawnInterval: 0.05
   _normalEnemySpawnRatio: 15
-  _eliteEnemySpawnRatio: 1000
+  _eliteEnemySpawnRatio: 1
   _dashEnemySpawnRatio: 2
   _holdEnemySpawnRatio: 3
   _spawnerOn: 1

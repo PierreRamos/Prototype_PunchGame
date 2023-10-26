@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2bc841762d5f274419ed6d2df0c6abcd
+guid: a8b738b61219aa941ae07cde16df7058
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -143,8 +143,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f7340344ff07f1c458b805d193ed7af4
-      internalID: 1856489212
+      spriteID: bfde1626a02eef143b3fef94787521e1
+      internalID: 1766307101
       vertices: []
       indices: 
       edges: []
@@ -164,8 +164,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 57b72759fac2cbd4aba3eb53963fceec
-      internalID: 1766628261
+      spriteID: ed683f1020046f7449a472a796862bf9
+      internalID: 1435335689
       vertices: []
       indices: 
       edges: []
@@ -185,8 +185,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: cca519cba4349e9468ae2c71f28b30d7
-      internalID: 2062524567
+      spriteID: c9fdbca97d156374faf5a507299d646c
+      internalID: 1328971778
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player-Attack_3_3
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 86734f649b3400f4aa704d0c8323d92c
+      internalID: 605799571
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player-Attack_3_4
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a3558409bbcf3bc4dac6d53af2d02b9d
+      internalID: 1617117079
       vertices: []
       indices: 
       edges: []
@@ -202,9 +244,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player-Attack_3_2: 2062524567
-      Player-Attack_3_0: 1856489212
-      Player-Attack_3_1: 1766628261
+      Player-Attack_3_2: 1328971778
+      Player-Attack_3_0: 1766307101
+      Player-Attack_3_4: 1617117079
+      Player-Attack_3_1: 1435335689
+      Player-Attack_3_3: 605799571
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
