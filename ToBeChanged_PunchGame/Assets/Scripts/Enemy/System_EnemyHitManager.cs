@@ -167,5 +167,12 @@ public class System_EnemyHitManager : MonoBehaviour
                 return; //To avoid deactivating enemy since _listOfHits.Count is now 0
             }
         }
+
+        if (_listOfHits.Count <= 0)
+        {
+            var collider = GetComponent<Collider2D>();
+            if (collider.enabled == true)
+                collider.enabled = false;
+        }
     }
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -32,11 +33,24 @@ public class System_EnemyController : MonoBehaviour
 
     bool _isMoving = true;
 
+    Action<GameObject> holdBattleDelegate;
+    Action<GameObject, List<MoveSet>> soloBattleDelegate;
+
     void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
         _collider = GetComponent<Collider2D>();
+
+        holdBattleDelegate = (enemy) =>
+        {
+            HaltMovement();
+        };
+
+        soloBattleDelegate = (enemy, moveSet) =>
+        {
+            HaltMovement();
+        };
     }
 
     void OnEnable()
@@ -48,6 +62,9 @@ public class System_EnemyController : MonoBehaviour
         EventHandler.Event_EnemyFlip += Flip;
         EventHandler.Event_DefeatedEnemy += TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer += TriggerDisableSelfHitPlayer;
+
+        EventHandler.Event_TriggeredHoldBattle += holdBattleDelegate;
+        EventHandler.Event_TriggeredSoloBattle += soloBattleDelegate;
 
         _playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
 
@@ -71,6 +88,9 @@ public class System_EnemyController : MonoBehaviour
         EventHandler.Event_EnemyFlip -= Flip;
         EventHandler.Event_DefeatedEnemy -= TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer -= TriggerDisableSelfHitPlayer;
+
+        EventHandler.Event_TriggeredHoldBattle -= holdBattleDelegate;
+        EventHandler.Event_TriggeredSoloBattle -= soloBattleDelegate;
 
         if (!_isFacingRight)
             Flip(gameObject);
@@ -174,8 +194,10 @@ public class System_EnemyController : MonoBehaviour
     }
 
     //Pushes game object back
-    void GiveKnockback()
+    private void GiveKnockback()
     {
+        StopMovement();
+
         if (_addForceTimer != null)
             StopCoroutine(_addForceTimer);
 
@@ -194,22 +216,28 @@ public class System_EnemyController : MonoBehaviour
                     ForceMode2D.Impulse
                 );
 
-            StopMovement();
-
             yield return new WaitForSeconds(GlobalValues.GetPlayerKnockBackTime());
 
             StartMovement();
         }
     }
 
+    //Starts movement towards player
     void StartMovement()
     {
         _isMoving = true;
     }
 
+    //Stops movement towards player
     void StopMovement()
     {
         _isMoving = false;
+    }
+
+    //Completely stops all movement
+    private void HaltMovement()
+    {
+        _rigidBody.velocity = Vector2.zero;
     }
 
     void OnTriggerEnter2D(Collider2D other)
