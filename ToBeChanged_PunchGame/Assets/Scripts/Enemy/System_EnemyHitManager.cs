@@ -129,7 +129,7 @@ public class System_EnemyHitManager : MonoBehaviour
         if (gameObject != enemy)
             return;
 
-        if (_listOfHits.Count <= 0)
+        if (_listOfHits.Count <= 0 && GlobalValues.GetGameState() == GameState.Normal)
         {
             EventHandler.Event_DefeatedEnemy?.Invoke(gameObject);
         }
