@@ -144,11 +144,6 @@ public class System_GlobalValues : MonoBehaviour
         _currentPlayerHealth = value;
     }
 
-    public void SetMovesToHitCount(int value)
-    {
-        _movesToHitCount = value;
-    }
-
     //Getters
 
     public GameState GetGameState()
@@ -194,11 +189,6 @@ public class System_GlobalValues : MonoBehaviour
     public int GetPlayerHealth()
     {
         return _currentPlayerHealth;
-    }
-
-    public int GetMovesToHitCount()
-    {
-        return _movesToHitCount;
     }
 
     //Incrementers

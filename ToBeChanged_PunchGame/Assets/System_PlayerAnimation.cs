@@ -20,6 +20,7 @@ public class System_PlayerAnimation : MonoBehaviour
 
     private GameObject _currentEnemy;
     private int _currentState;
+    private int _hitCount;
     private float _lockedTill;
     private bool _attacking;
     private bool _battling; //Hold battle | Solo battle
@@ -55,6 +56,10 @@ public class System_PlayerAnimation : MonoBehaviour
         GlobalValues = System_GlobalValues.Instance;
 
         //Attacking
+        EventHandler.Event_CorrectInput += (hitCount) =>
+        {
+            _hitCount = hitCount;
+        };
         EventHandler.Event_EnemyHitConfirm += (enemy) =>
         {
             _currentEnemy = enemy;
@@ -160,7 +165,7 @@ public class System_PlayerAnimation : MonoBehaviour
 
             if (GlobalValues.GetGameState() == GameState.SoloBattle)
             {
-                if (GlobalValues.GetMovesToHitCount() == 0)
+                if (_hitCount == 0)
                     attackAnimation = _usedRight ? _leftAttacks[1] : _rightAttacks[1];
                 else
                     attackAnimation = _usedRight ? _leftAttacks[0] : _rightAttacks[0];
