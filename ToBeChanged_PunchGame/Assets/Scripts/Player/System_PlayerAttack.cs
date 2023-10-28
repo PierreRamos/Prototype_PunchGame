@@ -46,8 +46,8 @@ public class System_PlayerAttack : MonoBehaviour
 
         EventHandler.Event_AttackLeft += HitCheckLeft;
         EventHandler.Event_AttackRight += HitCheckRight;
-        EventHandler.Event_EnemyHit += MoveToHitEnemy;
-        EventHandler.Event_EnemyHit += CheckDirection;
+        EventHandler.Event_EnemyTaggedForHit += MoveToHitEnemy;
+        EventHandler.Event_EnemyTaggedForHit += CheckDirection;
         // EventHandler.Event_DefeatedEnemy += MoveToHitEnemy;
     }
 
@@ -55,8 +55,8 @@ public class System_PlayerAttack : MonoBehaviour
     {
         EventHandler.Event_AttackLeft -= HitCheckLeft;
         EventHandler.Event_AttackRight -= HitCheckRight;
-        EventHandler.Event_EnemyHit -= MoveToHitEnemy;
-        EventHandler.Event_EnemyHit -= CheckDirection;
+        EventHandler.Event_EnemyTaggedForHit -= MoveToHitEnemy;
+        EventHandler.Event_EnemyTaggedForHit -= CheckDirection;
         // EventHandler.Event_DefeatedEnemy -= MoveToHitEnemy;
     }
 
@@ -170,7 +170,7 @@ public class System_PlayerAttack : MonoBehaviour
         //Internal
         void ConfirmHit(GameObject objectHit)
         {
-            EventHandler.Event_EnemyHit?.Invoke(objectHit);
+            EventHandler.Event_EnemyTaggedForHit?.Invoke(objectHit);
         }
 
         CheckDirection(direction);

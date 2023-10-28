@@ -13,12 +13,14 @@ public class System_EnemyHitManager : MonoBehaviour
     [SerializeField]
     List<HitType> _listOfHits = new List<HitType>();
 
+    bool _taggedForHit;
+
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
         GlobalValues = System_GlobalValues.Instance;
 
-        EventHandler.Event_EnemyHit += HitCheck;
+        EventHandler.Event_EnemyTaggedForHit += HitCheck;
 
         GenerateHits();
 
@@ -28,7 +30,7 @@ public class System_EnemyHitManager : MonoBehaviour
 
     private void OnDisable()
     {
-        EventHandler.Event_EnemyHit -= HitCheck;
+        EventHandler.Event_EnemyTaggedForHit -= HitCheck;
         EventHandler.Event_EnemyHitAnimation -= ConfirmHitAfterAnimation;
     }
 
@@ -133,37 +135,50 @@ public class System_EnemyHitManager : MonoBehaviour
         {
             EventHandler.Event_DefeatedEnemy?.Invoke(gameObject);
         }
+
+        _taggedForHit = false;
     }
 
-    //Checks if this is the enemy hit and evaluates depending on what type of orb is in the list
-    private void HitCheck(GameObject gameObject)
+    //Checks if this is the enemy is tagged for hit and evaluates depending on what type of orb is in the list
+    private void HitCheck(GameObject enemy)
     {
-        if (this.gameObject != gameObject || _listOfHits.Count <= 0)
+        if (gameObject != enemy)
+        {
+            if (_taggedForHit == true)
+                if (_listOfHits.Count <= 0 && GlobalValues.GetGameState() == GameState.Normal)
+                {
+                    EventHandler.Event_DefeatedEnemy?.Invoke(gameObject);
+                    print("Override kill");
+                }
+            return;
+        }
+
+        if (_listOfHits.Count <= 0)
             return;
 
         if (GlobalValues.GetGameState() == GameState.Normal)
         {
             var currentHit = _listOfHits[0];
             _listOfHits.RemoveAt(0);
-            EventHandler.Event_EnemyHitListChange?.Invoke(gameObject, _listOfHits);
+            EventHandler.Event_EnemyHitListChange?.Invoke(enemy, _listOfHits);
 
             if (currentHit == HitType.Normal)
             {
-                EventHandler.Event_EnemyHitConfirm?.Invoke(gameObject);
+                EventHandler.Event_EnemyHitConfirm?.Invoke(enemy);
             }
             else if (currentHit == HitType.Solo)
             {
-                EventHandler.Event_TriggerSoloBattle?.Invoke(gameObject);
+                EventHandler.Event_TriggerSoloBattle?.Invoke(enemy);
                 return; //To avoid deactivating enemy since _listOfHits.Count is now 0
             }
             else if (currentHit == HitType.Dash)
             {
-                EventHandler.Event_TriggerDash?.Invoke(gameObject);
-                EventHandler.Event_EnemyHitConfirm?.Invoke(gameObject);
+                EventHandler.Event_TriggerDash?.Invoke(enemy);
+                EventHandler.Event_EnemyHitConfirm?.Invoke(enemy);
             }
             else if (currentHit == HitType.Hold)
             {
-                EventHandler.Event_TriggerHoldBattle?.Invoke(gameObject);
+                EventHandler.Event_TriggerHoldBattle?.Invoke(enemy);
                 return; //To avoid deactivating enemy since _listOfHits.Count is now 0
             }
         }
@@ -174,5 +189,7 @@ public class System_EnemyHitManager : MonoBehaviour
             if (collider.enabled == true)
                 collider.enabled = false;
         }
+
+        _taggedForHit = true;
     }
 }

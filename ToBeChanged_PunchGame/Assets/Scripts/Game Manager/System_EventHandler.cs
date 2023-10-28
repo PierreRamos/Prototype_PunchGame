@@ -29,7 +29,7 @@ public class System_EventHandler : MonoBehaviour
     //Attack events
     public Action Event_SlowTime;
     public Action Event_StopSlowTime;
-    public Action<GameObject> Event_EnemyHit;
+    public Action<GameObject> Event_EnemyTaggedForHit;
     public Action<GameObject> Event_EnemyHitConfirm;
     public Action<GameObject> Event_EnemyHitAnimation;
     public Action<Vector3> Event_MoveToEnemy;
