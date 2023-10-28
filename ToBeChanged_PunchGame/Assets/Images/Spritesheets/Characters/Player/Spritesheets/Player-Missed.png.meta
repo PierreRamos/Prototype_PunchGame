@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: c7e6299bd66df4f48adf7cd3b9242339
+guid: 30f7f0d38181ccd4d9c5bea26f01aeb9
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,7 +129,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player-Missed_0
+      name: Player-Missed 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -143,14 +143,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 807aa7c832cab5545bd121e7aee22739
-      internalID: -2002581672
+      spriteID: 04d3d81733effda48978e370488aec01
+      internalID: 876099719
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player-Missed_1
+      name: Player-Missed 1_1
       rect:
         serializedVersion: 2
         x: 24
@@ -164,14 +164,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3111ca4c77201144b96946481e2d2f68
-      internalID: 355005630
+      spriteID: 26c742b3b94358143acb160d8d0fb2e4
+      internalID: 558082222
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player-Missed_2
+      name: Player-Missed 1_2
       rect:
         serializedVersion: 2
         x: 48
@@ -185,8 +185,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 601566f9e17bd5943a2dad678f913777
-      internalID: 438254959
+      spriteID: 74136e06ee1a962489b8e80bffa4460e
+      internalID: -1344067030
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player-Missed 1_3
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0163935a22106274a9edf089d78eb260
+      internalID: -2024364307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player-Missed 1_4
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00e4f31f1f8145f4ba3a67acf7bf6585
+      internalID: -773598879
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player-Missed 1_5
+      rect:
+        serializedVersion: 2
+        x: 120
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bf0cade99b3785b419571d612b0b592f
+      internalID: 2076220385
       vertices: []
       indices: 
       edges: []
@@ -202,9 +265,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player-Missed_0: -2002581672
-      Player-Missed_1: 355005630
-      Player-Missed_2: 438254959
+      Player-Missed 1_4: -773598879
+      Player-Missed 1_3: -2024364307
+      Player-Missed 1_2: -1344067030
+      Player-Missed 1_0: 876099719
+      Player-Missed 1_5: 2076220385
+      Player-Missed 1_1: 558082222
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0

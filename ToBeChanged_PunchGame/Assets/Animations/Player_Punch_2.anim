@@ -23,11 +23,11 @@ AnimationClip:
       value: {fileID: 2038995943, guid: 8a410fd76f438084481bddb046ff9eaf, type: 3}
     - time: 0.041666668
       value: {fileID: -1567540946, guid: 8a410fd76f438084481bddb046ff9eaf, type: 3}
-    - time: 0.125
+    - time: 0.083333336
       value: {fileID: 821268483, guid: 8a410fd76f438084481bddb046ff9eaf, type: 3}
-    - time: 0.16666667
+    - time: 0.125
       value: {fileID: 362806015, guid: 8a410fd76f438084481bddb046ff9eaf, type: 3}
-    - time: 0.20833333
+    - time: 0.16666667
       value: {fileID: -1069654865, guid: 8a410fd76f438084481bddb046ff9eaf, type: 3}
     attribute: m_Sprite
     path: 
@@ -58,7 +58,7 @@ AnimationClip:
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.25
+    m_StopTime: 0.20833334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -78,7 +78,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.125
+  - time: 0.083333336
     functionName: ConfirmHit
     data: 
     objectReferenceParameter: {fileID: 0}

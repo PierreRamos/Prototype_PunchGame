@@ -49,8 +49,11 @@ TagManager:
   - name: SubBackground
     uniqueID: 426919037
     locked: 0
-  - name: Entity
+  - name: Enemies
     uniqueID: 3310132305
+    locked: 0
+  - name: Player
+    uniqueID: 4243486423
     locked: 0
   - name: Effects
     uniqueID: 166059319

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 144ee733d4755204787a15764d44dcf5
+guid: 2644c5006c1a09f4e8cc8298c1c32338
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -129,7 +129,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Player-Hit_0
+      name: Player-Hit 1_0
       rect:
         serializedVersion: 2
         x: 0
@@ -143,14 +143,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 5004c39ba7192204ea0f08005a66f1b8
-      internalID: 928491064
+      spriteID: 80cfe66787e43674f89f4ec4d3e3cee7
+      internalID: 46278766
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player-Hit_1
+      name: Player-Hit 1_1
       rect:
         serializedVersion: 2
         x: 24
@@ -164,14 +164,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2296bdd1422e17b41855fec0c1f10e8e
-      internalID: -119811769
+      spriteID: 0a8eda8beec251d488c1a3ddb4a84335
+      internalID: -950563155
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Player-Hit_2
+      name: Player-Hit 1_2
       rect:
         serializedVersion: 2
         x: 48
@@ -185,8 +185,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a89fb45852a83844aae4ae919999affc
-      internalID: 278337156
+      spriteID: 6ceae41ef0bc9434a9b3b007fe44be3a
+      internalID: 652855108
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player-Hit 1_3
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 80f954184ae21bd4cbcba2622d09a21a
+      internalID: -1900901198
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Player-Hit 1_4
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 24
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c98fa329e2284be4ea29d46882cd1837
+      internalID: 786896076
       vertices: []
       indices: 
       edges: []
@@ -202,9 +244,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Player-Hit_2: 278337156
-      Player-Hit_1: -119811769
-      Player-Hit_0: 928491064
+      Player-Hit 1_1: -950563155
+      Player-Hit 1_3: -1900901198
+      Player-Hit 1_4: 786896076
+      Player-Hit 1_0: 46278766
+      Player-Hit 1_2: 652855108
   spritePackingTag: 
   pSDRemoveMatte: 0
   pSDShowRemoveMatteOption: 0
