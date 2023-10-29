@@ -216,7 +216,7 @@ public class System_EnemyController : MonoBehaviour
         IEnumerator StunTimer()
         {
             _runningStunTimer = true;
-            yield return new WaitForSeconds(GlobalValues.GetPlayerKnockBackTime());
+            yield return new WaitForSeconds(GlobalValues.GetPlayerStunTime());
             StartMovement();
             _runningStunTimer = false;
         }

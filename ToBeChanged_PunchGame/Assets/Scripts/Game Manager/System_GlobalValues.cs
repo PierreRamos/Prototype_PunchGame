@@ -62,7 +62,7 @@ public class System_GlobalValues : MonoBehaviour
     int _currentDefeatCount;
     int _currentPlayerHealth;
     int _movesToHitCount;
-    float _playerKnockBackTime;
+    float _playerStunTime;
     float _playerAttackRange;
     float _enemyMovementSpeed;
     float _enemySpawnModifier;
@@ -119,9 +119,9 @@ public class System_GlobalValues : MonoBehaviour
         _enemiesSpawnChance = enemiesSpawnChance;
     }
 
-    public void SetPlayerKnockBackTime(float value)
+    public void SetPlayerStunTime(float value)
     {
-        _playerKnockBackTime = value;
+        _playerStunTime = value;
     }
 
     public void SetEnemyMovementSpeed(float value)
@@ -156,9 +156,9 @@ public class System_GlobalValues : MonoBehaviour
         return _enemiesSpawnChance[enemyType];
     }
 
-    public float GetPlayerKnockBackTime()
+    public float GetPlayerStunTime()
     {
-        return _playerKnockBackTime;
+        return _playerStunTime;
     }
 
     public float GetEnemyMovementSpeed()

@@ -118,7 +118,7 @@ public class System_TimeManager : MonoBehaviour
         IEnumerator SlowTimeTimer()
         {
             _runningSlowTimeTimer = true;
-            yield return new WaitForSecondsRealtime(GlobalValues.GetPlayerKnockBackTime());
+            yield return new WaitForSecondsRealtime(GlobalValues.GetPlayerStunTime());
 
             //Checks if games is paused
             var gameState = GlobalValues.GetGameState();

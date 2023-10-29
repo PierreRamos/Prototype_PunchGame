@@ -25,7 +25,7 @@ public class System_PlayerAttack : MonoBehaviour
     float _moveToEnemyDistance;
 
     [SerializeField]
-    float _playerKnockBackTime;
+    float _playerStunTime;
 
     [SerializeField]
     DebugState _debug;
@@ -62,7 +62,7 @@ public class System_PlayerAttack : MonoBehaviour
 
     void Start()
     {
-        GlobalValues.SetPlayerKnockBackTime(_playerKnockBackTime);
+        GlobalValues.SetPlayerStunTime(_playerStunTime);
         GlobalValues.SetPlayerAttackRange(_rangeDistance);
     }
 
