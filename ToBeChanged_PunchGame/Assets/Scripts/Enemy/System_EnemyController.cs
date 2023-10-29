@@ -68,11 +68,7 @@ public class System_EnemyController : MonoBehaviour
                 _isDefeated = true;
 
                 if (_runningStunTimer == true)
-                {
                     StopCoroutine(_stunTimer);
-                    _isMoving = false;
-                    print("stopped");
-                }
             }
         };
     }
@@ -240,7 +236,6 @@ public class System_EnemyController : MonoBehaviour
             _runningStunTimer = true;
             yield return new WaitForSeconds(GlobalValues.GetPlayerStunTime());
             StartMovement();
-            print("ran");
             _runningStunTimer = false;
         }
     }
