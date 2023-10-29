@@ -39,7 +39,10 @@ public class System_PlayerSpecial : MonoBehaviour
         _currentSpecialValue++;
 
         if (_currentSpecialValue == _specialCapValue)
+        {
             _maxedSpecial = true;
+            EventHandler.Event_MaxedSpecialMeter?.Invoke();
+        }
 
         EventHandler.Event_SpecialMeterValueChange?.Invoke(_currentSpecialValue);
     }

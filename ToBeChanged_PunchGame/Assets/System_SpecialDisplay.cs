@@ -11,6 +11,9 @@ public class System_SpecialDisplay : MonoBehaviour
     [SerializeField]
     private Slider _specialMeterSlider;
 
+    [SerializeField]
+    private Animator _specialMeterAnimator;
+
     private void Awake()
     {
         EventHandler = System_EventHandler.Instance;
@@ -23,6 +26,10 @@ public class System_SpecialDisplay : MonoBehaviour
         EventHandler.Event_SpecialMeterValueChange += (specialValue) =>
         {
             _specialMeterSlider.value = specialValue;
+        };
+        EventHandler.Event_MaxedSpecialMeter += () =>
+        {
+            _specialMeterAnimator.SetTrigger("Maxed");
         };
     }
 }
