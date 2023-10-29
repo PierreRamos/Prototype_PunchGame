@@ -50,11 +50,11 @@ public class System_UIManager : MonoBehaviour
         EventHandler.Event_PlayerStunFinished += DeactivateStunBar;
 
         //Health
-        EventHandler.Event_PlayerHealthValueChange += UpdateHealthDisplay;
-        EventHandler.Event_FocusHealthUI += FocusHealthUI;
-        EventHandler.Event_NormalHealthUI += NormalHealthUI;
+        // EventHandler.Event_PlayerHealthValueChange += UpdateHealthDisplay;
+        // EventHandler.Event_FocusHealthUI += FocusHealthUI;
+        // EventHandler.Event_NormalHealthUI += NormalHealthUI;
 
-        EventHandler.Event_EnemyDefeatedValueChange += UpdateDefeatedDisplay;
+        // EventHandler.Event_EnemyDefeatedValueChange += UpdateDefeatedDisplay;
         EventHandler.Event_PlayerDied += ActivateGameOver;
 
         EventHandler.Event_Pause += PausePanel;
@@ -66,11 +66,11 @@ public class System_UIManager : MonoBehaviour
         EventHandler.Event_PlayerStunTimeChange -= UpdateStunBarSlider;
         EventHandler.Event_PlayerStunFinished -= DeactivateStunBar;
 
-        EventHandler.Event_PlayerHealthValueChange -= UpdateHealthDisplay;
-        EventHandler.Event_FocusHealthUI -= FocusHealthUI;
-        EventHandler.Event_NormalHealthUI -= NormalHealthUI;
+        // EventHandler.Event_PlayerHealthValueChange -= UpdateHealthDisplay;
+        // EventHandler.Event_FocusHealthUI -= FocusHealthUI;
+        // EventHandler.Event_NormalHealthUI -= NormalHealthUI;
 
-        EventHandler.Event_EnemyDefeatedValueChange -= UpdateDefeatedDisplay;
+        // EventHandler.Event_EnemyDefeatedValueChange -= UpdateDefeatedDisplay;
         EventHandler.Event_PlayerDied -= ActivateGameOver;
 
         EventHandler.Event_Pause -= PausePanel;
@@ -81,27 +81,27 @@ public class System_UIManager : MonoBehaviour
         _healthText = _baseHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
     }
 
-    void NormalHealthUI()
-    {
-        var healthValue = GlobalValues.GetPlayerHealth();
+    // void NormalHealthUI()
+    // {
+    //     var healthValue = GlobalValues.GetPlayerHealth();
 
-        _healthText = _baseHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        _healthText.text = healthValue.ToString();
+    //     _healthText = _baseHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+    //     _healthText.text = healthValue.ToString();
 
-        _baseHealthPanel.SetActive(true);
-        _soloHealthPanel.SetActive(false);
-    }
+    //     _baseHealthPanel.SetActive(true);
+    //     _soloHealthPanel.SetActive(false);
+    // }
 
-    void FocusHealthUI()
-    {
-        var healthValue = GlobalValues.GetPlayerHealth();
+    // void FocusHealthUI()
+    // {
+    //     var healthValue = GlobalValues.GetPlayerHealth();
 
-        _healthText = _soloHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
-        _healthText.text = healthValue.ToString();
+    //     _healthText = _soloHealthPanel.transform.GetChild(0).GetComponent<TextMeshProUGUI>();
+    //     _healthText.text = healthValue.ToString();
 
-        _soloHealthPanel.SetActive(true);
-        _baseHealthPanel.SetActive(false);
-    }
+    //     _soloHealthPanel.SetActive(true);
+    //     _baseHealthPanel.SetActive(false);
+    // }
 
     void PausePanel(bool value)
     {
@@ -131,13 +131,13 @@ public class System_UIManager : MonoBehaviour
             _gameOverPanel.SetActive(true);
     }
 
-    void UpdateHealthDisplay(int value)
-    {
-        _healthText.text = value.ToString();
-    }
+    // void UpdateHealthDisplay(int value)
+    // {
+    //     _healthText.text = value.ToString();
+    // }
 
-    void UpdateDefeatedDisplay(int value)
-    {
-        _defeatedText.text = $"Defeated: {value}";
-    }
+    // void UpdateDefeatedDisplay(int value)
+    // {
+    //     _defeatedText.text = $"Defeated: {value}";
+    // }
 }

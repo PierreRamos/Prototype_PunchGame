@@ -83,6 +83,9 @@ public class System_EventHandler : MonoBehaviour
     public Action<GameObject> Event_EnemyFlip;
     public Action Event_HitStopFinished;
 
+    //Special meter events
+    public Action<float> Event_SetSpecialMeterMaxValue;
+
     void Awake()
     {
         if (Instance == null)

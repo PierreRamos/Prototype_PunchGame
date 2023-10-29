@@ -34,9 +34,6 @@ public class System_PlayerSpecial : MonoBehaviour
         _currentSpecialValue++;
 
         if (_currentSpecialValue == _specialCapValue)
-        {
             _maxedSpecial = true;
-            print("maxed");
-        }
     }
 }
