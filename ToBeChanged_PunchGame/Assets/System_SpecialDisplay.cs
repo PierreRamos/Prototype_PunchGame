@@ -1,18 +1,28 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class System_SpecialDisplay : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    System_EventHandler EventHandler;
 
-    // Update is called once per frame
-    void Update()
+    [Header("Dependencies")]
+    [SerializeField]
+    private Slider _specialMeterSlider;
+
+    private void Awake()
     {
-        
+        EventHandler = System_EventHandler.Instance;
+
+        EventHandler.Event_SetSpecialMeterMaxValue += (maxSpecialValue) =>
+        {
+            _specialMeterSlider.maxValue = maxSpecialValue;
+        };
+
+        EventHandler.Event_SpecialMeterValueChange += (specialValue) =>
+        {
+            _specialMeterSlider.value = specialValue;
+        };
     }
 }

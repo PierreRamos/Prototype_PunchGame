@@ -84,6 +84,7 @@ public class System_EventHandler : MonoBehaviour
     public Action Event_HitStopFinished;
 
     //Special meter events
+    public Action<float> Event_SpecialMeterValueChange;
     public Action<float> Event_SetSpecialMeterMaxValue;
 
     void Awake()

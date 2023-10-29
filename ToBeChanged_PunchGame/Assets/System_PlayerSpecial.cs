@@ -8,9 +8,9 @@ public class System_PlayerSpecial : MonoBehaviour
 
     [Header("Player Special Settings")]
     [SerializeField]
-    private int _specialCapValue;
+    private float _specialCapValue;
 
-    private int _currentSpecialValue;
+    private float _currentSpecialValue;
     private bool _maxedSpecial;
 
     private void Awake()
@@ -26,6 +26,11 @@ public class System_PlayerSpecial : MonoBehaviour
         };
     }
 
+    private void Start()
+    {
+        EventHandler.Event_SetSpecialMeterMaxValue?.Invoke(_specialCapValue);
+    }
+
     private void IncreaseSpecial()
     {
         if (_maxedSpecial)
@@ -35,5 +40,7 @@ public class System_PlayerSpecial : MonoBehaviour
 
         if (_currentSpecialValue == _specialCapValue)
             _maxedSpecial = true;
+
+        EventHandler.Event_SpecialMeterValueChange?.Invoke(_currentSpecialValue);
     }
 }
