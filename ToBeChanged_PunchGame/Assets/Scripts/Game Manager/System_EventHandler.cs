@@ -29,9 +29,9 @@ public class System_EventHandler : MonoBehaviour
     //Attack events
     public Action Event_SlowTime;
     public Action Event_StopSlowTime;
-    public Action<GameObject> Event_EnemyTaggedForHit;
-    public Action<GameObject> Event_EnemyHitConfirm;
-    public Action<GameObject> Event_EnemyHitAnimation;
+    public Action<GameObject> Event_EnemyTaggedForHit; //Called from the moment of player input
+    public Action<GameObject> Event_EnemyHitConfirm; //Decreased an orb from enemy
+    public Action<GameObject> Event_EnemyHitAnimation; //Called when animation finishes
     public Action<Vector3> Event_MoveToEnemy;
 
     //Potion events

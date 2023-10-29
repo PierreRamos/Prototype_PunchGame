@@ -148,7 +148,6 @@ public class System_EnemyHitManager : MonoBehaviour
                 if (_listOfHits.Count <= 0 && GlobalValues.GetGameState() == GameState.Normal)
                 {
                     EventHandler.Event_DefeatedEnemy?.Invoke(gameObject);
-                    print("Override kill");
                 }
             return;
         }

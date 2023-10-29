@@ -27,9 +27,8 @@ public class System_EnemyController : MonoBehaviour
 
     Transform _playerTransform;
 
-    Coroutine _addForceTimer;
-    private bool _runningAddForceTimer;
-
+    Coroutine _stunTimer;
+    bool _runningStunTimer;
     bool _isFacingRight = true;
 
     bool _isMoving = true;
@@ -69,8 +68,9 @@ public class System_EnemyController : MonoBehaviour
         GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_EnemyHitConfirm += StopMovement;
-        EventHandler.Event_EnemyHitAnimation += GiveKnockback;
         EventHandler.Event_EnemyFlip += Flip;
+        EventHandler.Event_EnemyHitAnimation += TriggerStun;
+        EventHandler.Event_DefeatedEnemy += GiveKnockback;
         EventHandler.Event_DefeatedEnemy += TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer += TriggerDisableSelfHitPlayer;
 
@@ -94,8 +94,9 @@ public class System_EnemyController : MonoBehaviour
     void OnDisable()
     {
         EventHandler.Event_EnemyHitConfirm -= StopMovement;
-        EventHandler.Event_EnemyHitAnimation -= GiveKnockback;
         EventHandler.Event_EnemyFlip -= Flip;
+        EventHandler.Event_EnemyHitAnimation -= TriggerStun;
+        EventHandler.Event_DefeatedEnemy -= GiveKnockback;
         EventHandler.Event_DefeatedEnemy -= TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer -= TriggerDisableSelfHitPlayer;
 
@@ -191,46 +192,33 @@ public class System_EnemyController : MonoBehaviour
         }
     }
 
-    void CheckIfHit(GameObject enemy)
-    {
-        if (enemy.activeSelf == true)
-        {
-            GiveKnockback(enemy);
-        }
-    }
-
-    //Pushes game object back
+    //Pushes game object back when defeated
     private void GiveKnockback(GameObject enemy)
     {
-        if (gameObject != enemy || GlobalValues.GetGameState() != GameState.Normal)
+        if (gameObject != enemy)
             return;
 
+        if (_isFacingRight)
+            _rigidBody.AddForce(-transform.right.normalized * _knockBackForce, ForceMode2D.Impulse);
+        else
+            _rigidBody.AddForce(transform.right.normalized * _knockBackForce, ForceMode2D.Impulse);
+    }
+
+    private void TriggerStun(GameObject enemy)
+    {
         StopMovement(enemy);
 
-        if (_addForceTimer != null)
-            StopCoroutine(_addForceTimer);
+        if (_runningStunTimer)
+            StopCoroutine(_stunTimer);
 
-        _addForceTimer = StartCoroutine(AddForceTimer());
+        _stunTimer = StartCoroutine(StunTimer());
 
-        IEnumerator AddForceTimer()
+        IEnumerator StunTimer()
         {
-            _runningAddForceTimer = true;
-
-            if (_isFacingRight)
-                _rigidBody.AddForce(
-                    -transform.right.normalized * _knockBackForce,
-                    ForceMode2D.Impulse
-                );
-            else
-                _rigidBody.AddForce(
-                    transform.right.normalized * _knockBackForce,
-                    ForceMode2D.Impulse
-                );
-
+            _runningStunTimer = true;
             yield return new WaitForSeconds(GlobalValues.GetPlayerKnockBackTime());
-
             StartMovement();
-            _runningAddForceTimer = false;
+            _runningStunTimer = false;
         }
     }
 
@@ -253,9 +241,6 @@ public class System_EnemyController : MonoBehaviour
     private void HaltMovement()
     {
         _rigidBody.velocity = Vector2.zero;
-
-        if (_runningAddForceTimer)
-            StopCoroutine(_addForceTimer);
     }
 
     void OnTriggerEnter2D(Collider2D other)
