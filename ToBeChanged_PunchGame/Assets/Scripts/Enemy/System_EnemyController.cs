@@ -30,11 +30,12 @@ public class System_EnemyController : MonoBehaviour
     Coroutine _stunTimer;
     bool _runningStunTimer;
     bool _isFacingRight = true;
-
     bool _isMoving = true;
+    bool _isDefeated;
 
     Action<GameObject> holdBattleDelegate;
     Action<GameObject, List<MoveSet>> soloBattleDelegate;
+    Action<GameObject> defeatedEnemyDelegate;
 
     void Awake()
     {
@@ -60,6 +61,20 @@ public class System_EnemyController : MonoBehaviour
                 HaltMovement();
             }
         };
+        defeatedEnemyDelegate = (enemy) =>
+        {
+            if (gameObject == enemy)
+            {
+                _isDefeated = true;
+
+                if (_runningStunTimer == true)
+                {
+                    StopCoroutine(_stunTimer);
+                    _isMoving = false;
+                    print("stopped");
+                }
+            }
+        };
     }
 
     void OnEnable()
@@ -76,6 +91,7 @@ public class System_EnemyController : MonoBehaviour
 
         EventHandler.Event_TriggeredHoldBattle += holdBattleDelegate;
         EventHandler.Event_TriggeredSoloBattle += soloBattleDelegate;
+        EventHandler.Event_DefeatedEnemy += defeatedEnemyDelegate;
 
         if (_playerTransform != null)
         {
@@ -102,12 +118,15 @@ public class System_EnemyController : MonoBehaviour
 
         EventHandler.Event_TriggeredHoldBattle -= holdBattleDelegate;
         EventHandler.Event_TriggeredSoloBattle -= soloBattleDelegate;
+        EventHandler.Event_DefeatedEnemy -= defeatedEnemyDelegate;
 
         if (!_isFacingRight)
             Flip(gameObject);
 
         if (!_collider.enabled)
             _collider.enabled = true;
+
+        _isDefeated = false;
     }
 
     void Update()
@@ -208,6 +227,9 @@ public class System_EnemyController : MonoBehaviour
     {
         StopMovement(enemy);
 
+        if (_isDefeated)
+            return;
+
         if (_runningStunTimer)
             StopCoroutine(_stunTimer);
 
@@ -218,6 +240,7 @@ public class System_EnemyController : MonoBehaviour
             _runningStunTimer = true;
             yield return new WaitForSeconds(GlobalValues.GetPlayerStunTime());
             StartMovement();
+            print("ran");
             _runningStunTimer = false;
         }
     }
