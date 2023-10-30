@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 
 public class System_PlayerSpecial : MonoBehaviour
@@ -61,7 +62,7 @@ public class System_PlayerSpecial : MonoBehaviour
             return;
 
         _specialActive = true;
-        EventHandler.Event_SpecialActive?.Invoke(true);
+        EventHandler.Event_SpecialActive?.Invoke(true, _specialDuration);
         EventHandler.Event_SpecialMeterValueChange?.Invoke(_currentSpecialValue);
 
         StartCoroutine(SpecialTimer());
@@ -72,7 +73,7 @@ public class System_PlayerSpecial : MonoBehaviour
             _specialActive = false;
             _maxedSpecial = false;
             _currentSpecialValue = 0;
-            EventHandler.Event_SpecialActive?.Invoke(false);
+            EventHandler.Event_SpecialActive?.Invoke(false, _specialDuration);
         }
     }
 }

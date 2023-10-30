@@ -84,7 +84,7 @@ public class System_EventHandler : MonoBehaviour
 
     //Special meter events
     public Action Event_ActivateSpecialInput;
-    public Action<bool> Event_SpecialActive;
+    public Action<bool, float> Event_SpecialActive;
     public Action<float> Event_SpecialMeterValueChange;
     public Action<float> Event_SetSpecialMeterMaxValue;
     public Action Event_MaxedSpecialMeter;

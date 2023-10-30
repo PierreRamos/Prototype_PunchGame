@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,8 +32,11 @@ public class System_SpecialDisplay : MonoBehaviour
         {
             _specialMeterAnimator.SetTrigger("Maxed");
         };
-        EventHandler.Event_SpecialActive += (specialActive) =>
+        EventHandler.Event_SpecialActive += (specialActive, specialDuration) =>
         {
+            if (specialActive)
+                _specialMeterSlider.DOValue(0, specialDuration).SetEase(Ease.Linear);
+
             string animation = specialActive ? "Active" : "Normal";
             _specialMeterAnimator.SetTrigger(animation);
         };

@@ -50,7 +50,7 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackRight += HitCheckRight;
         EventHandler.Event_EnemyTaggedForHit += MoveToHitEnemy;
         EventHandler.Event_EnemyTaggedForHit += CheckDirection;
-        EventHandler.Event_SpecialActive += (specialActive) =>
+        EventHandler.Event_SpecialActive += (specialActive, specialDuration) =>
         {
             Camera camera = Camera.main;
             float height = 2f * camera.orthographicSize;
