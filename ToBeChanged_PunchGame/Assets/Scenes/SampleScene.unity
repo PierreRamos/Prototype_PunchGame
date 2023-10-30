@@ -5966,8 +5966,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9733c6d811f75d042b08207e29626119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _specialCapValue: 50
-  _specialDuration: 10
+  _specialCapValue: 1
+  _specialDuration: 7.5
 --- !u!1 &1257023375
 GameObject:
   m_ObjectHideFlags: 0
@@ -6775,6 +6775,7 @@ GameObject:
   - component: {fileID: 1559235790}
   - component: {fileID: 1559235793}
   - component: {fileID: 1559235794}
+  - component: {fileID: 1559235802}
   - component: {fileID: 1559235785}
   - component: {fileID: 1559235789}
   - component: {fileID: 1559235795}
@@ -7123,6 +7124,21 @@ MonoBehaviour:
   _backgroundChangeDuration: 0.15
   _scrollOffset: 76.875
   _scrollDuration: 0.15
+--- !u!114 &1559235802
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1559235784}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3adccf2abd118b441be1100842fff503, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _leftEnemySpawnPoint: {fileID: 809813740}
+  _rightEnemySpawnPoint: {fileID: 1802421789}
+  _spawnPointOffset: 0.25
 --- !u!1 &1566933747
 GameObject:
   m_ObjectHideFlags: 0
