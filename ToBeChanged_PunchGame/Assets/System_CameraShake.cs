@@ -5,6 +5,7 @@ using Cinemachine;
 public class System_CameraShake : MonoBehaviour
 {
     System_EventHandler EventHandler;
+    System_GlobalValues GlobalValues;
 
     [Header("Initialization")]
     [SerializeField]
@@ -27,6 +28,7 @@ public class System_CameraShake : MonoBehaviour
     private void OnEnable()
     {
         EventHandler = System_EventHandler.Instance;
+        GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_EnemyHitAnimation += TriggerEnemyHitShake;
         EventHandler.Event_DefeatedEnemy += TriggerEnemyDefeatedShake;
@@ -59,11 +61,13 @@ public class System_CameraShake : MonoBehaviour
 
     void ShakeCamera(float duration, float amplitude, float frequency)
     {
+        bool playerSpecialActive = GlobalValues.GetPlayerSpecialActive();
+
         if (noise != null)
         {
             // Start the camera shake by modifying the noise settings
-            noise.m_AmplitudeGain = amplitude;
-            noise.m_FrequencyGain = frequency;
+            noise.m_AmplitudeGain = playerSpecialActive ? amplitude * 2 : amplitude;
+            noise.m_FrequencyGain = playerSpecialActive ? frequency * 2 : frequency;
 
             // Stop the camera shake after the specified duration
             StartCoroutine(StopShake(duration));

@@ -71,6 +71,14 @@ public class System_AudioManager : MonoBehaviour
         {
             SetSoundNameToPlay("Player_Miss");
         };
+        EventHandler.Event_SpecialActive += (specialActive, specialDuration) =>
+        {
+            string soundName = specialActive
+                ? "Player_SpecialActivate"
+                : "Player_SpecialDeactivate";
+
+            SetSoundNameToPlay(soundName);
+        };
 
         //Enemy
         EventHandler.Event_EnemyHitAnimation += (dummy) =>

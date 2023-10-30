@@ -60,6 +60,12 @@ public class System_BackgroundManager : MonoBehaviour
         {
             _backgroundDimAnimator.SetTrigger("Normal");
         };
+
+        EventHandler.Event_SpecialActive += (specialActive, specialDuration) =>
+        {
+            string animation = specialActive ? "Dim" : "Normal";
+            _backgroundDimAnimator.SetTrigger(animation);
+        };
     }
 
     void Update()
