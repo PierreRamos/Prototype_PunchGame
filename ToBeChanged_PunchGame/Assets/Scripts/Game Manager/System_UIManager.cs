@@ -54,7 +54,7 @@ public class System_UIManager : MonoBehaviour
         // EventHandler.Event_FocusHealthUI += FocusHealthUI;
         // EventHandler.Event_NormalHealthUI += NormalHealthUI;
 
-        // EventHandler.Event_EnemyDefeatedValueChange += UpdateDefeatedDisplay;
+        EventHandler.Event_EnemyDefeatedValueChange += UpdateDefeatedDisplay;
         EventHandler.Event_PlayerDied += ActivateGameOver;
 
         EventHandler.Event_Pause += PausePanel;
@@ -70,7 +70,7 @@ public class System_UIManager : MonoBehaviour
         // EventHandler.Event_FocusHealthUI -= FocusHealthUI;
         // EventHandler.Event_NormalHealthUI -= NormalHealthUI;
 
-        // EventHandler.Event_EnemyDefeatedValueChange -= UpdateDefeatedDisplay;
+        EventHandler.Event_EnemyDefeatedValueChange -= UpdateDefeatedDisplay;
         EventHandler.Event_PlayerDied -= ActivateGameOver;
 
         EventHandler.Event_Pause -= PausePanel;
@@ -131,13 +131,8 @@ public class System_UIManager : MonoBehaviour
             _gameOverPanel.SetActive(true);
     }
 
-    // void UpdateHealthDisplay(int value)
-    // {
-    //     _healthText.text = value.ToString();
-    // }
-
-    // void UpdateDefeatedDisplay(int value)
-    // {
-    //     _defeatedText.text = $"Defeated: {value}";
-    // }
+    void UpdateDefeatedDisplay(int value)
+    {
+        _defeatedText.text = $"Defeated: {value}";
+    }
 }
