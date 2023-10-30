@@ -50,6 +50,15 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackRight += HitCheckRight;
         EventHandler.Event_EnemyTaggedForHit += MoveToHitEnemy;
         EventHandler.Event_EnemyTaggedForHit += CheckDirection;
+        EventHandler.Event_SpecialActive += (specialActive) =>
+        {
+            Camera camera = Camera.main;
+            float height = 2f * camera.orthographicSize;
+            float width = height * camera.aspect;
+            _rangeDistance = specialActive ? width / 2 : _baseRangeDistance;
+            GlobalValues.SetPlayerAttackRange(_rangeDistance);
+            EventHandler.Event_PlayerAttackRangeChange?.Invoke();
+        };
     }
 
     void OnDisable()
@@ -64,6 +73,7 @@ public class System_PlayerAttack : MonoBehaviour
     {
         GlobalValues.SetPlayerStunTime(_playerStunTime);
         GlobalValues.SetPlayerAttackRange(_rangeDistance);
+        EventHandler.Event_PlayerAttackRangeChange?.Invoke();
     }
 
     void Update()

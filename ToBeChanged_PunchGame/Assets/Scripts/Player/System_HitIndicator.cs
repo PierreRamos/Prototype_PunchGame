@@ -39,17 +39,14 @@ public class System_HitIndicator : MonoBehaviour
 
         EventHandler.Event_HasEnemyLeft += ActivateLeft;
         EventHandler.Event_HasEnemyRight += ActivateRight;
+        EventHandler.Event_PlayerAttackRangeChange += UpdateHitIndicatorRange;
     }
 
     void OnDisable()
     {
-        EventHandler.Event_HasEnemyLeft += ActivateLeft;
-        EventHandler.Event_HasEnemyRight += ActivateRight;
-    }
-
-    void Start()
-    {
-        UpdateHitIndicatorRange();
+        EventHandler.Event_HasEnemyLeft -= ActivateLeft;
+        EventHandler.Event_HasEnemyRight -= ActivateRight;
+        EventHandler.Event_PlayerAttackRangeChange -= UpdateHitIndicatorRange;
     }
 
     void UpdateHitIndicatorRange()

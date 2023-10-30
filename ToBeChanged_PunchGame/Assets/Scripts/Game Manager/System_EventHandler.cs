@@ -54,7 +54,6 @@ public class System_EventHandler : MonoBehaviour
     public Action Event_StoppedHoldBattle;
 
     //Value change events
-
     public Action<float> Event_PlayerStunTimeChange;
     public Action<int> Event_PlayerHealthValueChange;
     public Action<int> Event_EnemyDefeatedValueChange;
@@ -89,6 +88,9 @@ public class System_EventHandler : MonoBehaviour
     public Action<float> Event_SpecialMeterValueChange;
     public Action<float> Event_SetSpecialMeterMaxValue;
     public Action Event_MaxedSpecialMeter;
+
+    //Player hit range
+    public Action Event_PlayerAttackRangeChange;
 
     void Awake()
     {
