@@ -12,6 +12,7 @@ public class System_EventHandler : MonoBehaviour
     public Action<string> Event_PlaySound;
 
     //Enemy events
+    public Action<GameObject> Event_RemoveEnemy; //Override for removing enemies without defeating
     public Action<GameObject> Event_EnemyHitPlayer;
     public Action<GameObject> Event_DefeatedEnemy;
     public Action<GameObject> Event_EnemyDeathAnimation;

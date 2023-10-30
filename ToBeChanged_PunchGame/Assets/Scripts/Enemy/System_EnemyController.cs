@@ -84,6 +84,7 @@ public class System_EnemyController : MonoBehaviour
         EventHandler.Event_DefeatedEnemy += GiveKnockback;
         EventHandler.Event_DefeatedEnemy += TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer += TriggerDisableSelfHitPlayer;
+        EventHandler.Event_RemoveEnemy += DisableSelfOverride;
 
         EventHandler.Event_TriggeredHoldBattle += holdBattleDelegate;
         EventHandler.Event_TriggeredSoloBattle += soloBattleDelegate;
@@ -111,6 +112,7 @@ public class System_EnemyController : MonoBehaviour
         EventHandler.Event_DefeatedEnemy -= GiveKnockback;
         EventHandler.Event_DefeatedEnemy -= TriggerDisableSelf;
         EventHandler.Event_EnemyHitPlayer -= TriggerDisableSelfHitPlayer;
+        EventHandler.Event_RemoveEnemy -= DisableSelfOverride;
 
         EventHandler.Event_TriggeredHoldBattle -= holdBattleDelegate;
         EventHandler.Event_TriggeredSoloBattle -= soloBattleDelegate;
@@ -151,6 +153,14 @@ public class System_EnemyController : MonoBehaviour
 
         //test
         _spriteRenderer.flipX = !_spriteRenderer.flipX;
+    }
+
+    private void DisableSelfOverride(GameObject enemy)
+    {
+        if (gameObject != enemy)
+            return;
+
+        gameObject.SetActive(false);
     }
 
     //This is for when enemy is defeated by player (no animation yet)

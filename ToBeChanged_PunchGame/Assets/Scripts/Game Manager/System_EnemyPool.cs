@@ -41,6 +41,11 @@ public class System_EnemyPool : MonoBehaviour
         GlobalValues = System_GlobalValues.Instance;
 
         EventHandler.Event_SpawnEnemy += ActivateEnemy;
+        EventHandler.Event_SpecialActive += (specialActive, specialDuration) =>
+        {
+            if (!specialActive)
+                ClearEnemiesOutsideCamera();
+        };
     }
 
     void OnDisable()
@@ -136,16 +141,39 @@ public class System_EnemyPool : MonoBehaviour
                 }
             }
         }
+    }
 
-        //Debug only
-        // foreach (GameObject particleInstance in _dashEnemyPool)
-        // {
-        //     if (!particleInstance.activeInHierarchy)
-        //     {
-        //         particleInstance.transform.position = position;
-        //         particleInstance.SetActive(true);
-        //         return;
-        //     }
-        // }
+    private void ClearEnemiesOutsideCamera()
+    {
+        Camera camera = Camera.main;
+
+        float leftCameraEdge = camera.ViewportToWorldPoint(new Vector3(0f, 0f, 0f)).x;
+        float rightCameraEdge = camera.ViewportToWorldPoint(new Vector3(1f, 0f, 0f)).x;
+
+        RemoveEnemyType(leftCameraEdge, rightCameraEdge, _normalEnemyPool);
+        RemoveEnemyType(leftCameraEdge, rightCameraEdge, _dashEnemyPool);
+        RemoveEnemyType(leftCameraEdge, rightCameraEdge, _holdEnemyPool);
+        RemoveEnemyType(leftCameraEdge, rightCameraEdge, _eliteEnemyPool);
+
+        bool CheckIfInViewport(float enemyPosition)
+        {
+            if (enemyPosition < leftCameraEdge || enemyPosition > rightCameraEdge)
+                return false;
+            else
+                return true;
+        }
+
+        void RemoveEnemyType(
+            float leftCameraEdge,
+            float rightCameraEdge,
+            List<GameObject> enemyPool
+        )
+        {
+            foreach (var enemy in enemyPool)
+            {
+                if (enemy.activeSelf && !CheckIfInViewport(enemy.transform.position.x))
+                    EventHandler.Event_RemoveEnemy?.Invoke(enemy);
+            }
+        }
     }
 }
