@@ -6,7 +6,6 @@ using UnityEngine;
 public class System_EnemySpawner : MonoBehaviour
 {
     System_EventHandler EventHandler;
-
     System_GlobalValues GlobalValues;
 
     [Header("Initialization")]
@@ -110,6 +109,13 @@ public class System_EnemySpawner : MonoBehaviour
 
     void SpawnEnemy()
     {
+        if (GlobalValues.GetPlayerSpecialActive() == true)
+        {
+            EventHandler.Event_SpawnEnemy?.Invoke(_leftEnemySpawn.position);
+            EventHandler.Event_SpawnEnemy?.Invoke(_rightEnemySpawn.position);
+            return;
+        }
+
         int random = UnityEngine.Random.Range(0, 2);
 
         if (random == 0)
