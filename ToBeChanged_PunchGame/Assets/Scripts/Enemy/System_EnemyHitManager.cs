@@ -155,7 +155,14 @@ public class System_EnemyHitManager : MonoBehaviour
         if (_listOfHits.Count <= 0)
             return;
 
-        if (GlobalValues.GetGameState() == GameState.Normal)
+        if (GlobalValues.GetPlayerSpecialActive() == true)
+        {
+            //Instant kill if player special is active
+            _listOfHits.Clear();
+            EventHandler.Event_EnemyHitListChange?.Invoke(enemy, _listOfHits);
+            EventHandler.Event_EnemyHitConfirm?.Invoke(enemy);
+        }
+        else if (GlobalValues.GetGameState() == GameState.Normal)
         {
             var currentHit = _listOfHits[0];
             _listOfHits.RemoveAt(0);

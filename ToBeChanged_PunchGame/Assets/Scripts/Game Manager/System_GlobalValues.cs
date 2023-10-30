@@ -66,6 +66,7 @@ public class System_GlobalValues : MonoBehaviour
     float _playerAttackRange;
     float _enemyMovementSpeed;
     float _enemySpawnModifier;
+    bool _playerSpecialActive;
 
     void Awake()
     {
@@ -85,6 +86,10 @@ public class System_GlobalValues : MonoBehaviour
 
         EventHandler.Event_DefeatedEnemy += AddDefeatCount;
         EventHandler.Event_PlayerHealthValueChange += SetPlayerHealth;
+        EventHandler.Event_SpecialActive += (specialActive, specialDuration) =>
+        {
+            SetPlayerSpecialActive(specialActive);
+        };
     }
 
     void OnDisable()
@@ -108,6 +113,10 @@ public class System_GlobalValues : MonoBehaviour
     }
 
     //Setters
+    private void SetPlayerSpecialActive(bool specialActive)
+    {
+        _playerSpecialActive = specialActive;
+    }
 
     public void SetGameState(GameState gameState)
     {
@@ -145,6 +154,10 @@ public class System_GlobalValues : MonoBehaviour
     }
 
     //Getters
+    public bool GetPlayerSpecialActive()
+    {
+        return _playerSpecialActive;
+    }
 
     public GameState GetGameState()
     {
