@@ -19,7 +19,7 @@ public class System_PlayerAttack : MonoBehaviour
 
     [Header("Player Attack Settings")]
     [SerializeField]
-    float _rangeDistance;
+    float _baseRangeDistance;
 
     [SerializeField]
     float _moveToEnemyDistance;
@@ -29,13 +29,15 @@ public class System_PlayerAttack : MonoBehaviour
 
     [SerializeField]
     DebugState _debug;
-    SpriteRenderer _spriteRenderer;
 
+    SpriteRenderer _spriteRenderer;
     bool _isFacingRight = true;
+    float _rangeDistance;
 
     void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        _rangeDistance = _baseRangeDistance;
     }
 
     private void OnEnable()
@@ -48,7 +50,6 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackRight += HitCheckRight;
         EventHandler.Event_EnemyTaggedForHit += MoveToHitEnemy;
         EventHandler.Event_EnemyTaggedForHit += CheckDirection;
-        // EventHandler.Event_DefeatedEnemy += MoveToHitEnemy;
     }
 
     void OnDisable()
@@ -57,7 +58,6 @@ public class System_PlayerAttack : MonoBehaviour
         EventHandler.Event_AttackRight -= HitCheckRight;
         EventHandler.Event_EnemyTaggedForHit -= MoveToHitEnemy;
         EventHandler.Event_EnemyTaggedForHit -= CheckDirection;
-        // EventHandler.Event_DefeatedEnemy -= MoveToHitEnemy;
     }
 
     void Start()

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -22,7 +23,6 @@ public class System_SpecialDisplay : MonoBehaviour
         {
             _specialMeterSlider.maxValue = maxSpecialValue;
         };
-
         EventHandler.Event_SpecialMeterValueChange += (specialValue) =>
         {
             _specialMeterSlider.value = specialValue;
@@ -30,6 +30,11 @@ public class System_SpecialDisplay : MonoBehaviour
         EventHandler.Event_MaxedSpecialMeter += () =>
         {
             _specialMeterAnimator.SetTrigger("Maxed");
+        };
+        EventHandler.Event_SpecialActive += (specialActive) =>
+        {
+            string animation = specialActive ? "Active" : "Normal";
+            _specialMeterAnimator.SetTrigger(animation);
         };
     }
 }

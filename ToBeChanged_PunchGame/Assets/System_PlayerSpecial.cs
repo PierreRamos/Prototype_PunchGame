@@ -10,8 +10,12 @@ public class System_PlayerSpecial : MonoBehaviour
     [SerializeField]
     private float _specialCapValue;
 
+    [SerializeField]
+    private float _specialDuration;
+
     private float _currentSpecialValue;
     private bool _maxedSpecial;
+    private bool _specialActive;
 
     private void Awake()
     {
@@ -23,6 +27,10 @@ public class System_PlayerSpecial : MonoBehaviour
         EventHandler.Event_DefeatedEnemy += (enemy) =>
         {
             IncreaseSpecial();
+        };
+        EventHandler.Event_ActivateSpecialInput += () =>
+        {
+            ActivateSpecial();
         };
     }
 
@@ -45,5 +53,26 @@ public class System_PlayerSpecial : MonoBehaviour
         }
 
         EventHandler.Event_SpecialMeterValueChange?.Invoke(_currentSpecialValue);
+    }
+
+    private void ActivateSpecial()
+    {
+        if (!_maxedSpecial || _specialActive)
+            return;
+
+        _specialActive = true;
+        EventHandler.Event_SpecialActive?.Invoke(true);
+        EventHandler.Event_SpecialMeterValueChange?.Invoke(_currentSpecialValue);
+
+        StartCoroutine(SpecialTimer());
+
+        IEnumerator SpecialTimer()
+        {
+            yield return new WaitForSeconds(_specialDuration);
+            _specialActive = false;
+            _maxedSpecial = false;
+            _currentSpecialValue = 0;
+            EventHandler.Event_SpecialActive?.Invoke(false);
+        }
     }
 }

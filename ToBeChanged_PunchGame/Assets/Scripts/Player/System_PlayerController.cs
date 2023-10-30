@@ -104,4 +104,12 @@ public class System_PlayerController : MonoBehaviour
             if (GlobalValues.GetGameState() == GameState.SoloBattle)
                 EventHandler.Event_Hit?.Invoke(MoveSet.Down);
     }
+
+    public void ActivateSpecial(InputAction.CallbackContext context)
+    {
+        var gameState = GlobalValues.GetGameState();
+
+        if (context.performed && gameState == GameState.Normal)
+            EventHandler.Event_ActivateSpecialInput?.Invoke();
+    }
 }
