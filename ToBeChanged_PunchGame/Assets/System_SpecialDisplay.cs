@@ -19,6 +19,10 @@ public class System_SpecialDisplay : MonoBehaviour
 
     [Space]
     [SerializeField]
+    private List<Animator> _specialIndicatorAnimators;
+
+    [Space]
+    [SerializeField]
     private GameObject _specialCutscenePanel;
 
     [SerializeField]
@@ -44,6 +48,11 @@ public class System_SpecialDisplay : MonoBehaviour
         EventHandler.Event_MaxedSpecialMeter += () =>
         {
             _specialMeterAnimator.SetTrigger("Maxed");
+
+            foreach (Animator animator in _specialIndicatorAnimators)
+            {
+                animator.SetTrigger("Maxed");
+            }
         };
         EventHandler.Event_SpecialActive += (specialActive, specialDuration) =>
         {
@@ -73,6 +82,11 @@ public class System_SpecialDisplay : MonoBehaviour
             {
                 string animation = specialActive ? "Active" : "Normal";
                 _specialMeterAnimator.SetTrigger(animation);
+
+                foreach (Animator animator in _specialIndicatorAnimators)
+                {
+                    animator.SetTrigger("Normal");
+                }
             }
         };
     }
@@ -97,6 +111,11 @@ public class System_SpecialDisplay : MonoBehaviour
 
                     string animation = specialActive ? "Active" : "Normal";
                     _specialMeterAnimator.SetTrigger(animation);
+
+                    foreach (Animator animator in _specialIndicatorAnimators)
+                    {
+                        animator.SetTrigger("Active");
+                    }
                 }
             );
     }
