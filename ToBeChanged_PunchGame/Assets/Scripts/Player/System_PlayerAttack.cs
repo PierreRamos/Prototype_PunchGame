@@ -163,18 +163,24 @@ public class System_PlayerAttack : MonoBehaviour
                 ConfirmHit(objectHit);
             else
             {
+                if (!GlobalValues.GetPlayerSpecialActive())
+                {
+                    EventHandler.Event_TriggerStun?.Invoke();
+                    EventHandler.Event_ExclamationEffect?.Invoke(
+                        new Vector3(transform.position.x, transform.position.y + 0.5f)
+                    );
+                }
+            }
+        }
+        else
+        {
+            if (!GlobalValues.GetPlayerSpecialActive())
+            {
                 EventHandler.Event_TriggerStun?.Invoke();
                 EventHandler.Event_ExclamationEffect?.Invoke(
                     new Vector3(transform.position.x, transform.position.y + 0.5f)
                 );
             }
-        }
-        else
-        {
-            EventHandler.Event_TriggerStun?.Invoke();
-            EventHandler.Event_ExclamationEffect?.Invoke(
-                new Vector3(transform.position.x, transform.position.y + 0.5f)
-            );
         }
 
         //Internal
