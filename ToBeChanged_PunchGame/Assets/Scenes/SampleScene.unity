@@ -5966,7 +5966,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9733c6d811f75d042b08207e29626119, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _specialCapValue: 1
+  _specialCapValue: 50
   _specialDuration: 7.5
 --- !u!1 &1257023375
 GameObject:

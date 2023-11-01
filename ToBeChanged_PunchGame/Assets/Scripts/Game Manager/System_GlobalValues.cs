@@ -52,10 +52,6 @@ public class System_GlobalValues : MonoBehaviour
 {
     public static System_GlobalValues Instance;
     System_EventHandler EventHandler;
-
-    [SerializeField]
-    int _targetFrameRate;
-
     GameState _currentGameState;
     Dictionary<EnemyType, int> _enemiesSpawnChance = new Dictionary<EnemyType, int>();
     int _difficulty;
@@ -102,8 +98,6 @@ public class System_GlobalValues : MonoBehaviour
     {
         Time.timeScale = 1;
         _currentGameState = GameState.Normal;
-
-        Application.targetFrameRate = _targetFrameRate;
     }
 
     public void AddDifficulty()
