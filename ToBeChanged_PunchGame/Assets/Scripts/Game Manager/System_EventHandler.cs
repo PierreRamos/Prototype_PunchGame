@@ -89,6 +89,7 @@ public class System_EventHandler : MonoBehaviour
     public Action<float> Event_SpecialMeterValueChange;
     public Action<float> Event_SetSpecialMeterMaxValue;
     public Action Event_MaxedSpecialMeter;
+    public Action Event_SpecialCutsceneFinished;
 
     //Player hit range
     public Action Event_PlayerAttackRangeChange;

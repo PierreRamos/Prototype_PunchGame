@@ -36,6 +36,15 @@ public class System_TimeManager : MonoBehaviour
         EventHandler.Event_TriggerStun += NormalTime;
         EventHandler.Event_PlayerDied += StopTime;
         EventHandler.Event_Pause += PauseTime;
+        EventHandler.Event_SpecialActive += (specialActive, specialDuration) =>
+        {
+            if (specialActive)
+            {
+                StopAllCoroutines();
+                StopTime();
+            }
+        };
+        EventHandler.Event_SpecialCutsceneFinished += NormalTime;
 
         EventHandler.Event_EnemyHitAnimation += HitStop;
     }

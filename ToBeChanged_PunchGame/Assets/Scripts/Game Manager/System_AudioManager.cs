@@ -79,6 +79,10 @@ public class System_AudioManager : MonoBehaviour
 
             SetSoundNameToPlay(soundName);
         };
+        EventHandler.Event_MaxedSpecialMeter += () =>
+        {
+            SetSoundNameToPlay("Player_SpecialMaxed");
+        };
 
         //Enemy
         EventHandler.Event_EnemyHitAnimation += (dummy) =>
